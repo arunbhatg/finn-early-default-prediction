@@ -16,7 +16,7 @@ from src.utils.display_helpers import (
     get_text_intel_metrics,
     text_severity_label,
 )
-from src.utils.ui_text import FINN_SCORE_LABEL, STRESS_RISK_EXPLAINER, TAB_BUSINESS_SIGNALS
+from src.utils.ui_text import FINN_SCORE_LABEL, TAB_BUSINESS_SIGNALS
 
 
 def _payment_metrics(features: dict, profile: dict) -> list[dict]:
@@ -81,7 +81,6 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     obs_info = describe_month_on_book(profile, result.get("observation_month"))
 
     render_decision_banner(result, month_on_book=obs_info["short"])
-    st.caption(STRESS_RISK_EXPLAINER)
 
     gauge_col, detail_col = st.columns([1, 1.35], gap="large")
     with gauge_col:
@@ -90,16 +89,12 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     with detail_col:
         with st.container(border=True):
             st.markdown(f"**{decision['action']}** — {decision['headline']}")
-            if result.get("blend_note"):
-                st.caption(result["blend_note"])
             lb = profile.get("loan_book", {})
             m1, m2, m3 = st.columns(3, gap="small")
             m1.metric("Month on book", str(obs_info["month"]))
             m2.metric("Outstanding", f"₹{lb.get('outstanding_lakhs', 0):.1f}L")
             m3.metric("EMI / month", f"₹{lb.get('monthly_emi_lakhs', 0):.2f}L")
             st.caption(f"{lb.get('loan_type', '—')} · {profile.get('city', '—')}")
-            with st.expander("About month on book", expanded=False):
-                st.markdown(str(obs_info["long"]))
 
     st.markdown('<p class="finn-section-title">Payment & collections</p>', unsafe_allow_html=True)
     _metric_row(_payment_metrics(features, profile), columns=4)
@@ -287,7 +282,7 @@ def render_alt_data_charts(profile: dict, features: dict, *, key_prefix: str = "
             title="GST filing status (recent months)",
             color_discrete_map={"filed": "#22C55E", "delayed": "#F59E0B", "missed": "#EF4444"},
         )
-        fig.update_layout(**_chart_layout(height=260), showlegend=True)
+        fig.update_layout(**_chart_layout(height=260, show_legend=True))
         _plot_chart(fig, key=f"{key_prefix}_gst_filing")
 
     c1, c2 = st.columns(2, gap="medium")
