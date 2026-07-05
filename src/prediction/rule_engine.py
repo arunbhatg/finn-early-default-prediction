@@ -65,8 +65,6 @@ def score_bureau_ntc(f: dict) -> tuple[float, list[dict]]:
     court_penalty = f.get("court_civil_cases", 0) * 8 + f.get("court_insolvency", 0) * 25
     score = clamp(sum(s[1] for s in signals) / len(signals) - court_penalty, 0, 100)
     drivers = [{"factor": s[0], "impact": s[1], "value": s[2]} for s in signals]
-    label = "NTC alt-data" if is_ntc else "Bureau"
-    drivers.insert(0, {"factor": f"Credit path: {label}", "impact": 70 if not is_ntc else 60, "value": "NTC" if is_ntc else "Bureau"})
     return score, drivers
 
 

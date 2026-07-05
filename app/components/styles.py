@@ -54,6 +54,37 @@ def inject_styles() -> None:
             margin: 0 0.35rem;
             color: #CBD5E1;
         }}
+        .finn-band-pill {{
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.2rem 0.55rem;
+            border: 1px solid;
+            border-radius: 999px;
+            margin: 0.2rem 0 0.55rem 0;
+        }}
+        .finn-event {{
+            font-size: 0.84rem;
+            line-height: 1.45;
+            padding: 0.55rem 0.65rem;
+            margin-bottom: 0.4rem;
+            border-radius: 8px;
+            border-left: 3px solid #E2E8F0;
+            background: #F8FAFC;
+            color: #334155;
+        }}
+        .finn-event-meta {{
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #64748B;
+            margin-bottom: 0.15rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }}
+        .finn-event-negative {{ border-left-color: #EF4444; background: #FEF2F2; }}
+        .finn-event-positive {{ border-left-color: #22C55E; background: #F0FDF4; }}
+        .finn-event-neutral {{ border-left-color: #94A3B8; }}
         h1 {{ font-size: 1.65rem !important; font-weight: 600 !important; margin-bottom: 0.2rem !important; }}
         h2, h3 {{ font-size: 1.05rem !important; font-weight: 600 !important; }}
         [data-testid="stSidebar"] {{

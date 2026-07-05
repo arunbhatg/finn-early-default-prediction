@@ -6,10 +6,17 @@ import streamlit as st
 
 from app.components.widgets import render_stress_gauge
 from src.prediction import stress_insights as _stress_insights
-from src.prediction.model import load_training_metrics
 from src.prediction.stress_insights import get_risk_flags, get_stress_decision
 from src.utils.chart_helpers import timeseries_df
-from src.utils.ui_text import FINN_SCORE_LABEL
+from src.utils.display_helpers import (
+    build_text_signal_table,
+    collect_text_timeline,
+    describe_month_on_book,
+    get_derived_business_metrics,
+    get_text_intel_metrics,
+    text_severity_label,
+)
+from src.utils.ui_text import FINN_SCORE_LABEL, STRESS_RISK_EXPLAINER, TAB_BUSINESS_SIGNALS
 
 
 def _payment_metrics(features: dict, profile: dict) -> list[dict]:
@@ -44,19 +51,19 @@ def _metric_row(metrics: list[dict], columns: int = 4) -> None:
             st.metric(m["label"], m["value"])
 
 
-def render_decision_banner(result: dict) -> None:
+def render_decision_banner(result: dict, *, month_on_book: str = "") -> None:
     decision = result.get("decision") or get_stress_decision(result["stress_prob"])
     stress_pct = int(result["stress_prob"] * 100)
+    mob = f'<span class="finn-decision-banner-sep">·</span><span>{month_on_book}</span>' if month_on_book else ""
     st.markdown(
         f"""
         <div class="finn-decision-banner" style="border-left-color:{decision['color']}">
             <div class="finn-decision-banner-action" style="color:{decision['color']}">{decision['action']}</div>
             <div class="finn-decision-banner-meta">
-                <span><strong>{stress_pct}%</strong> stress (12m)</span>
+                <span><strong>{stress_pct}%</strong> 12-month stress risk</span>
                 <span class="finn-decision-banner-sep">·</span>
                 <span>{decision['band']} band</span>
-                <span class="finn-decision-banner-sep">·</span>
-                <span>{decision['headline']}</span>
+                {mob}
             </div>
         </div>
         """,
@@ -65,14 +72,16 @@ def render_decision_banner(result: dict) -> None:
 
 
 def render_overview(profile: dict, features: dict, result: dict) -> None:
-    """Underwriter decision view — action, payment signals, flags, drivers."""
+    """Underwriter decision view — action, payment signals, derived intel, flags, drivers."""
     stress_pct = int(result["stress_prob"] * 100)
     band = result["band"]
     decision = result.get("decision") or get_stress_decision(result["stress_prob"])
     case_key = profile.get("msme_id", "case")
     features["_stress_prob_display"] = result["stress_prob"]
+    obs_info = describe_month_on_book(profile, result.get("observation_month"))
 
-    render_decision_banner(result)
+    render_decision_banner(result, month_on_book=obs_info["short"])
+    st.caption(STRESS_RISK_EXPLAINER)
 
     gauge_col, detail_col = st.columns([1, 1.35], gap="large")
     with gauge_col:
@@ -80,26 +89,32 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
             render_stress_gauge(stress_pct, band, result.get("band_color", "#166534"), chart_key=f"gauge_{case_key}")
     with detail_col:
         with st.container(border=True):
-            st.markdown(f"**Recommended action:** `{decision['action']}`")
-            st.caption(decision["headline"])
-            st.caption(result.get("blend_note", ""))
-            obs = result.get("observation_month", "—")
+            st.markdown(f"**{decision['action']}** — {decision['headline']}")
+            if result.get("blend_note"):
+                st.caption(result["blend_note"])
             lb = profile.get("loan_book", {})
-            st.markdown(
-                f"- **Loan:** {lb.get('loan_type', '—')} · ₹{lb.get('outstanding_lakhs', 0):.1f}L outstanding  \n"
-                f"- **Horizon:** 12 months · observation month **{obs}**  \n"
-                f"- **Credit path:** {'NTC (alt-data)' if profile.get('bureau', {}).get('is_ntc') else 'Bureau file'}"
-            )
+            m1, m2, m3 = st.columns(3, gap="small")
+            m1.metric("Month on book", str(obs_info["month"]))
+            m2.metric("Outstanding", f"₹{lb.get('outstanding_lakhs', 0):.1f}L")
+            m3.metric("EMI / month", f"₹{lb.get('monthly_emi_lakhs', 0):.2f}L")
+            st.caption(f"{lb.get('loan_type', '—')} · {profile.get('city', '—')}")
+            with st.expander("About month on book", expanded=False):
+                st.markdown(str(obs_info["long"]))
 
-    st.markdown('<p class="finn-section-title">① Payment & collections (priority)</p>', unsafe_allow_html=True)
+    st.markdown('<p class="finn-section-title">Payment & collections</p>', unsafe_allow_html=True)
     _metric_row(_payment_metrics(features, profile), columns=4)
 
-    st.markdown('<p class="finn-section-title">② Facility snapshot</p>', unsafe_allow_html=True)
+    st.markdown('<p class="finn-section-title">Facility</p>', unsafe_allow_html=True)
     _metric_row(_facility_metrics(features, profile), columns=4)
+
+    st.markdown('<p class="finn-section-title">Business signals</p>', unsafe_allow_html=True)
+    _metric_row(get_derived_business_metrics(features, profile), columns=4)
+
+    render_text_intel_compact(profile, features, key_prefix=f"decision_nlp_{case_key}")
 
     flags = get_risk_flags(features, profile)
     if flags:
-        st.markdown('<p class="finn-section-title">③ Early warning flags</p>', unsafe_allow_html=True)
+        st.markdown('<p class="finn-section-title">Early warning flags</p>', unsafe_allow_html=True)
         c1, c2 = st.columns(2, gap="medium")
         with c1:
             st.markdown("**Concerns**")
@@ -111,7 +126,7 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     risks = result.get("risk_factors", [])[:4]
     protective = result.get("protective_factors", [])[:3]
     expand_drivers = result["stress_prob"] >= 0.45
-    with st.expander(f"④ {FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
+    with st.expander(f"{FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
         d1, d2 = st.columns(2, gap="medium")
         with d1:
             st.markdown("**Risk factors**")
@@ -128,20 +143,6 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
             else:
                 st.caption("None flagged")
 
-    metrics_data = load_training_metrics()
-    if metrics_data:
-        with st.expander("Model uplift (structured-only vs full)", expanded=False):
-            s_det = metrics_data.get("structured", {}).get("stress_detection_rate", 0) * 100
-            f_det = metrics_data.get("full", {}).get("stress_detection_rate", 0) * 100
-            c1, c2 = st.columns(2)
-            c1.metric("Legacy structured-only", f"{s_det:.1f}%", help="No collections timing / NLP")
-            c2.metric("Full FINN. model", f"{f_det:.1f}%", help="Collections + bureau other-loans + text")
-            st.caption(
-                f"This case — structured ML: {result.get('structured_ml_prob', 0)*100:.0f}% · "
-                f"full ML: {result.get('ml_stress_prob', 0)*100:.0f}% · "
-                f"rules: {result.get('rule_stress_prob', 0)*100:.0f}%"
-            )
-
 
 def _chart_layout(*, show_legend: bool = False, height: int = 300) -> dict:
     return {"height": height, "margin": dict(t=36, l=8, r=8, b=8), "showlegend": show_legend}
@@ -153,6 +154,51 @@ def _section(title: str) -> None:
 
 def _plot_chart(fig, key: str) -> None:
     st.plotly_chart(fig, width="stretch", key=key)
+
+
+def _text_stress_chart(features: dict, *, key: str, height: int = 280) -> None:
+    conv = [
+        ("Reviews", features.get("review_stress_score", 0)),
+        ("News", features.get("news_stress_score", 0)),
+        ("RM notes", features.get("rm_note_stress_score", 0)),
+        ("GST remarks", features.get("gst_remark_stress_score", 0)),
+        ("Collection notes", features.get("collection_note_stress_score", 0)),
+    ]
+    df = pd.DataFrame({"Source": [c[0] for c in conv], "Score": [c[1] * 100 for c in conv]})
+    fig = px.bar(
+        df,
+        x="Score",
+        y="Source",
+        orientation="h",
+        title="Text → structured stress scores (0–100)",
+        color="Score",
+        color_continuous_scale=["#DCFCE7", "#FEF9C3", "#FEE2E2"],
+        range_color=[0, 100],
+    )
+    fig.update_layout(**_chart_layout(height=height), coloraxis_showscale=False)
+    _plot_chart(fig, key=key)
+
+
+def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str = "nlp") -> None:
+    rows = build_text_signal_table(profile, features)
+    if not rows and features.get("composite_text_stress_score", 0) <= 0:
+        return
+
+    _section("Text & market signals")
+    _metric_row(get_text_intel_metrics(features), columns=4)
+
+    if rows:
+        c1, c2 = st.columns([1.2, 1], gap="medium")
+        with c1:
+            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        with c2:
+            _text_stress_chart(features, key=f"{key_prefix}_bar", height=260)
+
+        composite = features.get("composite_text_stress_score", 0)
+        st.caption(
+            f"Composite text stress index: **{composite * 100:.0f}/100** ({text_severity_label(composite)}) — "
+            "derived from keyword and sentiment analysis on reviews, news, RM notes, GST remarks, and collection notes."
+        )
 
 
 def render_collection_charts(profile: dict, features: dict, *, key_prefix: str = "coll") -> None:
@@ -209,7 +255,7 @@ def render_loan_panel(profile: dict, features: dict) -> None:
     )
 
     if bureau.get("is_ntc"):
-        st.info("**New-To-Credit (NTC)** — stress model uses GST, UPI, EPFO, and AA proxies instead of bureau score.")
+        st.caption("New-to-Credit — CIBIL not available; GST, UPI, and bank data used in scoring.")
     else:
         st.caption(
             f"Promoter CIBIL **{bureau.get('cibil_score')}** · "
@@ -221,6 +267,28 @@ def render_loan_panel(profile: dict, features: dict) -> None:
 def render_alt_data_charts(profile: dict, features: dict, *, key_prefix: str = "alt") -> None:
     gst = profile["gst"]
     aa = profile["aa"]
+
+    filing = gst.get("filing_status", [])
+    if filing:
+        obs = min(len(filing), 12)
+        recent = filing[-obs:]
+        status_df = pd.DataFrame(
+            {
+                "Month": [f"M{i+1}" for i in range(len(recent))],
+                "Status": recent,
+                "Score": [1 if s == "filed" else 0.5 if s == "delayed" else 0 for s in recent],
+            }
+        )
+        fig = px.bar(
+            status_df,
+            x="Month",
+            y="Score",
+            color="Status",
+            title="GST filing status (recent months)",
+            color_discrete_map={"filed": "#22C55E", "delayed": "#F59E0B", "missed": "#EF4444"},
+        )
+        fig.update_layout(**_chart_layout(height=260), showlegend=True)
+        _plot_chart(fig, key=f"{key_prefix}_gst_filing")
 
     c1, c2 = st.columns(2, gap="medium")
     with c1:
@@ -242,38 +310,56 @@ def render_alt_data_charts(profile: dict, features: dict, *, key_prefix: str = "
     fig.update_layout(**_chart_layout(show_legend=True))
     _plot_chart(fig, key=f"{key_prefix}_cashflow")
 
+    _metric_row(get_derived_business_metrics(features, profile), columns=4)
+
 
 def render_unstructured_signals(profile: dict, features: dict, *, key_prefix: str = "nlp") -> None:
-    unstructured = profile.get("unstructured", {})
+    _section("Unstructured text → structured features")
+    render_text_intel_compact(profile, features, key_prefix=key_prefix)
 
-    conv = [
-        ("Review stress", features.get("review_stress_score", 0)),
-        ("News stress", features.get("news_stress_score", 0)),
-        ("RM note stress", features.get("rm_note_stress_score", 0)),
-        ("GST remark stress", features.get("gst_remark_stress_score", 0)),
-        ("Collection note stress", features.get("collection_note_stress_score", 0)),
-        ("Composite text stress", features.get("composite_text_stress_score", 0)),
-    ]
-    df = pd.DataFrame({"Signal": [c[0] for c in conv], "Score": [c[1] for c in conv]})
-    fig = px.bar(df, x="Score", y="Signal", orientation="h", title="Unstructured → structured stress scores")
-    fig.update_layout(**_chart_layout())
-    _plot_chart(fig, key=f"{key_prefix}_stress_bar")
+    rows = build_text_signal_table(profile, features)
+    if rows:
+        st.markdown("**Structured conversion by source**")
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
-    with st.expander("Source text evidence", expanded=result_expanded(features)):
-        for note in unstructured.get("rm_call_notes", [])[:3]:
-            st.markdown(f"**RM note** ({note.get('days_ago')}d ago): {note.get('text')}")
-        for news in unstructured.get("news_mentions", [])[:3]:
-            st.markdown(f"**News** ({news.get('days_ago')}d ago): {news.get('headline')}")
-        for gst in unstructured.get("gst_remarks", [])[:2]:
-            st.markdown(f"**GST remark** ({gst.get('days_ago')}d ago): {gst.get('text')}")
-        for cn in unstructured.get("collection_notes", [])[:2]:
-            st.markdown(f"**Collection note** ({cn.get('days_ago')}d ago): {cn.get('text')}")
-        if not any(
-            unstructured.get(k)
-            for k in ("rm_call_notes", "news_mentions", "gst_remarks", "collection_notes")
-        ):
-            st.caption("No unstructured text on file.")
+    timeline = collect_text_timeline(profile)
+    if timeline:
+        st.markdown("**Recent text events**")
+        for event in timeline:
+            sentiment = event.get("sentiment", "neutral")
+            css = {"negative": "finn-event-negative", "positive": "finn-event-positive"}.get(sentiment, "finn-event-neutral")
+            st.markdown(
+                f'<div class="finn-event {css}">'
+                f'<span class="finn-event-meta">{event["source"]} · {event["days_ago"]}d ago</span>'
+                f'{event["text"][:180]}{"…" if len(event["text"]) > 180 else ""}'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+    composite = features.get("composite_text_stress_score", 0)
+    with st.expander("How text scores are computed", expanded=False):
+        st.markdown(
+            "Each text source is scanned for stress keywords (e.g. *overdue, bounce, restructuring, default*) "
+            "and positive signals (*timely, growth*). Keyword density is converted to a **0–100 structured score** "
+            "per source, then blended into the composite text stress index used by the model."
+        )
+        st.caption(f"Composite index for this case: **{composite * 100:.0f}/100** ({text_severity_label(composite)})")
 
 
-def result_expanded(features: dict) -> bool:
-    return features.get("composite_text_stress_score", 0) >= 0.25
+def render_evidence_summary(profile: dict, features: dict, result: dict) -> None:
+    obs = describe_month_on_book(profile, result.get("observation_month"))
+    decision = result.get("decision") or get_stress_decision(result["stress_prob"])
+    st.markdown(
+        f"**{obs['short']}** · **{int(result['stress_prob'] * 100)}%** stress risk · "
+        f"**{decision['action']}** ({result['band']})"
+    )
+    summary = (
+        _payment_metrics(features, profile)[:2]
+        + get_derived_business_metrics(features, profile)[:2]
+        + get_text_intel_metrics(features)[:2]
+    )
+    _metric_row(summary[:6], columns=3)
+
+
+def tab_business_signals_label() -> str:
+    return TAB_BUSINESS_SIGNALS

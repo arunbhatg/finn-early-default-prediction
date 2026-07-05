@@ -7,7 +7,7 @@ from src.connectors.base import load_profile
 from src.prediction.model import predict_at_observation
 from src.prediction.stress_insights import get_stress_decision
 from src.utils.constants import DEMO_PERSONAS
-from src.utils.ui_text import FINN_SCORE_LABEL
+from src.utils.display_helpers import describe_month_on_book
 
 
 def _load_cases() -> list[tuple]:
@@ -22,7 +22,7 @@ def _load_cases() -> list[tuple]:
 
 def page_cases():
     st.markdown("### MSME loan portfolio")
-    st.caption("Cases ranked by 12-month stress probability — highest risk first.")
+    st.caption("Ranked by 12-month stress risk — highest first.")
 
     cols = st.columns(2, gap="medium")
     for i, (prob_f, msme_id, meta, profile, result) in enumerate(_load_cases()):
@@ -30,26 +30,25 @@ def page_cases():
         band = result["band"]
         decision = result.get("decision") or get_stress_decision(prob_f)
         loan_type = profile.get("loan_book", {}).get("loan_type", "—")
-        is_ntc = profile.get("bureau", {}).get("is_ntc", False)
-        credit_tag = "NTC" if is_ntc else "Bureau"
         outstanding = profile["loan_book"]["outstanding_lakhs"]
+        mob = describe_month_on_book(profile, result.get("observation_month"))["short"]
 
         with cols[i % 2]:
             with st.container(border=True):
                 st.markdown(f"##### {meta['name']}")
-                st.caption(f"{loan_type} · {meta['city']} · {credit_tag}")
+                st.caption(f"{loan_type} · {meta['city']} · {mob}")
 
                 m1, m2, m3 = st.columns(3, gap="small")
-                m1.metric(FINN_SCORE_LABEL, f"{prob}%")
+                m1.metric("Stress risk", f"{prob}%")
                 m2.metric("Action", decision["action"])
                 m3.metric("Outstanding", f"₹{outstanding:.1f}L")
 
                 st.markdown(
-                    f"<span class='finn-decision finn-decision-inline' "
-                    f"style='color:{decision['color']}'>{decision['action']} · {band}</span>",
+                    f"<span class='finn-band-pill' style='border-color:{decision['color']};color:{decision['color']}'>"
+                    f"{band}</span>",
                     unsafe_allow_html=True,
                 )
-                if st.button("Open assessment", key=f"open_{msme_id}", width="stretch", type="primary"):
+                if st.button("Review decision", key=f"open_{msme_id}", width="stretch", type="primary"):
                     load_case(msme_id)
                     st.session_state.page = "Decision"
                     st.rerun()

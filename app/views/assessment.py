@@ -8,8 +8,10 @@ from app.components.underwriter import (
     render_loan_panel,
     render_overview,
     render_unstructured_signals,
+    tab_business_signals_label,
 )
 from app.views._helpers import require_case
+from src.utils.display_helpers import describe_month_on_book
 
 
 def page_assessment():
@@ -20,12 +22,12 @@ def page_assessment():
     features = st.session_state.features
     result = st.session_state.score_result
     loan_type = profile.get("loan_book", {}).get("loan_type", "—")
-    obs = result.get("observation_month", "—")
+    obs_info = describe_month_on_book(profile, result.get("observation_month"))
 
     st.markdown(f"### {profile['business_name']}")
-    st.caption(f"{loan_type} · {profile['city']} · observation month {obs} · 12-month horizon")
+    st.caption(f"{loan_type} · {profile['city']} · {obs_info['short']} · 12-month forward view")
 
-    tab1, tab2, tab3 = st.tabs(["Decision", "Collections & Bureau", "Alt-data & Text"])
+    tab1, tab2, tab3 = st.tabs(["Decision", "Collections & Bureau", tab_business_signals_label()])
     case_key = profile.get("msme_id", "case")
 
     with tab1:
