@@ -1,139 +1,113 @@
-"""Underwriter-focused UI panels."""
+"""Clean underwriter UI — minimal clutter."""
 
-import plotly.express as px
-import plotly.graph_objects as go
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
-from app.components.widgets import pillar_bar_chart, render_score_gauge
-from src.scoring.underwriter_insights import get_credit_decision, get_key_metrics, get_risk_flags, get_traditional_gap
+from app.components.widgets import render_score_gauge
+from src.scoring.loan_simulator import simulate_loan
+from src.scoring.underwriter_insights import get_credit_decision, get_key_metrics, get_risk_flags
 
 
-def render_decision_header(score: float, grade: str, profile: dict, features: dict) -> None:
-    decision = get_credit_decision(score)
-    c1, c2, c3 = st.columns([1.2, 1, 1])
-
-    with c1:
-        render_score_gauge(score, grade)
-
-    with c2:
-        st.markdown("### Credit recommendation")
-        color_map = {"green": "green", "orange": "orange", "red": "red"}
-        color = color_map[decision["color"]]
-        st.markdown(f":{color}[**{decision['action']}**]")
-        st.caption(decision["headline"])
-        st.write(decision["rationale"])
-        st.markdown(f"**{profile['business_name']}**")
-        st.caption(f"{profile['sector']} · {profile['city']} · GSTIN {profile['gstin']}")
-
-    with c3:
-        gap = get_traditional_gap(profile, score)
-        st.markdown("### Traditional vs Alt-data")
-        st.error(f"**{gap['traditional']}**  \n{gap['traditional_reason']}")
-        st.success(f"**{gap['alt_data']}**  \n{gap['alt_reason']}")
-        st.caption(f"{gap['sources_used']} sources · Decision in {gap['time_to_decision']}")
-
-
-def render_key_metrics_row(features: dict, profile: dict) -> None:
-    st.markdown("#### Key underwriting metrics")
-    metrics = get_key_metrics(features, profile)
-    cols = st.columns(len(metrics))
-    for col, m in zip(cols, metrics):
-        with col:
-            st.metric(m["label"], m["value"], help=f"Benchmark: {m['benchmark']}")
-
-
-def render_risk_flags(features: dict, profile: dict) -> None:
-    flags = get_risk_flags(features, profile)
-    if not flags:
+def _chips(flags: list[dict], levels: tuple[str, ...], css: str, limit: int = 4) -> None:
+    items = [f for f in flags if f["level"] in levels][:limit]
+    if not items:
+        st.caption("—")
         return
+    html = "".join(
+        f"<span class='finn-chip {css}'>{f['label']}</span>" for f in items
+    )
+    st.markdown(html, unsafe_allow_html=True)
 
-    st.markdown("#### Risk & strength flags")
-    reds = [f for f in flags if f["level"] == "red"]
-    ambers = [f for f in flags if f["level"] == "amber"]
-    greens = [f for f in flags if f["level"] == "green"]
+
+def render_overview(profile: dict, features: dict, result: dict) -> None:
+    from src.utils.helpers import score_to_grade
+
+    score = result["final_score"]
+    grade = score_to_grade(score)
+    decision = get_credit_decision(score)
+
+    left, right = st.columns([1.1, 1])
+    with left:
+        render_score_gauge(score, grade)
+    with right:
+        color = {"green": "#166534", "orange": "#854D0E", "red": "#991B1B"}[decision["color"]]
+        st.markdown(
+            f"<p class='finn-decision' style='color:{color};margin-bottom:0.25rem'>{decision['action']}</p>"
+            f"<p class='finn-muted'>{decision['headline']}</p>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"Traditional: **Rejected** (no file) → Alt-data: **{int(score)}**",
+        )
+
+    metrics = get_key_metrics(features, profile)[:6]
+    cols = st.columns(3)
+    for i, m in enumerate(metrics):
+        with cols[i % 3]:
+            st.metric(m["label"], m["value"])
+
+    flags = get_risk_flags(features, profile)
+    if flags:
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Concerns**")
+            _chips(flags, ("red", "amber"), "finn-chip-red")
+        with c2:
+            st.markdown("**Strengths**")
+            _chips(flags, ("green",), "finn-chip-green")
+
+    boosters = result.get("boosters", [])[:3]
+    draggers = result.get("draggers", [])[:3]
+    if boosters or draggers:
+        with st.expander("Score drivers", expanded=False):
+            for d in boosters:
+                st.caption(f"↑ {d['factor']} ({d['value']})")
+            for d in draggers:
+                st.caption(f"↓ {d['factor']} ({d['value']})")
+
+
+def render_charts(profile: dict) -> None:
+    gst, upi, aa, epfo = profile["gst"], profile["upi"], profile["aa"], profile["epfo"]
+    layout = dict(height=280, margin=dict(t=36, l=8, r=8, b=8), showlegend=False)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        df = pd.DataFrame({"Turnover (₹L)": gst["monthly_turnover_lakhs"]})
+        fig = px.line(df, markers=True, title="GST turnover")
+        fig.update_layout(**layout)
+        st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        df = pd.DataFrame({"UPI (₹L)": upi["monthly_volume_lakhs"]})
+        fig = px.bar(df, title="UPI collections")
+        fig.update_layout(**layout)
+        st.plotly_chart(fig, use_container_width=True)
+
+    c3, c4 = st.columns(2)
+    with c3:
+        df = pd.DataFrame({"Credits": aa["monthly_credits_lakhs"], "Debits": aa["monthly_debits_lakhs"]})
+        fig = px.area(df, title="Bank cash flow")
+        fig.update_layout(**layout, showlegend=True)
+        st.plotly_chart(fig, use_container_width=True)
+    with c4:
+        df = pd.DataFrame({"Staff": epfo["employee_count"]})
+        fig = px.line(df, markers=True, title="Payroll headcount")
+        fig.update_layout(**layout)
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def render_loan_panel(features: dict, result: dict) -> None:
+    score = result["final_score"]
+    turnover = features["gst_avg_monthly_turnover"]
+    amount = st.slider("Loan amount (₹ Lakhs)", 5, 50, 15)
+    out = simulate_loan(score, amount, turnover)
+
+    if out["eligible"]:
+        st.success(f"Indicative approval: ₹{out['approved_lakhs']}L at {out.get('interest_rate_pct')}%")
+    else:
+        st.warning(out["reason"])
 
     c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown("**Concerns**")
-        for f in reds:
-            st.error(f"**{f['label']}** — {f['detail']}")
-        for f in ambers:
-            st.warning(f"**{f['label']}** — {f['detail']}")
-        if not reds and not ambers:
-            st.caption("No material concerns flagged")
-    with c2:
-        st.markdown("**Strengths**")
-        for f in greens:
-            st.success(f"**{f['label']}** — {f['detail']}")
-    with c3:
-        st.markdown("**Pillar scores**")
-        # placeholder — filled by caller if pillars passed
-
-
-def render_driver_chart(boosters: list, draggers: list) -> None:
-    rows = boosters[:4] + draggers[:4]
-    if not rows:
-        return
-    df = pd.DataFrame({
-        "factor": [r["factor"][:30] for r in rows],
-        "points": [r["score_points"] for r in rows],
-        "type": ["Boost" if r["score_points"] > 0 else "Drag" for r in rows],
-    })
-    fig = px.bar(
-        df, x="points", y="factor", orientation="h", color="type",
-        color_discrete_map={"Boost": "#22C55E", "Drag": "#EF4444"},
-        title="Score drivers (approx. points)",
-    )
-    fig.update_layout(height=300, showlegend=False, margin=dict(t=40, l=10))
-    st.plotly_chart(fig, use_container_width=True)
-
-
-def render_evidence_dashboard(profile: dict) -> None:
-    """Plot-heavy evidence view for underwriters."""
-    gst = profile["gst"]
-    upi = profile["upi"]
-    aa = profile["aa"]
-    epfo = profile["epfo"]
-
-    r1c1, r1c2 = st.columns(2)
-    with r1c1:
-        df = pd.DataFrame({"Turnover (₹L)": gst["monthly_turnover_lakhs"]})
-        df.index = [f"M{i+1}" for i in range(len(df))]
-        st.plotly_chart(px.line(df, markers=True, title="GST turnover trend"), use_container_width=True)
-    with r1c2:
-        df = pd.DataFrame({"UPI volume (₹L)": upi["monthly_volume_lakhs"]})
-        df.index = [f"M{i+1}" for i in range(len(df))]
-        st.plotly_chart(px.bar(df, title="UPI collections"), use_container_width=True)
-
-    r2c1, r2c2 = st.columns(2)
-    with r2c1:
-        df = pd.DataFrame({
-            "Credits": aa["monthly_credits_lakhs"],
-            "Debits": aa["monthly_debits_lakhs"],
-        })
-        df.index = [f"M{i+1}" for i in range(len(df))]
-        st.plotly_chart(px.area(df, title="Bank cash flow (AA)"), use_container_width=True)
-    with r2c2:
-        df = pd.DataFrame({
-            "Headcount": epfo["employee_count"],
-            "Wage bill (₹L)": epfo["monthly_wage_bill_lakhs"],
-        })
-        df.index = [f"M{i+1}" for i in range(len(df))]
-        st.plotly_chart(px.line(df, markers=True, title="Payroll (EPFO)"), use_container_width=True)
-
-
-def render_demo_card(preview: dict, meta: dict, button_key: str) -> bool:
-    """Render a demo case card; returns True if selected."""
-    with st.container(border=True):
-        st.markdown(f"**{meta['name']}**")
-        st.caption(f"{preview['type']} · {meta['city']}, {meta['state']}")
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Score", preview["score"])
-        c2.metric("Decision", preview["decision"])
-        c3.metric("Turnover", preview["turnover"])
-        c4.metric("CIBIL", preview["cibil"])
-        st.caption(
-            f"GST {preview['gst_compliance']} · Litigation {preview['litigation']} · _{preview['tag']}_"
-        )
-        return st.button(f"Open case →", key=button_key, use_container_width=True)
+    c1.metric("Max eligible", f"₹{out.get('max_eligible_lakhs', 0)}L")
+    c2.metric("Rate", f"{out.get('interest_rate_pct', '—')}%")
+    c3.metric("Tenure", f"{out.get('tenure_months', '—')} mo")

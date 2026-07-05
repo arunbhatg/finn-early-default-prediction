@@ -46,9 +46,10 @@ def load_case(msme_id: str) -> None:
 
 def require_case() -> bool:
     if not st.session_state.fetched or not st.session_state.score_result:
-        st.warning("Select an MSME case first (① Select MSME Case).")
-        if st.button("Go to case selection"):
-            st.session_state.page = "① Select MSME Case"
+        st.markdown("### No case selected")
+        st.caption("Choose a demo MSME from **Cases** to view this page.")
+        if st.button("Go to Cases", type="primary"):
+            st.session_state.page = "Cases"
             st.rerun()
         return False
     return True

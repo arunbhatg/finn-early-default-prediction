@@ -1,4 +1,4 @@
-"""Streamlit entry — underwriter workflow for FinHealth Card."""
+"""Streamlit entry — clean 3-step underwriter flow."""
 
 import sys
 from pathlib import Path
@@ -10,60 +10,83 @@ if str(ROOT) not in sys.path:
 import streamlit as st
 
 from app.components.branding import render_footer_branding, render_sidebar_branding, render_sidebar_footer_link
-from app.views.cases import page_select_case
-from app.views.decision import page_credit_decision
-from app.views.evidence import page_evidence
-from app.views.loan import page_loan_offer
-from app.views.onboarding import page_onboarding_flow
-from app.views.summary import page_summary_sheet
+from app.components.styles import inject_styles
+from app.views.assessment import page_assessment
+from app.views.cases import page_cases
+from app.views.details import page_details
 
-NAV = {
-    "① Select MSME Case": page_select_case,
-    "② Credit Decision": page_credit_decision,
-    "③ Evidence & Trends": page_evidence,
-    "④ Loan Offer": page_loan_offer,
-    "⑤ Data Summary Sheet": page_summary_sheet,
+PAGES = {
+    "Cases": page_cases,
+    "Assessment": page_assessment,
+    "Details": page_details,
 }
 
 
 def init_session():
     defaults = {
-        "page": "① Select MSME Case",
+        "page": "Cases",
         "msme_id": None,
         "profile": None,
         "features": None,
         "score_result": None,
+        "source_status": None,
         "fetched": False,
+        "_bootstrapped": False,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
             st.session_state[k] = v
 
 
+def bootstrap_once():
+    if st.session_state._bootstrapped:
+        return
+    with st.spinner("Starting…"):
+        from src.bootstrap import ensure_ready
+        ensure_ready()
+    st.session_state._bootstrapped = True
+
+
 def sidebar():
     render_sidebar_branding()
 
-    if st.session_state.msme_id and st.session_state.profile:
-        st.sidebar.success(st.session_state.profile.get("business_name", ""))
-        st.sidebar.caption(f"{st.session_state.msme_id} · {st.session_state.profile.get('sector', '')}")
-        if st.session_state.score_result:
-            st.sidebar.metric("Health Score", int(st.session_state.score_result["final_score"]))
-        if st.session_state.get("source_status"):
-            live_n = sum(1 for s in st.session_state.source_status if s["mode"] == "live")
-            st.sidebar.caption(f"Data: {live_n} live connector(s)")
+    if st.session_state.fetched and st.session_state.profile:
+        p = st.session_state.profile
+        score = int(st.session_state.score_result["final_score"]) if st.session_state.score_result else "—"
+        st.sidebar.markdown(
+            f"**{p['business_name'][:26]}**  \n"
+            f"<span class='finn-muted'>{p['sector']} · {score}</span>",
+            unsafe_allow_html=True,
+        )
+        if st.sidebar.button("Change case", use_container_width=True):
+            st.session_state.page = "Cases"
+            st.rerun()
     else:
-        st.sidebar.info("Select a demo case to begin")
-
-    st.sidebar.divider()
-    st.sidebar.markdown("**Workflow**")
-    page = st.sidebar.radio("Go to", list(NAV.keys()), index=list(NAV.keys()).index(st.session_state.page))
-    st.session_state.page = page
-
-    st.sidebar.divider()
-    with st.sidebar.expander("Full onboarding flow (optional)"):
-        page_onboarding_flow()
+        st.sidebar.caption("Pick a case to begin")
 
     render_sidebar_footer_link()
+
+
+def top_nav():
+    labels = list(PAGES.keys())
+    has_case = st.session_state.fetched and st.session_state.score_result
+    if not has_case:
+        labels = ["Cases"]
+
+    idx = labels.index(st.session_state.page) if st.session_state.page in labels else 0
+    st.markdown('<div class="finn-nav">', unsafe_allow_html=True)
+    page = st.radio(
+        "Navigate",
+        labels,
+        index=idx,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if page != st.session_state.page:
+        st.session_state.page = page
+        st.rerun()
 
 
 def run_app():
@@ -74,13 +97,12 @@ def run_app():
         initial_sidebar_state="expanded",
     )
 
-    with st.spinner("Loading FinHealth Card..."):
-        from src.bootstrap import ensure_ready
-        ensure_ready()
-
+    inject_styles()
     init_session()
+    bootstrap_once()
     sidebar()
-    NAV[st.session_state.page]()
+    top_nav()
+    PAGES[st.session_state.page]()
     render_footer_branding()
 
 
