@@ -48,6 +48,9 @@ def sidebar():
         st.sidebar.caption(f"{st.session_state.msme_id} · {st.session_state.profile.get('sector', '')}")
         if st.session_state.score_result:
             st.sidebar.metric("Health Score", int(st.session_state.score_result["final_score"]))
+        if st.session_state.get("source_status"):
+            live_n = sum(1 for s in st.session_state.source_status if s["mode"] == "live")
+            st.sidebar.caption(f"Data: {live_n} live connector(s)")
     else:
         st.sidebar.info("Select a demo case to begin")
 

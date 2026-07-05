@@ -17,4 +17,5 @@ def page_summary_sheet():
         st.session_state.profile,
         st.session_state.features,
         st.session_state.score_result,
+        st.session_state.get("source_status"),
     )

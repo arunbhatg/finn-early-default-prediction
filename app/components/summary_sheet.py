@@ -34,12 +34,27 @@ def render_metric_row_with_drilldown(features: dict, profile: dict) -> None:
             st.caption(f"Bench: {m['benchmark']}")
 
 
-def render_summary_sheet(profile: dict, features: dict, result: dict) -> None:
+def render_source_status(status_list: list[dict]) -> None:
+    """Show live vs mock badge per connector."""
+    live = sum(1 for s in status_list if s["mode"] == "live")
+    static = sum(1 for s in status_list if s["mode"] == "static")
+    mock = sum(1 for s in status_list if s["mode"] == "mock")
+    st.caption(f"**{live} live** · {static} static/reference · {mock} mock (PoC)")
+
+    cols = st.columns(2)
+    for i, s in enumerate(status_list):
+        badge = {"live": "🟢 LIVE", "static": "🟡 STATIC", "mock": "⚪ MOCK"}.get(s["mode"], "⚪")
+        with cols[i % 2]:
+            st.markdown(f"**{badge} {s['name']}**")
+            st.caption(s["detail"])
+
+
+def render_summary_sheet(profile: dict, features: dict, result: dict, source_status: list[dict] | None = None) -> None:
     st.markdown("### Data summary sheet")
     st.caption("All actual values pulled for this assessment — suitable for credit memo attachment.")
 
-    tab_id, tab_feat, tab_score, tab_sources = st.tabs(
-        ["Borrower", "All features", "Score breakdown", "By source"]
+    tab_id, tab_feat, tab_score, tab_sources, tab_connectors = st.tabs(
+        ["Borrower", "All features", "Score breakdown", "By source", "Connector status"]
     )
 
     with tab_id:
@@ -78,6 +93,13 @@ def render_summary_sheet(profile: dict, features: dict, result: dict) -> None:
             with st.expander("Review text (sample)"):
                 for r in profile["google"]["reviews"][:8]:
                     st.markdown(f"**{r['rating']}★** ({r['sentiment']}) — _{r['text']}_")
+
+    with tab_connectors:
+        if source_status:
+            render_source_status(source_status)
+        else:
+            st.info("Connector status available after case assessment.")
+        st.markdown("[Full integration guide](https://github.com/arunbhatg/finhealth-card/blob/main/docs/CONNECTOR_INTEGRATION.md)")
 
 
 def render_flags_with_detail(features: dict, profile: dict) -> None:

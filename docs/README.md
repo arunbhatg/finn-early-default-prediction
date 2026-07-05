@@ -5,7 +5,8 @@ Technical and business documentation for the MSME alternative-data credit PoC.
 | Document | Audience | Contents |
 |----------|----------|----------|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Engineering, architects | System design, scoring pipeline, deployment |
-| [DATA_SOURCES.md](DATA_SOURCES.md) | Engineering, product | Real vs dummy data, connector replacement guide |
+| [DATA_SOURCES.md](DATA_SOURCES.md) | Engineering, product | Real vs dummy data overview |
+| [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md) | Engineering, integration | **Live connectors + step-by-step API guide** |
 | [NTC_MSME.md](NTC_MSME.md) | Business, underwriting, judges | Why alt-data works for New-To-Credit MSMEs |
 | [CODE_GUIDE.md](CODE_GUIDE.md) | Developers | Repo layout, modules, how to extend |
 
@@ -19,4 +20,4 @@ Technical and business documentation for the MSME alternative-data credit PoC.
 
 FinHealth Card scores **New-To-Credit (NTC) MSMEs** using **10 alternative data connectors** when traditional financials and bureau history are unavailable. A **hybrid engine** (rule-based explainability + LightGBM calibration) produces a **300–900 health score** with pillar breakdown, risk flags, and loan simulation.
 
-**PoC status:** All borrower data is **synthetic** via mock connectors; architecture is production-shaped so real APIs (GSTN, Account Aggregator, EPFO, bureau) can replace mocks without changing scoring logic.
+**PoC status:** Borrower data is **synthetic**; **2 connectors pull live public data** (RBI macro + Open-Meteo weather). Optional Google Places with API key. See [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md).

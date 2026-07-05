@@ -25,6 +25,17 @@ Scores MSME creditworthiness using **10 digital data sources** (GST, UPI, Accoun
 | ② | **Credit Decision** | Score, recommendation, key metrics, drivers, flags |
 | ③ | **Evidence & Trends** | GST, UPI, bank, payroll charts |
 | ④ | **Loan Offer** | Limit and pricing simulation |
+| ⑤ | **Data Summary Sheet** | Actual values, CSV export, connector status |
+
+## Live data connectors (no API key)
+
+| Connector | Source | What it pulls |
+|-----------|--------|---------------|
+| **Macro / RBI** | [Indian Data Project](https://indiandataproject.org/open-data) | Live repo rate, CPI, policy stance |
+| **Weather** | [Open-Meteo](https://open-meteo.com/) | 30-day rainfall → monsoon index |
+| **Google** (optional) | Google Places API | Set `GOOGLE_PLACES_API_KEY` in secrets |
+
+All other sources are mock in PoC — integration guide: [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md)
 
 ## Quick start
 
@@ -49,7 +60,7 @@ Open http://localhost:8501 → **① Select MSME Case** → compare **MSME001** 
 |-----|-------------|
 | [docs/README.md](docs/README.md) | Documentation index |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design & scoring pipeline |
-| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) | Real vs dummy data & API replacement |
+| [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md) | Live connectors + how to connect each source |
 | [docs/NTC_MSME.md](docs/NTC_MSME.md) | Business case for NTC MSMEs |
 | [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md) | Code layout & extension guide |
 

@@ -81,10 +81,11 @@ def summarize_epfo(epfo: dict) -> dict:
 def summarize_google(google: dict) -> dict:
     pos = sum(1 for r in google["reviews"] if r["sentiment"] == "positive")
     total = len(google["reviews"]) or 1
+    live_tag = " · LIVE Places API" if google.get("live") else " · synthetic"
     return {
         "source": "Google Business",
         "icon": "⭐",
-        "records": f"{google['review_count']} reviews",
+        "records": f"{google['review_count']} reviews{live_tag}",
         "headline": f"{google['rating']}★ rating · {pos/total*100:.0f}% positive sentiment",
         "highlights": [
             f"Reviews analysed (NLP): {total}",
@@ -149,15 +150,23 @@ def summarize_electricity(elec: dict) -> dict:
 def summarize_macro(profile: dict) -> dict:
     sector = profile["sector"]
     macro = profile["macro"]
+    repo = macro.get("repo_rate_live", MACRO_INDICATORS["repo_rate"])
+    repo_label = f"{repo}%"
+    if macro.get("macro_fetch_source"):
+        repo_label += f" (live · {macro['macro_fetch_source']})"
+    monsoon = macro.get("monsoon_index_pct", 100)
+    monsoon_note = ""
+    if macro.get("weather_source"):
+        monsoon_note = f" · live rainfall {macro.get('precipitation_mm_30d')}mm/30d"
     return {
         "source": "Macro & Sector",
         "icon": "🌐",
-        "records": "Live indicators",
+        "records": "Live + sector static",
         "headline": f"{sector} sector growth {SECTOR_GROWTH.get(sector, 5):.1f}%",
         "highlights": [
-            f"Repo rate: {MACRO_INDICATORS['repo_rate']}%",
-            f"Manufacturing PMI: {MACRO_INDICATORS['manufacturing_pmi']}",
-            f"Monsoon index: {macro.get('monsoon_index_pct', 100)}%",
+            f"Repo rate: {repo_label}",
+            f"RBI stance: {macro.get('rbi_stance', '—')}",
+            f"Monsoon index: {monsoon}%{monsoon_note}",
             f"Region: {macro.get('region_tier', 'N/A')}",
         ],
         "status": "healthy",
