@@ -10,7 +10,8 @@ from src.scoring.underwriter_insights import get_credit_decision, get_key_metric
 from src.utils.chart_helpers import timeseries_df
 from src.utils.constants import SECTOR_GROWTH
 from src.utils.ui_text import FINN_SCORE_LABEL
-from src.utils.upi_insights import upi_insight_metrics, upi_momentum
+from src.utils.upi_insights import upi_momentum
+from src.utils.helpers import avg_recent
 
 
 def _chips(flags: list[dict], levels: tuple[str, ...], css: str, limit: int = 4) -> None:
@@ -109,9 +110,25 @@ def _render_upi_chart(profile: dict) -> None:
     _plot_chart(fig)
 
 
+def _upi_signal_metrics(profile: dict, features: dict) -> list[dict]:
+    upi = profile["upi"]
+    ticket = upi.get("avg_ticket_size", 0)
+    if isinstance(ticket, list):
+        avg_ticket = avg_recent(ticket, min(3, len(ticket)))
+    else:
+        avg_ticket = float(ticket)
+    return [
+        {"label": "P2M share", "value": f"{upi['p2m_ratio'] * 100:.0f}%"},
+        {"label": "6M avg volume", "value": f"₹{features['upi_avg_monthly_volume']:.1f}L"},
+        {"label": "Volume YoY", "value": f"{features['upi_volume_yoy_growth']:+.1f}%"},
+        {"label": "Failed txn rate", "value": f"{upi['failed_txn_rate'] * 100:.2f}%"},
+        {"label": "Avg ticket", "value": f"₹{avg_ticket:,.0f}"},
+    ]
+
+
 def _render_upi_signal(profile: dict, features: dict) -> None:
     upi = profile["upi"]
-    metrics = upi_insight_metrics(profile, features)
+    metrics = _upi_signal_metrics(profile, features)
     cells = "".join(
         f"<div class='finn-upi-metric'><span class='k'>{m['label']}</span>"
         f"<span class='v'>{m['value']}</span></div>"

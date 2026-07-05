@@ -134,7 +134,6 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
         "UPI": pd.DataFrame({
             "Month": [f"M{i+1}" for i in range(len(upi["monthly_volume_lakhs"]))],
             "Volume (₹L)": upi["monthly_volume_lakhs"],
-            "Txn count": upi["monthly_txn_count"],
             "Avg ticket (₹)": upi["avg_ticket_size"],
         }),
         "Bank (AA)": pd.DataFrame({
