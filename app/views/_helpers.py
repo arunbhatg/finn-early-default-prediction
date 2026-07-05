@@ -7,11 +7,12 @@ from src.connectors.data_summary import build_data_pull_summary
 from src.connectors.enrichment import enrich_profile_with_public_data
 from src.connectors.sources import ALL_CONNECTORS
 from src.features.feature_engineering import extract_features
-from src.scoring.explainability import build_score_narrative, extract_score_drivers
-from src.scoring.model import compute_final_score
 
 
 def assess_msme(msme_id: str, profile: dict, sources: list[str] | None = None) -> dict:
+    from src.scoring.explainability import build_score_narrative, extract_score_drivers
+    from src.scoring.model import compute_final_score
+
     sources = sources or list(ALL_CONNECTORS.keys())
     enriched, source_status = enrich_profile_with_public_data(profile)
     features = extract_features(enriched)

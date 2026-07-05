@@ -9,17 +9,22 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from app.components.branding import render_footer_branding, render_sidebar_branding, render_sidebar_footer_link
-from app.components.styles import inject_styles
-from app.views.assessment import page_assessment
-from app.views.cases import page_cases
-from app.views.details import page_details
+PAGE_ORDER = ("Cases", "Assessment", "Details")
 
-PAGES = {
-    "Cases": page_cases,
-    "Assessment": page_assessment,
-    "Details": page_details,
-}
+
+def _run_page(name: str) -> None:
+    if name == "Cases":
+        from app.views.cases import page_cases
+
+        page_cases()
+    elif name == "Assessment":
+        from app.views.assessment import page_assessment
+
+        page_assessment()
+    elif name == "Details":
+        from app.views.details import page_details
+
+        page_details()
 
 
 def init_session():
@@ -43,11 +48,14 @@ def bootstrap_once():
         return
     with st.spinner("Starting…"):
         from src.bootstrap import ensure_ready
+
         ensure_ready()
     st.session_state._bootstrapped = True
 
 
 def sidebar():
+    from app.components.branding import render_sidebar_branding, render_sidebar_footer_link
+
     render_sidebar_branding()
 
     if st.session_state.fetched and st.session_state.profile:
@@ -68,10 +76,7 @@ def sidebar():
 
 
 def top_nav():
-    labels = list(PAGES.keys())
-    has_case = st.session_state.fetched and st.session_state.score_result
-    if not has_case:
-        labels = ["Cases"]
+    labels = list(PAGE_ORDER) if st.session_state.fetched and st.session_state.score_result else ["Cases"]
 
     idx = labels.index(st.session_state.page) if st.session_state.page in labels else 0
     st.markdown('<div class="finn-nav">', unsafe_allow_html=True)
@@ -90,6 +95,9 @@ def top_nav():
 
 
 def run_app():
+    from app.components.branding import render_footer_branding
+    from app.components.styles import inject_styles
+
     st.set_page_config(
         page_title="FinHealth Card | FINN.",
         page_icon="🟢",
@@ -102,7 +110,7 @@ def run_app():
     bootstrap_once()
     sidebar()
     top_nav()
-    PAGES[st.session_state.page]()
+    _run_page(st.session_state.page)
     render_footer_branding()
 
 

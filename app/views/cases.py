@@ -5,8 +5,8 @@ import streamlit as st
 from app.views._helpers import load_case
 from src.connectors.base import load_profile
 from src.features.feature_engineering import extract_features
-from src.scoring.underwriter_insights import bill_pay_on_time_pct, get_credit_decision
 from src.utils.constants import DEMO_PERSONAS
+from src.utils.display_metrics import bill_pay_on_time_pct
 
 
 def _decision_color(action: str) -> str:
@@ -15,6 +15,7 @@ def _decision_color(action: str) -> str:
 
 def page_cases():
     from src.scoring.model import compute_final_score
+    from src.scoring.underwriter_insights import get_credit_decision
 
     st.title("Cases")
     st.caption("Open a demo MSME to run the financial health assessment.")
