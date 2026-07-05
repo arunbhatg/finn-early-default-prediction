@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from src.utils.ui_text import APP_TAGLINE, APP_TITLE, FINN_SCORE_LABEL
+from src.utils.ui_text import APP_BUILD, APP_TAGLINE, APP_TITLE, FINN_SCORE_LABEL
 
 PAGE_ORDER = ("Portfolio", "Decision", "Evidence")
 
@@ -99,6 +99,7 @@ def sidebar():
     else:
         st.sidebar.caption("Pick a loan from portfolio to begin")
 
+    st.sidebar.caption(f"Build: {APP_BUILD}")
     _sidebar_footer_link()
 
 
@@ -166,4 +167,5 @@ def run_app():
     _footer_branding()
 
 
-run_app()
+if __name__ == "__main__":
+    run_app()

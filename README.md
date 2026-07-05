@@ -38,6 +38,18 @@ A predictive model that identifies loan stress **12 months in advance** with **~
 | MSME003 | Working Capital | Bureau | **High** — early warning ~12m before default |
 | MSME004 | Mudra/PMEGP | **NTC** | Low |
 
+## Streamlit Cloud deploy
+
+| Setting | Value |
+|---------|--------|
+| **Repository** | `arunbhatg/finn-early-default-prediction` |
+| **Branch** | `main` |
+| **Main file path** | `streamlit_app.py` |
+
+After each push: **Manage app → Reboot app** (or wait for auto-redeploy).
+
+**Verify deploy:** sidebar should show `Build: 1b00156 · month-on-book UI` and nav tabs **Portfolio · Decision · Evidence** (not Assessment / Signals).
+
 ## Quick start
 
 ```bash

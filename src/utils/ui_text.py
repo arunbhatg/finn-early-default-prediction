@@ -8,3 +8,4 @@ STRESS_RISK_EXPLAINER = (
 APP_TITLE = "FINN. Early Default Prediction"
 APP_TAGLINE = "12-month MSME loan stress early warning · structured + unstructured data"
 TAB_BUSINESS_SIGNALS = "Business & Digital Signals"
+APP_BUILD = "1b00156 · month-on-book UI"
