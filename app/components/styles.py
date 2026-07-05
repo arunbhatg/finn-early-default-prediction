@@ -61,7 +61,7 @@ def inject_styles() -> None:
         .finn-case-stat .value {{
             display: block;
             color: #0F172A;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 600;
             white-space: nowrap;
         }}

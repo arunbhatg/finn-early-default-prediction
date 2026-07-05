@@ -4,14 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import joblib
-import lightgbm as lgb
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
 
-from src.features.feature_engineering import FEATURE_COLUMNS, build_feature_matrix, extract_features
+from src.features.feature_engineering import FEATURE_COLUMNS, build_feature_matrix
 from src.scoring.explainability import build_score_narrative, extract_score_drivers
 from src.scoring.rule_engine import compute_rule_score
 from src.connectors.data_summary import build_data_pull_summary
@@ -23,6 +19,11 @@ def _label_from_rules(features: dict) -> float:
 
 
 def train_model(save: bool = True) -> dict:
+    import joblib
+    import lightgbm as lgb
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error, r2_score
+
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     df = build_feature_matrix()
     X = df[FEATURE_COLUMNS].values
@@ -51,7 +52,9 @@ def train_model(save: bool = True) -> dict:
     return metrics
 
 
-def load_model() -> tuple[lgb.LGBMRegressor, list[str]] | tuple[None, list[str]]:
+def load_model():
+    import joblib
+
     path = MODELS_DIR / "score_model.pkl"
     if not path.exists():
         return None, FEATURE_COLUMNS

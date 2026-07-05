@@ -55,7 +55,7 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
         flags.append({
             "level": "red",
             "label": "Active litigation",
-            "detail": f"{courts['civil_cases']} civil · {courts['criminal_cases']} criminal",
+            "detail": f"{court_case_count(profile)} case(s) on record",
         })
 
     if features["gst_turnover_yoy_growth"] > 10:
@@ -82,21 +82,32 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
     return flags
 
 
+def court_case_count(profile: dict) -> int:
+    courts = profile["courts"]
+    return courts["civil_cases"] + courts["criminal_cases"] + courts["insolvency_petitions"]
+
+
+def bill_pay_on_time_pct(features: dict) -> float:
+    """Blended on-time rate across utility and bank autopay."""
+    return (features["electricity_payment_regularity"] + features["aa_emi_on_time_rate"]) / 2 * 100
+
+
 def get_key_metrics(features: dict, profile: dict) -> list[dict]:
     growth = features["gst_turnover_yoy_growth"]
     growth_sign = "+" if growth >= 0 else ""
+    cases = court_case_count(profile)
     return [
         {"label": "GST YoY growth", "value": f"{growth_sign}{growth:.1f}%"},
         {"label": "GST compliance", "value": f"{features['gst_filing_compliance']*100:.0f}%"},
-        {"label": "Bill pay on-time", "value": f"{features['electricity_payment_regularity']*100:.0f}%"},
         {"label": "Autopay failures", "value": str(int(features["aa_bounce_count"]))},
         {"label": "Late penalties", "value": str(int(features["gst_payment_delays"]))},
         {"label": "Employee growth", "value": f"{features['epfo_headcount_growth']:+.1f}%"},
         {
             "label": "Google sentiment",
             "value": f"{features['google_rating']:.1f}★",
-            "benchmark": f"{features['google_sentiment_score']*100:.0f}% positive",
         },
+        {"label": "Court cases", "value": str(cases)},
+        {"label": "Elec. consumption", "value": f"{features['electricity_avg_kwh']:.0f} kWh"},
         {"label": "Monthly turnover", "value": f"₹{features['gst_avg_monthly_turnover']:.1f}L"},
     ]
 

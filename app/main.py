@@ -58,7 +58,7 @@ def sidebar():
             f"<span class='finn-muted'>{p['sector']} · {score}</span>",
             unsafe_allow_html=True,
         )
-        if st.sidebar.button("Change case", use_container_width=True):
+        if st.sidebar.button("Change case", width="stretch"):
             st.session_state.page = "Cases"
             st.rerun()
     else:

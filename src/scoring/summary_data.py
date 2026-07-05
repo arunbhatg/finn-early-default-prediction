@@ -8,6 +8,12 @@ from src.utils.constants import MACRO_INDICATORS, SECTOR_GROWTH
 from src.utils.helpers import avg_recent, compliance_rate, yoy_growth
 
 
+def _kv_table(rows: list[tuple], columns: tuple[str, str] = ("Field", "Value")) -> pd.DataFrame:
+    df = pd.DataFrame(rows, columns=list(columns))
+    df[columns[1]] = df[columns[1]].astype(str)
+    return df
+
+
 def borrower_identity_table(profile: dict) -> pd.DataFrame:
     rows = [
         ("Business name", profile["business_name"]),
@@ -20,7 +26,7 @@ def borrower_identity_table(profile: dict) -> pd.DataFrame:
         ("Years in business", str(profile["years_in_business"])),
         ("Promoter", profile["bureau"]["promoter_name"]),
     ]
-    return pd.DataFrame(rows, columns=["Field", "Value"])
+    return _kv_table(rows)
 
 
 def features_table(features: dict) -> pd.DataFrame:
@@ -63,21 +69,21 @@ def metric_drilldown(metric_key: str, profile: dict, features: dict) -> pd.DataF
             "ABB (3M avg)": [""] * 5 + [aa["abb_lakhs"]],
         })
     if metric_key == "cibil":
-        return pd.DataFrame([
+        return _kv_table([
             ("CIBIL score", bureau["cibil_score"]),
             ("Active loans", bureau["active_loans"]),
             ("DPD (12M)", bureau["dpd_12m"]),
             ("Write-offs (36M)", bureau["write_offs_36m"]),
             ("Credit utilisation", f"{bureau['credit_utilization']*100:.0f}%"),
-        ], columns=["Field", "Value"])
+        ])
     if metric_key == "emi":
-        return pd.DataFrame([
+        return _kv_table([
             ("EMI on-time rate", f"{aa['emi_on_time_rate']*100:.1f}%"),
             ("Bounces (12M)", aa["bounce_count_12m"]),
             ("OD/CC utilisation", f"{aa['od_utilization']*100:.0f}%"),
             ("Avg monthly credits (₹L)", f"{avg_recent(aa['monthly_credits_lakhs'], 6):.2f}"),
             ("Avg monthly debits (₹L)", f"{avg_recent(aa['monthly_debits_lakhs'], 6):.2f}"),
-        ], columns=["Field", "Value"])
+        ])
     if metric_key == "employees":
         cnt = epfo["employee_count"][-12:]
         wages = epfo["monthly_wage_bill_lakhs"][-12:]
@@ -88,7 +94,7 @@ def metric_drilldown(metric_key: str, profile: dict, features: dict) -> pd.DataF
             "Wage bill (₹L)": wages,
             "EPFO status": status,
         })
-    return pd.DataFrame([("No drill-down", "—")], columns=["Field", "Value"])
+    return _kv_table([("No drill-down", "—")])
 
 
 METRIC_KEYS = {
@@ -144,37 +150,37 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
             "Month": [f"M{i+1}" for i in range(len(elec["monthly_kwh"]))],
             "kWh": elec["monthly_kwh"],
         }),
-        "Courts": pd.DataFrame([
+        "Courts": _kv_table([
             ("Civil cases", courts["civil_cases"]),
             ("Criminal cases", courts["criminal_cases"]),
             ("Insolvency", courts["insolvency_petitions"]),
             ("Outstanding (₹L)", courts["total_outstanding_litigation_lakhs"]),
-        ], columns=["Field", "Value"]),
-        "Google": pd.DataFrame([
+        ]),
+        "Google": _kv_table([
             ("Rating", f"{google['rating']} ★"),
             ("Reviews", google["review_count"]),
             ("Response rate", f"{google['response_rate']*100:.0f}%"),
             ("Velocity 6M", google["review_velocity_6m"]),
-        ], columns=["Field", "Value"]),
-        "Investment": pd.DataFrame([
+        ]),
+        "Investment": _kv_table([
             ("CapEx 12M (₹L)", inv["capex_lakhs_12m"]),
             ("R&D annual (₹L)", inv["rnd_spend_lakhs_annual"]),
             ("Patents", inv["patents_count"]),
             ("Govt scheme", "Yes" if inv["govt_scheme_beneficiary"] else "No"),
-        ], columns=["Field", "Value"]),
-        "Macro": pd.DataFrame([
+        ]),
+        "Macro": _kv_table([
             ("Sector growth", f"{SECTOR_GROWTH.get(profile['sector'], 5):.1f}%"),
             ("Repo rate", f"{MACRO_INDICATORS['repo_rate']}%"),
             ("Monsoon index", f"{profile['macro'].get('monsoon_index_pct', 100)}%"),
             ("Region", profile["macro"].get("region_tier", "—")),
-        ], columns=["Field", "Value"]),
-        "Bureau": pd.DataFrame([
+        ]),
+        "Bureau": _kv_table([
             ("Promoter", bureau["promoter_name"]),
             ("CIBIL", bureau["cibil_score"]),
             ("DPD 12M", bureau["dpd_12m"]),
             ("Write-offs 36M", bureau["write_offs_36m"]),
             ("Utilisation", f"{bureau['credit_utilization']*100:.0f}%"),
-        ], columns=["Field", "Value"]),
+        ]),
     }
     return tables
 
@@ -187,4 +193,4 @@ def score_summary_table(result: dict) -> pd.DataFrame:
     ]
     for pillar, data in result.get("pillars", {}).items():
         rows.append((f"Pillar: {pillar.title()}", f"{data['score']:.0f}/100"))
-    return pd.DataFrame(rows, columns=["Metric", "Value"])
+    return _kv_table(rows, columns=("Metric", "Value"))

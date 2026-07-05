@@ -6,7 +6,7 @@ import streamlit as st
 
 from app.components.widgets import render_score_gauge
 from src.scoring.loan_simulator import simulate_loan
-from src.scoring.underwriter_insights import get_credit_decision, get_key_metrics, get_risk_flags
+from src.scoring.underwriter_insights import court_case_count, get_credit_decision, get_key_metrics, get_risk_flags
 from src.utils.constants import SECTOR_GROWTH
 
 
@@ -40,9 +40,9 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
         )
 
     metrics = get_key_metrics(features, profile)
-    cols = st.columns(4)
+    cols = st.columns(3)
     for i, m in enumerate(metrics):
-        with cols[i % 4]:
+        with cols[i % 3]:
             st.metric(m["label"], m["value"])
 
     flags = get_risk_flags(features, profile)
@@ -83,19 +83,12 @@ def _google_sentiment_counts(reviews: list[dict]) -> dict[str, int]:
     return counts
 
 
-def _electricity_payment_split(electricity: dict) -> tuple[int, int]:
-    months = len(electricity["monthly_kwh"])
-    late = round((1 - electricity["payment_regularity"]) * months)
-    return months - late, late
-
-
 def render_charts(profile: dict, features: dict) -> None:
     gst = profile["gst"]
     upi = profile["upi"]
     aa = profile["aa"]
     epfo = profile["epfo"]
     google = profile["google"]
-    courts = profile["courts"]
     electricity = profile["electricity"]
     sector = profile["sector"]
 
@@ -155,34 +148,18 @@ def render_charts(profile: dict, features: dict) -> None:
 
     c7, c8 = st.columns(2)
     with c7:
-        court_labels = ["Civil", "Criminal", "Insolvency"]
-        court_vals = [
-            courts["civil_cases"],
-            courts["criminal_cases"],
-            courts["insolvency_petitions"],
-        ]
-        df = pd.DataFrame({"Type": court_labels, "Cases": court_vals})
+        total_cases = court_case_count(profile)
         fig = px.bar(
-            df,
-            x="Type",
-            y="Cases",
+            x=["Court cases"],
+            y=[total_cases],
             title="Court cases",
-            color="Type",
-            color_discrete_sequence=["#F97316", "#EF4444", "#991B1B"],
+            color_discrete_sequence=["#EF4444" if total_cases else "#22C55E"],
         )
         fig.update_layout(**_chart_layout())
         st.plotly_chart(fig, width="stretch")
     with c8:
-        on_time, late = _electricity_payment_split(electricity)
-        df = pd.DataFrame({"Status": ["On time", "Late / bounce"], "Months": [on_time, late]})
-        fig = px.bar(
-            df,
-            x="Status",
-            y="Months",
-            title=f"Electricity bill payments ({electricity['payment_regularity']*100:.0f}% on-time)",
-            color="Status",
-            color_discrete_map={"On time": "#22C55E", "Late / bounce": "#EF4444"},
-        )
+        df = pd.DataFrame({"kWh": electricity["monthly_kwh"]})
+        fig = px.line(df, markers=True, title="Electricity consumption")
         fig.update_layout(**_chart_layout())
         st.plotly_chart(fig, width="stretch")
 

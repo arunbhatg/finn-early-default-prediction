@@ -14,8 +14,8 @@ def render_summary_sheet(profile, features, result, source_status=None):
     tab1, tab2, tab3 = st.tabs(["Borrower & score", "By source", "Connectors"])
 
     with tab1:
-        st.dataframe(borrower_identity_table(profile), use_container_width=True, hide_index=True)
-        st.dataframe(score_summary_table(result), use_container_width=True, hide_index=True)
+        st.dataframe(borrower_identity_table(profile), width="stretch", hide_index=True)
+        st.dataframe(score_summary_table(result), width="stretch", hide_index=True)
         st.download_button(
             "Download features CSV",
             features_table(features).to_csv(index=False),
@@ -25,7 +25,7 @@ def render_summary_sheet(profile, features, result, source_status=None):
     with tab2:
         tables = source_snapshot_tables(profile)
         source = st.selectbox("Source", list(tables.keys()), label_visibility="collapsed")
-        st.dataframe(tables[source], use_container_width=True, hide_index=True)
+        st.dataframe(tables[source], width="stretch", hide_index=True)
 
     with tab3:
         if source_status:
