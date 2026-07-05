@@ -34,7 +34,6 @@ def page_details():
     st.markdown("#### Business & digital footprint")
     render_alt_data_charts(profile, features, key_prefix=f"signals_alt_{case_key}")
 
-    st.markdown("#### Text intelligence")
     render_unstructured_signals(profile, features, key_prefix=f"signals_nlp_{case_key}")
 
     with st.expander("Full data summary & export", expanded=False):

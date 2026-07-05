@@ -16,7 +16,7 @@ from src.utils.display_helpers import (
     get_text_intel_metrics,
     text_severity_label,
 )
-from src.utils.ui_text import FINN_SCORE_LABEL, TAB_BUSINESS_SIGNALS
+from src.utils.ui_text import FINN_SCORE_LABEL, SECTION_UNSTRUCTURED_INSIGHTS, TAB_BUSINESS_SIGNALS
 
 
 def _payment_metrics(features: dict, profile: dict) -> list[dict]:
@@ -174,12 +174,13 @@ def _text_stress_chart(features: dict, *, key: str, height: int = 280) -> None:
     _plot_chart(fig, key=key)
 
 
-def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str = "nlp") -> None:
+def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str = "nlp", show_section: bool = True) -> None:
     rows = build_text_signal_table(profile, features)
     if not rows and features.get("composite_text_stress_score", 0) <= 0:
         return
 
-    _section("Text & market signals")
+    if show_section:
+        _section(SECTION_UNSTRUCTURED_INSIGHTS)
     _metric_row(get_text_intel_metrics(features), columns=4)
 
     if rows:
@@ -309,13 +310,7 @@ def render_alt_data_charts(profile: dict, features: dict, *, key_prefix: str = "
 
 
 def render_unstructured_signals(profile: dict, features: dict, *, key_prefix: str = "nlp") -> None:
-    _section("Unstructured text → structured features")
-    render_text_intel_compact(profile, features, key_prefix=key_prefix)
-
-    rows = build_text_signal_table(profile, features)
-    if rows:
-        st.markdown("**Structured conversion by source**")
-        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+    render_text_intel_compact(profile, features, key_prefix=key_prefix, show_section=True)
 
     timeline = collect_text_timeline(profile)
     if timeline:
@@ -330,15 +325,6 @@ def render_unstructured_signals(profile: dict, features: dict, *, key_prefix: st
                 f"</div>",
                 unsafe_allow_html=True,
             )
-
-    composite = features.get("composite_text_stress_score", 0)
-    with st.expander("How text scores are computed", expanded=False):
-        st.markdown(
-            "Each text source is scanned for stress keywords (e.g. *overdue, bounce, restructuring, default*) "
-            "and positive signals (*timely, growth*). Keyword density is converted to a **0–100 structured score** "
-            "per source, then blended into the composite text stress index used by the model."
-        )
-        st.caption(f"Composite index for this case: **{composite * 100:.0f}/100** ({text_severity_label(composite)})")
 
 
 def render_evidence_summary(profile: dict, features: dict, result: dict) -> None:
