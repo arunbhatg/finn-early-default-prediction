@@ -11,7 +11,7 @@ from src.scoring.summary_data import (
 
 
 def render_summary_sheet(profile, features, result, source_status=None):
-    tab1, tab2, tab3 = st.tabs(["Borrower & FINN. score", "By source", "Connectors"])
+    tab1, tab2, tab3 = st.tabs(["Borrower & stress", "By source", "Connectors"])
 
     with tab1:
         st.dataframe(borrower_identity_table(profile), width="stretch", hide_index=True)

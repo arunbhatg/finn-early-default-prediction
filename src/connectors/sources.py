@@ -1,6 +1,7 @@
 """Mock data connectors for all alternative data sources."""
 
 from src.connectors.base import BaseConnector
+from src.connectors.live.loan_tape import LoanTapeConnector
 from src.utils.constants import MACRO_INDICATORS, SECTOR_GROWTH
 
 
@@ -80,6 +81,7 @@ class InvestmentConnector(BaseConnector):
 
 
 ALL_CONNECTORS = {
+    "loan_tape": LoanTapeConnector(),
     "gst": GSTConnector(),
     "upi": UPIConnector(),
     "aa": AAConnector(),

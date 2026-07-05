@@ -7,23 +7,15 @@ from src.connectors.data_summary import build_data_pull_summary
 from src.connectors.enrichment import enrich_profile_with_public_data
 from src.connectors.sources import ALL_CONNECTORS
 from src.features.feature_engineering import extract_features
+from src.prediction.model import compute_stress_prediction, predict_at_observation
 
 
 def assess_msme(msme_id: str, profile: dict, sources: list[str] | None = None) -> dict:
-    from src.scoring.explainability import build_score_narrative, extract_score_drivers
-    from src.scoring.model import compute_final_score
-
     sources = sources or list(ALL_CONNECTORS.keys())
     enriched, source_status = enrich_profile_with_public_data(profile)
-    features = extract_features(enriched)
-    result = compute_final_score(features)
-
-    drivers = extract_score_drivers(result["pillars"])
-    result["boosters"] = drivers["boosters"]
-    result["draggers"] = drivers["draggers"]
-    result["narrative"] = build_score_narrative(
-        result["final_score"], drivers["boosters"], drivers["draggers"]
-    )
+    result = predict_at_observation(enriched)
+    features = extract_features(enriched, observation_month=result.get("observation_month"))
+    features["_stress_prob_display"] = result["stress_prob"]
     result["data_summary"] = build_data_pull_summary(enriched, sources)
 
     return {
@@ -47,10 +39,10 @@ def load_case(msme_id: str) -> None:
 
 def require_case() -> bool:
     if not st.session_state.fetched or not st.session_state.score_result:
-        st.markdown("### No case selected")
-        st.caption("Choose a demo MSME from **Cases** to view this page.")
-        if st.button("Go to Cases", type="primary"):
-            st.session_state.page = "Cases"
+        st.markdown("### No loan selected")
+        st.caption("Choose a loan from **Portfolio** to view stress assessment.")
+        if st.button("Go to Portfolio", type="primary"):
+            st.session_state.page = "Portfolio"
             st.rerun()
         return False
     return True

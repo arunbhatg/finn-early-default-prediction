@@ -23,7 +23,7 @@ def finn_logo_html(size: str = "medium") -> str:
 
 def render_sidebar_branding() -> None:
     st.sidebar.markdown(finn_logo_html("medium"), unsafe_allow_html=True)
-    st.sidebar.caption("FinHealth Card")
+    st.sidebar.caption("Early Default Prediction")
 
 
 def render_app_header() -> None:

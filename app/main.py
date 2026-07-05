@@ -1,4 +1,4 @@
-"""Streamlit entry — clean 3-step underwriter flow."""
+"""Streamlit entry — portfolio early-warning flow."""
 
 import sys
 from pathlib import Path
@@ -9,16 +9,13 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-# Startup-safe copy — duplicated in src/utils/ui_text.py for other modules.
-APP_TITLE = "FINN. Alternative Score System"
-APP_TAGLINE = "NTC MSME underwriting · powered by Finndot alternative data"
-FINN_SCORE_LABEL = "FINN. Alternative Score"
+from src.utils.ui_text import APP_TAGLINE, APP_TITLE, FINN_SCORE_LABEL
 
-PAGE_ORDER = ("Cases", "Assessment", "Details")
+PAGE_ORDER = ("Portfolio", "Assessment", "Signals")
 
 
 def _run_page(name: str) -> None:
-    if name == "Cases":
+    if name == "Portfolio":
         from app.views.cases import page_cases
 
         page_cases()
@@ -26,7 +23,7 @@ def _run_page(name: str) -> None:
         from app.views.assessment import page_assessment
 
         page_assessment()
-    elif name == "Details":
+    elif name == "Signals":
         from app.views.details import page_details
 
         page_details()
@@ -34,7 +31,7 @@ def _run_page(name: str) -> None:
 
 def init_session():
     defaults = {
-        "page": "Cases",
+        "page": "Portfolio",
         "msme_id": None,
         "profile": None,
         "features": None,
@@ -68,7 +65,7 @@ def _sidebar_branding() -> None:
             '<span style="font-weight:700;font-size:1.2rem">FINN<span style="color:#22C55E">.</span></span>',
             unsafe_allow_html=True,
         )
-        st.sidebar.caption("FinHealth Card")
+        st.sidebar.caption("Early Default Prediction")
 
 
 def _sidebar_footer_link() -> None:
@@ -86,23 +83,24 @@ def sidebar():
 
     if st.session_state.fetched and st.session_state.profile:
         p = st.session_state.profile
-        score = int(st.session_state.score_result["final_score"]) if st.session_state.score_result else "—"
+        prob = int(st.session_state.score_result["stress_prob"] * 100) if st.session_state.score_result else "—"
+        loan_type = p.get("loan_book", {}).get("loan_type", "—")
         st.sidebar.markdown(
             f"**{p['business_name'][:26]}**  \n"
-            f"<span class='finn-muted'>{p['sector']} · {FINN_SCORE_LABEL}: {score}</span>",
+            f"<span class='finn-muted'>{loan_type} · {FINN_SCORE_LABEL}: {prob}%</span>",
             unsafe_allow_html=True,
         )
         if st.sidebar.button("Change case", width="stretch"):
-            st.session_state.page = "Cases"
+            st.session_state.page = "Portfolio"
             st.rerun()
     else:
-        st.sidebar.caption("Pick a case to begin")
+        st.sidebar.caption("Pick a loan from portfolio to begin")
 
     _sidebar_footer_link()
 
 
 def top_nav():
-    labels = list(PAGE_ORDER) if st.session_state.fetched and st.session_state.score_result else ["Cases"]
+    labels = list(PAGE_ORDER) if st.session_state.fetched and st.session_state.score_result else ["Portfolio"]
 
     idx = labels.index(st.session_state.page) if st.session_state.page in labels else 0
     st.markdown('<div class="finn-nav">', unsafe_allow_html=True)
@@ -149,7 +147,7 @@ def run_app():
     from app.components.styles import inject_styles
 
     st.set_page_config(
-        page_title="FinHealth Card | FINN.",
+        page_title="FINN. Early Default Prediction",
         page_icon="🟢",
         layout="wide",
         initial_sidebar_state="expanded",

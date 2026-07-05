@@ -1,43 +1,42 @@
-# FinHealth Card
+# FINN. Early Default Prediction
 
-**Alternative-data credit assessment for New-To-Credit (NTC) MSMEs** — when traditional financials and bureau history are unavailable.
+**12-month MSME loan stress early warning** — combining structured alt-data, collection payment timing, bureau/NTC signals, and unstructured text conversion.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io)
-
-**Repository:** https://github.com/arunbhatg/finhealth-card
+**Repository:** https://github.com/arunbhatg/finn-early-default-prediction
 
 **Powered by FINN.** · [Try Finndot AI app](https://play.google.com/store/apps/details?id=com.anomapro.finndot.prd)
 
 ---
 
-## What it does
+## Problem
 
-Scores MSME creditworthiness using **10 digital data sources** (GST, UPI, Account Aggregator, EPFO, Google sentiment, promoter bureau, courts, electricity, macro, investment) and produces:
+Loan default prediction accuracy currently sits between **16–22%** when relying only on static structured data (bureau snapshots, loan master, basic GST).
 
-- **Financial Health Score** (300–900, CIBIL-like scale)
-- **Credit recommendation** (Approve / Review / Decline)
-- **Explainable pillars** + risk flags for underwriters
-- **Indicative loan offer** (limit, rate, tenure)
+## Solution
+
+A predictive model that identifies loan stress **12 months in advance** with **~90% accuracy** by adding:
+
+- **Collection payment timing** — DPD trends, EMI lead/lag days, bounces, broken promise-to-pay
+- **Bureau other-loan behaviour** — how the promoter pays non-IDBI facilities
+- **NTC alt-data proxies** — GST, UPI, EPFO, AA when no bureau score exists
+- **Unstructured → structured NLP features** — reviews, news, RM notes, GST notices, collection field notes
 
 ## Underwriter workflow (app)
 
 | Step | Screen | Purpose |
 |------|--------|---------|
-| ① | **Select MSME Case** | Pick demo borrower with visible score/decision preview |
-| ② | **Credit Decision** | Score, recommendation, key metrics, drivers, flags |
-| ③ | **Evidence & Trends** | GST, UPI, bank, payroll charts |
-| ④ | **Loan Offer** | Limit and pricing simulation |
-| ⑤ | **Data Summary Sheet** | Actual values, CSV export, connector status |
+| ① | **Portfolio** | Active MSME loans with stress badge + loan type |
+| ② | **Assessment** | 12m stress probability, risk band, model comparison (18% vs 90%) |
+| ③ | **Signals** | Collection charts, bureau other-loans, unstructured evidence |
 
-## Live data connectors (no API key)
+## Demo cases
 
-| Connector | Source | What it pulls |
-|-----------|--------|---------------|
-| **Macro / RBI** | [Indian Data Project](https://indiandataproject.org/open-data) | Live repo rate, CPI, policy stance |
-| **Weather** | [Open-Meteo](https://open-meteo.com/) | 30-day rainfall → monsoon index |
-| **Google** (optional) | Google Places API | Set `GOOGLE_PLACES_API_KEY` in secrets |
-
-All other sources are mock in PoC — integration guide: [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md)
+| ID | Loan type | Credit file | Typical stress |
+|----|-----------|-------------|----------------|
+| MSME001 | Term Loan | Bureau | Low |
+| MSME002 | Cash Credit | **NTC** | Low–Watch |
+| MSME003 | Working Capital | Bureau | **High** — early warning ~12m before default |
+| MSME004 | Mudra/PMEGP | **NTC** | Low |
 
 ## Quick start
 
@@ -45,35 +44,21 @@ All other sources are mock in PoC — integration guide: [docs/CONNECTOR_INTEGRA
 pip install -r requirements.txt
 python scripts/generate_data.py
 python scripts/train_model.py
+python scripts/verify_predictions.py
 streamlit run app/main.py
 ```
 
-Open http://localhost:8501 → **① Select MSME Case** → compare **MSME001** vs **MSME003**.
-
-## Deploy (free)
-
-1. Push to GitHub
-2. [share.streamlit.io](https://share.streamlit.io) → New app
-3. Main file: `app/main.py`
+Open http://localhost:8501 → **Portfolio** → compare **MSME001** vs **MSME003**.
 
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
 | [docs/README.md](docs/README.md) | Documentation index |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design & scoring pipeline |
-| [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md) | Live connectors + how to connect each source |
-| [docs/NTC_MSME.md](docs/NTC_MSME.md) | Business case for NTC MSMEs |
-| [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md) | Code layout & extension guide |
-
-## Demo cases
-
-| ID | Profile | Typical score | Decision |
-|----|---------|---------------|----------|
-| MSME001 | Manufacturer, Pune | ~740 | Approve |
-| MSME002 | Retail kirana, Ahmedabad | ~720 | Approve |
-| MSME003 | Distressed trader, Delhi | ~460 | Decline |
-| MSME004 | Agri-input, Nagpur | ~705 | Approve |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Early-warning pipeline |
+| [docs/EARLY_WARNING.md](docs/EARLY_WARNING.md) | Business case & RM workflow |
+| [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md) | CBS loan tape + bureau feeds |
+| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) | Structured + unstructured sources |
 
 ## Tech stack
 
@@ -81,8 +66,8 @@ Python · Streamlit · LightGBM · Plotly · Pandas
 
 ## PoC disclaimer
 
-All borrower data is **synthetic**. Architecture supports production connectors (GSTN, AA, bureau) — see [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
+90% accuracy is demonstrated on **curated synthetic portfolio data**. Production requires real NPA labels, out-of-time validation, and model governance.
 
 ## License
 
-Hackathon / PoC — IDBI internal use.
+Hackathon / PoC — internal use.

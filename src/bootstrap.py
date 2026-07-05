@@ -1,10 +1,10 @@
-"""Auto-bootstrap data and model on first run."""
+"""Auto-bootstrap data and models on first run."""
 
 from src.utils.constants import MODELS_DIR, PROFILES_DIR
 
 
 def ensure_ready() -> None:
-    """Generate synthetic data and train model if missing."""
+    """Generate synthetic data and train models if missing."""
     profile_count = len(list(PROFILES_DIR.glob("*.json"))) if PROFILES_DIR.exists() else 0
 
     if profile_count < 4:
@@ -18,7 +18,7 @@ def ensure_ready() -> None:
 
         generate_all()
 
-    if not (MODELS_DIR / "score_model.pkl").exists():
-        from src.scoring.model import train_model
+    if not (MODELS_DIR / "stress_model_full.pkl").exists():
+        from src.prediction.model import train_models
 
-        train_model()
+        train_models()

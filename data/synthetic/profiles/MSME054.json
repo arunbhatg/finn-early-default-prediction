@@ -1,79 +1,523 @@
 {
   "msme_id": "MSME054",
-  "business_name": "Chokshi PLC",
-  "pan": "JGGYY0607L",
-  "gstin": "24HMIE8989GN1ZD",
-  "sector": "Food Processing",
-  "city": "Raiganj",
+  "business_name": "Dalal-Bhatti",
+  "pan": "RJEEG7641O",
+  "gstin": "24DL9T15KCK41Z3",
+  "sector": "Textiles",
+  "city": "Vijayawada",
   "state": "Gujarat",
-  "years_in_business": 10,
-  "udyam_number": "UDYAM-24-1283652",
-  "persona": "random",
+  "years_in_business": 18,
+  "udyam_number": "UDYAM-24-8409097",
+  "persona": "distressed",
+  "loan_book": {
+    "loan_id": "LN-MSME054-001",
+    "loan_type": "Equipment Finance",
+    "sanctioned_amount_lakhs": 138.68,
+    "outstanding_lakhs": 119.64,
+    "interest_rate_pct": 11.93,
+    "tenure_months": 60,
+    "monthly_emi_lakhs": 2.9,
+    "collateral_type": "Property",
+    "disbursement_date": "2025-09-08",
+    "months_since_disbursement": 10,
+    "stress_onset_month": 14
+  },
+  "collections": {
+    "monthly_panel": [
+      {
+        "month_index": 0,
+        "emi_due_date": "2024-07-15",
+        "emi_paid_date": "2024-07-15",
+        "days_past_due": 0,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 1,
+        "emi_due_date": "2024-08-14",
+        "emi_paid_date": "2024-08-14",
+        "days_past_due": 0,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 2,
+        "emi_due_date": "2024-09-13",
+        "emi_paid_date": "2024-09-22",
+        "days_past_due": 9,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 1,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 3,
+        "emi_due_date": "2024-10-13",
+        "emi_paid_date": "2024-10-20",
+        "days_past_due": 7,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 4,
+        "emi_due_date": "2024-11-12",
+        "emi_paid_date": "2024-11-21",
+        "days_past_due": 9,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 5,
+        "emi_due_date": "2024-12-12",
+        "emi_paid_date": "2024-12-20",
+        "days_past_due": 8,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 1,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 6,
+        "emi_due_date": "2025-01-11",
+        "emi_paid_date": "2025-01-16",
+        "days_past_due": 5,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 7,
+        "emi_due_date": "2025-02-10",
+        "emi_paid_date": "2025-02-16",
+        "days_past_due": 6,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 8,
+        "emi_due_date": "2025-03-12",
+        "emi_paid_date": "2025-03-17",
+        "days_past_due": 5,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 9,
+        "emi_due_date": "2025-04-11",
+        "emi_paid_date": "2025-04-19",
+        "days_past_due": 8,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 10,
+        "emi_due_date": "2025-05-11",
+        "emi_paid_date": "2025-05-16",
+        "days_past_due": 5,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 11,
+        "emi_due_date": "2025-06-10",
+        "emi_paid_date": "2025-06-15",
+        "days_past_due": 5,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 0,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 12,
+        "emi_due_date": "2025-07-10",
+        "emi_paid_date": "2025-07-18",
+        "days_past_due": 8,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 13,
+        "emi_due_date": "2025-08-09",
+        "emi_paid_date": "2025-08-18",
+        "days_past_due": 9,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 14,
+        "emi_due_date": "2025-09-08",
+        "emi_paid_date": "2025-11-08",
+        "days_past_due": 61,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 15,
+        "emi_due_date": "2025-10-08",
+        "emi_paid_date": "2025-12-10",
+        "days_past_due": 63,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": true,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 16,
+        "emi_due_date": "2025-11-07",
+        "emi_paid_date": "2026-01-12",
+        "days_past_due": 66,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": false,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 17,
+        "emi_due_date": "2025-12-07",
+        "emi_paid_date": "2026-02-13",
+        "days_past_due": 68,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 18,
+        "emi_due_date": "2026-01-06",
+        "emi_paid_date": "2026-03-09",
+        "days_past_due": 62,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 3,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 19,
+        "emi_due_date": "2026-02-05",
+        "emi_paid_date": "2026-04-09",
+        "days_past_due": 63,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": true,
+        "follow_up_calls": 1,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 20,
+        "emi_due_date": "2026-03-07",
+        "emi_paid_date": "2026-05-14",
+        "days_past_due": 68,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": false,
+        "follow_up_calls": 1,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 21,
+        "emi_due_date": "2026-04-06",
+        "emi_paid_date": "2026-06-08",
+        "days_past_due": 63,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 1.74,
+        "partial_payment": true,
+        "bounce": true,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": true
+      },
+      {
+        "month_index": 22,
+        "emi_due_date": "2026-05-06",
+        "emi_paid_date": "2026-07-10",
+        "days_past_due": 65,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": true,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": false
+      },
+      {
+        "month_index": 23,
+        "emi_due_date": "2026-06-05",
+        "emi_paid_date": "2026-08-06",
+        "days_past_due": 62,
+        "amount_due_lakhs": 2.9,
+        "amount_paid_lakhs": 2.9,
+        "partial_payment": false,
+        "bounce": true,
+        "follow_up_calls": 2,
+        "promise_to_pay_kept": false
+      }
+    ]
+  },
+  "observation_labels": [
+    {
+      "observation_month": 0,
+      "stress_12m": 0
+    },
+    {
+      "observation_month": 1,
+      "stress_12m": 0
+    },
+    {
+      "observation_month": 2,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 3,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 4,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 5,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 6,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 7,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 8,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 9,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 10,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 11,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 12,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 13,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 14,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 15,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 16,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 17,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 18,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 19,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 20,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 21,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 22,
+      "stress_12m": 1
+    },
+    {
+      "observation_month": 23,
+      "stress_12m": 0
+    }
+  ],
+  "unstructured": {
+    "news_mentions": [
+      {
+        "headline": "Dalal-Bhatti faces supplier payment delays",
+        "text": "Local traders report overdue payments and cheque bounce issues.",
+        "sentiment": "negative",
+        "days_ago": 63
+      },
+      {
+        "headline": "GST notice issued for delayed filing",
+        "text": "Tax department issued notice for consecutive delayed GST returns.",
+        "sentiment": "negative",
+        "days_ago": 74
+      }
+    ],
+    "rm_call_notes": [
+      {
+        "text": "Promoter requested restructuring \u2014 cashflow tight, missed last EMI by 12 days.",
+        "sentiment": "negative",
+        "days_ago": 53
+      },
+      {
+        "text": "Promise to pay broken \u2014 customer said payment by 15th but bounced.",
+        "sentiment": "negative",
+        "days_ago": 14
+      }
+    ],
+    "gst_remarks": [
+      {
+        "text": "Show cause notice for delayed GST payment \u2014 penalty applicable.",
+        "days_ago": 107,
+        "type": "notice"
+      }
+    ],
+    "collection_notes": [
+      {
+        "text": "Field visit \u2014 partial payment received, balance overdue 35 days.",
+        "days_ago": 27
+      }
+    ]
+  },
   "gst": {
-    "registration_date": "2023-05-29",
-    "business_type": "Food Processing",
+    "registration_date": "2019-01-30",
+    "business_type": "Textiles",
     "monthly_turnover_lakhs": [
-      38.01,
-      37.83,
-      37.83,
-      38.21,
-      38.98,
-      40.69,
-      42.14,
-      42.01,
-      43.39,
-      45.18,
-      46.2,
-      48.17,
-      48.4,
-      48.27,
-      48.54,
-      49.11,
-      50.84,
-      51.21,
-      53.19,
-      54.2,
-      54.94,
-      57.07,
-      56.53,
-      56.42
+      16.13,
+      15.77,
+      14.92,
+      13.35,
+      13.72,
+      13.26,
+      12.29,
+      12.14,
+      10.76,
+      11.7,
+      10.74,
+      10.18,
+      10.79,
+      12.12,
+      11.74,
+      11.42,
+      10.26,
+      10.5,
+      9.58,
+      9.61,
+      10.21,
+      11.15,
+      11.4,
+      11.04
     ],
     "filing_status": [
+      "delayed",
+      "missed",
+      "delayed",
       "filed",
+      "missed",
+      "missed",
       "filed",
+      "delayed",
       "filed",
-      "filed",
-      "filed",
+      "delayed",
       "missed",
       "missed",
       "filed",
       "filed",
       "filed",
       "filed",
+      "missed",
       "filed",
       "filed",
       "filed",
-      "filed",
-      "filed",
-      "filed",
-      "filed",
-      "delayed",
-      "filed",
-      "delayed",
+      "missed",
       "filed",
       "filed",
       "filed"
     ],
-    "b2b_sales_ratio": 0.64,
-    "payment_delays_count": 4,
+    "b2b_sales_ratio": 0.74,
+    "payment_delays_count": 11,
     "primary_customer_sectors": {
-      "Agri-Input": 0.47,
-      "Services": 0.17,
-      "Logistics": 0.36
+      "Services": 0.47,
+      "Logistics": 0.17,
+      "Textiles": 0.36
     }
   },
   "upi": {
-    "vpa": "chokshi@ybl",
+    "vpa": "dalal-bhatti@ybl",
     "monthly_txn_count": [
       0,
       0,
@@ -89,446 +533,323 @@
       0
     ],
     "monthly_volume_lakhs": [
-      4.3,
-      3.76,
-      4.32,
-      3.68,
-      4.01,
-      3.7,
-      3.83,
-      3.4,
-      3.92,
-      3.44,
-      3.36,
-      2.8
+      11.26,
+      11.5,
+      10.65,
+      11.1,
+      11.05,
+      10.4,
+      9.8,
+      9.26,
+      9.03,
+      9.5,
+      9.35,
+      8.81
     ],
     "avg_ticket_size": [
-      4.3,
-      3.76,
-      4.32,
-      3.68,
-      4.01,
-      3.7,
-      3.83,
-      3.4,
-      3.92,
-      3.44,
-      3.36,
-      2.8
+      11.26,
+      11.5,
+      10.65,
+      11.1,
+      11.05,
+      10.4,
+      9.8,
+      9.26,
+      9.03,
+      9.5,
+      9.35,
+      8.81
     ],
-    "p2m_ratio": 0.72,
-    "failed_txn_rate": 0.007
+    "p2m_ratio": 0.75,
+    "failed_txn_rate": 0.024
   },
   "aa": {
     "consent_id": "AA-CONSENT-MSME054",
     "accounts": [
       {
-        "bank": "HDFC",
+        "bank": "Axis",
         "type": "current"
       }
     ],
     "monthly_closing_balance_lakhs": [
-      12.34,
-      12.14,
-      12.53,
-      12.57,
-      12.56,
-      12.81,
-      12.85,
-      12.54,
-      13.03,
-      13.53,
-      13.15,
-      13.38
+      1.5,
+      1.94,
+      1.58,
+      1.18,
+      1.44,
+      1.77,
+      2.1,
+      2.24,
+      2.22,
+      2.32,
+      2.78,
+      2.38
     ],
     "monthly_credits_lakhs": [
-      23.58,
-      23.97,
-      23.95,
-      23.47,
-      24.82,
-      24.15,
-      25.03,
-      25.24,
-      26.58,
-      27.07,
-      27.0,
-      26.67
+      9.72,
+      8.83,
+      9.69,
+      9.32,
+      8.75,
+      9.5,
+      9.21,
+      9.28,
+      8.09,
+      7.26,
+      6.26,
+      6.04
     ],
     "monthly_debits_lakhs": [
-      21.53,
-      21.13,
-      21.5,
-      18.43,
-      23.03,
-      20.55,
-      21.08,
-      20.28,
-      23.55,
-      25.12,
-      22.94,
-      20.6
+      8.41,
+      6.99,
+      8.93,
+      7.32,
+      6.61,
+      7.47,
+      7.67,
+      8.74,
+      6.99,
+      6.24,
+      4.81,
+      5.71
     ],
-    "abb_lakhs": 13.35,
-    "emi_on_time_rate": 0.72,
-    "bounce_count_12m": 0,
-    "od_utilization": 0.36
+    "abb_lakhs": 2.49,
+    "emi_on_time_rate": 0.74,
+    "bounce_count_12m": 2,
+    "od_utilization": 0.73
   },
   "epfo": {
-    "establishment_id": "GU/RAI/620230",
+    "establishment_id": "GU/VIJ/345868",
     "employee_count": [
-      17,
-      16,
-      17,
-      17,
-      17,
-      17,
-      17,
-      18,
-      18,
-      18,
-      18,
-      18
+      21,
+      21,
+      21,
+      20,
+      20,
+      20,
+      19,
+      19,
+      20,
+      19,
+      19,
+      19
     ],
     "monthly_wage_bill_lakhs": [
-      404141.8,
-      352048.8,
-      361065.35,
-      338011.05,
-      385565.2,
-      324950.77,
-      460874.55,
-      440226.99,
-      332395.44,
-      461374.58,
-      450047.87,
-      470752.4
+      462013.04,
+      418743.81,
+      564289.73,
+      367867.53,
+      428486.67,
+      362156.06,
+      348250.64,
+      452827.48,
+      401735.71,
+      420521.08,
+      429179.22,
+      390222.98
     ],
     "contribution_status": [
-      "delayed",
+      "paid",
       "paid",
       "missed",
       "paid",
       "paid",
       "paid",
-      "paid",
-      "paid",
       "delayed",
       "paid",
+      "delayed",
+      "missed",
       "paid",
       "paid"
     ],
-    "new_joiners_12m": 1,
-    "attrition_rate": 0.06
+    "new_joiners_12m": 2,
+    "attrition_rate": 0.17
   },
   "google": {
     "place_id": "ChIJMSME054",
-    "rating": 4.3,
-    "review_count": 43,
+    "rating": 3.8,
+    "review_count": 22,
     "reviews": [
       {
-        "rating": 1,
-        "text": "Payment issues and unresponsive staff.",
+        "rating": 4,
+        "text": "Payment issues and unresponsive staff \u2014 cheque bounce reported.",
         "sentiment": "negative",
-        "days_ago": 125
-      },
-      {
-        "rating": 4,
-        "text": "Great service, fair pricing.",
-        "sentiment": "positive",
-        "days_ago": 158
-      },
-      {
-        "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 191
-      },
-      {
-        "rating": 4,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 253
-      },
-      {
-        "rating": 3,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 361
-      },
-      {
-        "rating": 1,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 219
-      },
-      {
-        "rating": 4,
-        "text": "Average experience, nothing exceptional.",
-        "sentiment": "neutral",
-        "days_ago": 454
-      },
-      {
-        "rating": 4,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 179
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
         "days_ago": 228
       },
       {
-        "rating": 3,
-        "text": "Average experience, nothing exceptional.",
-        "sentiment": "neutral",
-        "days_ago": 434
-      },
-      {
-        "rating": 4,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 481
-      },
-      {
-        "rating": 2,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 471
-      },
-      {
         "rating": 5,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 510
-      },
-      {
-        "rating": 4,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 163
-      },
-      {
-        "rating": 3,
-        "text": "Average experience, nothing exceptional.",
-        "sentiment": "neutral",
-        "days_ago": 102
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 103
-      },
-      {
-        "rating": 2,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 228
-      },
-      {
-        "rating": 2,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 188
-      },
-      {
-        "rating": 1,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 446
-      },
-      {
-        "rating": 1,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 265
-      },
-      {
-        "rating": 2,
         "text": "Decent products at market rates.",
         "sentiment": "neutral",
-        "days_ago": 454
-      },
-      {
-        "rating": 4,
-        "text": "Average experience, nothing exceptional.",
-        "sentiment": "neutral",
-        "days_ago": 222
-      },
-      {
-        "rating": 1,
-        "text": "Payment issues and unresponsive staff.",
-        "sentiment": "negative",
-        "days_ago": 166
-      },
-      {
-        "rating": 2,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 109
-      },
-      {
-        "rating": 3,
-        "text": "Average experience, nothing exceptional.",
-        "sentiment": "neutral",
-        "days_ago": 355
-      },
-      {
-        "rating": 3,
-        "text": "Consistently good experience over the years.",
-        "sentiment": "positive",
-        "days_ago": 158
+        "days_ago": 61
       },
       {
         "rating": 4,
         "text": "Very professional team, highly recommended.",
         "sentiment": "positive",
-        "days_ago": 183
+        "days_ago": 464
       },
       {
-        "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 387
+        "rating": 3,
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
+        "days_ago": 465
       },
       {
         "rating": 2,
-        "text": "Great service, fair pricing.",
-        "sentiment": "positive",
-        "days_ago": 217
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 249
+        "text": "Payment issues and unresponsive staff \u2014 cheque bounce reported.",
+        "sentiment": "negative",
+        "days_ago": 365
       },
       {
         "rating": 1,
-        "text": "Standard service for the sector.",
+        "text": "Payment issues and unresponsive staff \u2014 cheque bounce reported.",
+        "sentiment": "negative",
+        "days_ago": 383
+      },
+      {
+        "rating": 3,
+        "text": "Reliable supplier \u2014 payments always honoured.",
+        "sentiment": "positive",
+        "days_ago": 446
+      },
+      {
+        "rating": 5,
+        "text": "Decent products at market rates.",
         "sentiment": "neutral",
-        "days_ago": 491
+        "days_ago": 373
       },
       {
-        "rating": 3,
-        "text": "Standard service for the sector.",
-        "sentiment": "neutral",
-        "days_ago": 118
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 283
+        "rating": 1,
+        "text": "Delayed delivery and poor communication.",
+        "sentiment": "negative",
+        "days_ago": 174
       },
       {
         "rating": 5,
-        "text": "Reliable supplier for our business needs.",
+        "text": "Reliable supplier \u2014 payments always honoured.",
         "sentiment": "positive",
-        "days_ago": 323
+        "days_ago": 106
       },
       {
-        "rating": 4,
-        "text": "Great service, fair pricing.",
-        "sentiment": "positive",
-        "days_ago": 125
-      },
-      {
-        "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 74
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 59
-      },
-      {
-        "rating": 5,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 235
-      },
-      {
-        "rating": 3,
-        "text": "Great service, fair pricing.",
-        "sentiment": "positive",
-        "days_ago": 396
-      },
-      {
-        "rating": 3,
-        "text": "Reliable supplier for our business needs.",
-        "sentiment": "positive",
-        "days_ago": 47
-      },
-      {
-        "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 179
+        "rating": 1,
+        "text": "Delayed delivery and poor communication.",
+        "sentiment": "negative",
+        "days_ago": 48
       },
       {
         "rating": 1,
         "text": "Decent products at market rates.",
         "sentiment": "neutral",
-        "days_ago": 89
+        "days_ago": 307
       },
       {
         "rating": 3,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 80
+        "text": "Delayed delivery and poor communication.",
+        "sentiment": "negative",
+        "days_ago": 287
+      },
+      {
+        "rating": 2,
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
+        "days_ago": 231
+      },
+      {
+        "rating": 4,
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
+        "days_ago": 254
+      },
+      {
+        "rating": 5,
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
+        "days_ago": 251
+      },
+      {
+        "rating": 5,
+        "text": "Decent products at market rates.",
+        "sentiment": "neutral",
+        "days_ago": 340
+      },
+      {
+        "rating": 1,
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
+        "days_ago": 232
+      },
+      {
+        "rating": 3,
+        "text": "Business seems to be declining, missed deadlines.",
+        "sentiment": "negative",
+        "days_ago": 35
+      },
+      {
+        "rating": 2,
+        "text": "Decent products at market rates.",
+        "sentiment": "neutral",
+        "days_ago": 214
+      },
+      {
+        "rating": 1,
+        "text": "Delayed delivery and poor communication.",
+        "sentiment": "negative",
+        "days_ago": 198
+      },
+      {
+        "rating": 3,
+        "text": "Delayed delivery and poor communication.",
+        "sentiment": "negative",
+        "days_ago": 404
       }
     ],
-    "response_rate": 0.48,
-    "review_velocity_6m": 17
+    "response_rate": 0.64,
+    "review_velocity_6m": 5
   },
   "bureau": {
-    "promoter_name": "Devika Bajaj",
-    "cibil_score": 682,
+    "promoter_name": "Ishwar Raj",
+    "cibil_score": 603,
+    "is_ntc": false,
+    "ntc_months_on_file": 36,
     "active_loans": 0,
-    "dpd_12m": 1,
-    "write_offs_36m": 0,
-    "credit_utilization": 0.34
+    "other_loans": [],
+    "dpd_12m": 2,
+    "write_offs_36m": 1,
+    "credit_utilization": 0.77
   },
   "courts": {
-    "civil_cases": 0,
-    "criminal_cases": 0,
-    "insolvency_petitions": 0,
-    "total_outstanding_litigation_lakhs": 0.0
+    "civil_cases": 3,
+    "criminal_cases": 1,
+    "insolvency_petitions": 1,
+    "total_outstanding_litigation_lakhs": 12.47
   },
   "electricity": {
-    "consumer_number": "ELC550883",
+    "consumer_number": "ELC589968",
     "monthly_kwh": [
-      2656.95,
-      2599.63,
-      2588.34,
-      2612.79,
-      2561.77,
-      2580.08,
-      2642.03,
-      2699.56,
-      2646.84,
-      2630.13,
-      2695.02,
-      2737.6
+      2093.85,
+      2131.2,
+      2114.57,
+      2009.89,
+      2005.49,
+      2028.05,
+      1947.67,
+      1915.73,
+      1823.38,
+      1852.21,
+      1765.1,
+      1815.27
     ],
     "tariff_category": "Commercial",
-    "payment_regularity": 0.83
+    "payment_regularity": 0.55
   },
   "macro": {
     "sector_growth_pct": null,
-    "monsoon_index_pct": 106.8,
+    "monsoon_index_pct": 90.2,
     "region_tier": "Tier-2"
   },
   "investment": {
-    "rnd_spend_lakhs_annual": 0.85,
-    "capex_lakhs_12m": 2.02,
+    "rnd_spend_lakhs_annual": 0.81,
+    "capex_lakhs_12m": 1.45,
     "patents_count": 1,
     "govt_scheme_beneficiary": false
   }

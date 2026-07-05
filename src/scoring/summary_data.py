@@ -125,7 +125,19 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
     n = len(gst["monthly_turnover_lakhs"])
     months = [f"M{i+1}" for i in range(n)]
 
+    lb = profile.get("loan_book", {})
+    coll = profile.get("collections", {}).get("monthly_panel", [])
+    unstructured = profile.get("unstructured", {})
+
     tables = {
+        "Loan tape": _kv_table([
+            ("Loan ID", lb.get("loan_id", "—")),
+            ("Type", lb.get("loan_type", "—")),
+            ("Sanctioned (₹L)", lb.get("sanctioned_amount_lakhs", "—")),
+            ("Outstanding (₹L)", lb.get("outstanding_lakhs", "—")),
+            ("EMI (₹L)", lb.get("monthly_emi_lakhs", "—")),
+        ]),
+        "Collections": pd.DataFrame(coll) if coll else _kv_table([("Status", "No panel")]),
         "GST": pd.DataFrame({
             "Month": months,
             "Turnover (₹L)": gst["monthly_turnover_lakhs"],
@@ -188,19 +200,41 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
         ]) if news.get("articles") else _kv_table([("Status", "No articles")]),
         "Bureau": _kv_table([
             ("Promoter", bureau["promoter_name"]),
-            ("CIBIL", bureau["cibil_score"]),
+            ("NTC", "Yes" if bureau.get("is_ntc") else "No"),
+            ("CIBIL", bureau["cibil_score"] if not bureau.get("is_ntc") else "N/A (NTC)"),
+            ("Other loans", len(bureau.get("other_loans", []))),
             ("DPD 12M", bureau["dpd_12m"]),
             ("Write-offs 36M", bureau["write_offs_36m"]),
             ("Utilisation", f"{bureau['credit_utilization']*100:.0f}%"),
         ]),
+        "Unstructured": pd.DataFrame([
+            {"Type": "news", "Text": n.get("headline", ""), "Days ago": n.get("days_ago")}
+            for n in unstructured.get("news_mentions", [])
+        ] + [
+            {"Type": "rm_note", "Text": n.get("text", ""), "Days ago": n.get("days_ago")}
+            for n in unstructured.get("rm_call_notes", [])
+        ]) if unstructured else _kv_table([("Status", "None")]),
     }
     return tables
 
 
 def score_summary_table(result: dict) -> pd.DataFrame:
+    if "stress_prob" in result:
+        rows = [
+            (FINN_SCORE_LABEL, f"{result['stress_prob']*100:.1f}%"),
+            ("Risk band", result.get("band", "—")),
+            ("Rule component", f"{result.get('rule_stress_prob', 0)*100:.1f}%"),
+            ("ML component (full)", f"{result.get('ml_stress_prob', 0)*100:.1f}%" if result.get("ml_stress_prob") else "—"),
+            ("ML component (structured)", f"{result.get('structured_ml_prob', 0)*100:.1f}%" if result.get("structured_ml_prob") else "—"),
+            ("Horizon", f"{result.get('horizon_months', 12)} months"),
+        ]
+        for pillar, data in result.get("pillars", {}).items():
+            rows.append((f"Pillar: {pillar.replace('_', ' ').title()}", f"{data['score']:.0f}/100"))
+        return _kv_table(rows, columns=("Metric", "Value"))
+
     rows = [
-        (FINN_SCORE_LABEL, int(result["final_score"])),
-        ("Rule component", int(result["rule_score"])),
+        (FINN_SCORE_LABEL, int(result.get("final_score", 0))),
+        ("Rule component", int(result.get("rule_score", 0))),
         ("ML component", int(result["ml_score"]) if result.get("ml_score") else "—"),
     ]
     for pillar, data in result.get("pillars", {}).items():

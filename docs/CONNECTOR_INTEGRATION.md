@@ -8,6 +8,7 @@ How to connect each data source — what is **live today**, what is **mock**, an
 
 | # | Source | App status | Public data available? | Production path |
 |---|--------|------------|--------------------------|-----------------|
+| 0 | **Loan tape / Collections** | ⚪ Mock | No | CBS core banking export / LMS API |
 | 1 | **Macro / RBI** | 🟢 **LIVE** | Yes — [Indian Data Project](https://indiandataproject.org/open-data) | Already integrated |
 | 2 | **Weather / rainfall** | 🟢 **LIVE** | Yes — [Open-Meteo](https://open-meteo.com/) (no API key) | Already integrated |
 | 3 | **Google Business** | 🟡 **Optional LIVE** | Yes — Google Places API (API key required) | Set `GOOGLE_PLACES_API_KEY` |
@@ -360,6 +361,36 @@ print('Weather:', fetch_live_weather('Pune'))
 - [ ] Update connector status UI (auto-detects `live` flag)
 - [ ] Document consent flow for regulated sources
 - [ ] Retrain ML model on real portfolio labels
+
+---
+
+## 0. Loan tape / Collections (Mock → CBS)
+
+### Current implementation
+- **File:** `src/connectors/live/loan_tape.py`
+- **PoC:** Reads `loan_book`, `collections.monthly_panel`, `observation_labels` from profile JSON
+
+### Production schema (CBS export)
+
+| Field | Description |
+|-------|-------------|
+| `loan_id` | Core banking account ID |
+| `loan_type` | WC / TL / CC / LAP / etc. |
+| `sanctioned_amount` | Original limit |
+| `outstanding` | Current OS |
+| `monthly_emi` | Scheduled EMI |
+| `dpd` | Days past due (daily snapshot) |
+| `emi_paid_date` | Actual payment date |
+| `bounce_flag` | NACH/cheque bounce |
+| `collection_notes` | CRM field visit text |
+
+### Bureau other-loan tradelines
+
+Refresh nightly from bureau pull — map `other_loans[]` with per-facility DPD history and on-time rates.
+
+### Unstructured pipeline
+
+Pipe RM notes, GST notices, and collection CRM text into `profile["unstructured"]` — feature layer converts to numeric stress scores via `src/features/nlp_features.py`.
 
 ---
 

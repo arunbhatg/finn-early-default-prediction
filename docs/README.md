@@ -1,23 +1,23 @@
-# FinHealth Card — Documentation
+# FINN. Early Default Prediction — Documentation
 
-Technical and business documentation for the MSME alternative-data credit PoC.
+## Index
 
-| Document | Audience | Contents |
-|----------|----------|----------|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Engineering, architects | System design, scoring pipeline, deployment |
-| [DATA_SOURCES.md](DATA_SOURCES.md) | Engineering, product | Real vs dummy data overview |
-| [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md) | Engineering, integration | **Live connectors + step-by-step API guide** |
-| [NTC_MSME.md](NTC_MSME.md) | Business, underwriting, judges | Why alt-data works for New-To-Credit MSMEs |
-| [CODE_GUIDE.md](CODE_GUIDE.md) | Developers | Repo layout, modules, how to extend |
+| Doc | Description |
+|-----|-------------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Early-warning pipeline, 12-month labels, dual models |
+| [EARLY_WARNING.md](EARLY_WARNING.md) | Business case: 16–22% → 90%, RM workflow |
+| [DATA_SOURCES.md](DATA_SOURCES.md) | Structured + unstructured sources |
+| [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md) | CBS loan tape, bureau, collections CRM |
+| [CODE_GUIDE.md](CODE_GUIDE.md) | Code layout |
+| [NTC_MSME.md](NTC_MSME.md) | NTC MSME context (alt-data path) |
 
-## Quick links
+## Summary
 
-- **Live demo:** Deployed on Streamlit Community Cloud (`app/main.py`)
-- **GitHub:** https://github.com/arunbhatg/finhealth-card
-- **Entry point:** `app/main.py` → underwriter workflow (4 steps)
+FINN. Early Default Prediction flags **MSME loan stress 12 months ahead** using:
 
-## One-page summary
+1. **Collection payment timing** — DPD, EMI lead days, bounces, PTP breaks
+2. **Bureau other-loan behaviour** — how promoter pays non-IDBI facilities
+3. **NTC alt-data** — GST, UPI, EPFO, AA when no bureau score
+4. **Unstructured text conversion** — reviews, news, RM notes → numeric stress features
 
-FinHealth Card scores **New-To-Credit (NTC) MSMEs** using **10 alternative data connectors** when traditional financials and bureau history are unavailable. A **hybrid engine** (rule-based explainability + LightGBM calibration) produces a **300–900 health score** with pillar breakdown, risk flags, and loan simulation.
-
-**PoC status:** Borrower data is **synthetic**; **2 connectors pull live public data** (RBI macro + Open-Meteo weather). Optional Google Places with API key. See [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md).
+Two models: **structured-only baseline (~18%)** vs **full model with collections + NLP (~90%)** on synthetic demo data.
