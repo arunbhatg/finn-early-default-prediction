@@ -7,8 +7,8 @@ from app.views._helpers import require_case
 
 
 def page_details():
-    st.title("Details")
-    st.caption("Full data tables and exports.")
+    st.markdown("### Case details")
+    st.caption("Full data tables, source snapshots, and exports.")
 
     if not require_case():
         return

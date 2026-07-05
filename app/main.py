@@ -110,6 +110,9 @@ def run_app():
     init_session()
     bootstrap_once()
     sidebar()
+    from app.components.branding import render_app_header
+
+    render_app_header()
     top_nav()
     _run_page(st.session_state.page)
     render_footer_branding()

@@ -18,8 +18,8 @@ def page_cases():
     from src.scoring.model import compute_final_score
     from src.scoring.underwriter_insights import get_credit_decision
 
-    st.title("Cases")
-    st.caption("Open a demo MSME to run the financial health assessment.")
+    st.markdown("### Select a case")
+    st.caption("Choose a demo MSME profile to generate a FINN. alternative score.")
 
     cols = st.columns(2)
     for i, (msme_id, meta) in enumerate(DEMO_PERSONAS.items()):

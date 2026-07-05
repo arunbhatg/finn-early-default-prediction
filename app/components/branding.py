@@ -26,6 +26,21 @@ def render_sidebar_branding() -> None:
     st.sidebar.caption("FinHealth Card")
 
 
+def render_app_header() -> None:
+    """Main content hero — product title above page navigation."""
+    from src.utils.labels import APP_TAGLINE, APP_TITLE
+
+    st.markdown(
+        f"""
+        <div class="finn-app-header">
+            <div class="finn-app-title">{APP_TITLE}</div>
+            <div class="finn-app-tagline">{APP_TAGLINE}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_page_header_branding() -> None:
     """Compact logo row for main content area (optional)."""
     col_logo, col_spacer = st.columns([1, 4])

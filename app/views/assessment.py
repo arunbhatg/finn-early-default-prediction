@@ -14,7 +14,7 @@ def page_assessment():
     features = st.session_state.features
     result = st.session_state.score_result
 
-    st.title(profile["business_name"])
+    st.markdown(f"### {profile['business_name']}")
     st.caption(f"{profile['sector']} · {profile['city']} · {profile['gstin']}")
 
     tab1, tab2, tab3 = st.tabs(["Overview", "Charts", "Loan"])

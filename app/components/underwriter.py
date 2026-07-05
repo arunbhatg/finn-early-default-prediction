@@ -68,12 +68,21 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
                 st.caption(f"↓ {d['factor']} ({d['value']})")
 
 
-def _chart_layout(*, show_legend: bool = False, height: int = 260) -> dict:
+def _chart_layout(*, show_legend: bool = False, height: int = 280) -> dict:
     return {
         "height": height,
-        "margin": dict(t=36, l=8, r=8, b=8),
+        "margin": dict(t=40, l=12, r=12, b=12),
         "showlegend": show_legend,
     }
+
+
+def _section(title: str) -> None:
+    st.markdown(f'<p class="finn-section-title">{title}</p>', unsafe_allow_html=True)
+
+
+def _plot_chart(fig) -> None:
+    with st.container(border=True):
+        st.plotly_chart(fig, width="stretch")
 
 
 def _google_sentiment_counts(reviews: list[dict]) -> dict[str, int]:
@@ -88,9 +97,7 @@ def _google_sentiment_counts(reviews: list[dict]) -> dict[str, int]:
 
 def _render_upi_panel(profile: dict, features: dict) -> None:
     upi = profile["upi"]
-    st.caption(f"Merchant VPA: {upi.get('vpa', '—')} · {upi_momentum(upi['monthly_volume_lakhs'])}")
-
-    chart_col, info_col = st.columns([1.35, 1])
+    chart_col, info_col = st.columns([1.45, 1], gap="medium")
     with chart_col:
         df = timeseries_df(upi["monthly_volume_lakhs"], y_name="Volume (₹L)")
         fig = px.line(
@@ -101,42 +108,59 @@ def _render_upi_panel(profile: dict, features: dict) -> None:
             title="UPI collection trend",
         )
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
 
     with info_col:
-        for row in upi_insight_metrics(profile, features):
-            st.metric(row["label"], row["value"])
+        with st.container(border=True):
+            st.markdown("**UPI merchant signal**")
+            st.caption(f"{upi.get('vpa', '—')} · {upi_momentum(upi['monthly_volume_lakhs'])}")
+            cells = "".join(
+                f"<div class='finn-upi-metric'><span class='k'>{m['label']}</span>"
+                f"<span class='v'>{m['value']}</span></div>"
+                for m in upi_insight_metrics(profile, features)
+            )
+            st.markdown(f"<div class='finn-upi-metrics'>{cells}</div>", unsafe_allow_html=True)
 
 
-def _render_news_panel(profile: dict) -> None:
+def _render_news_section(profile: dict) -> None:
+    st.markdown('<p class="finn-news-heading">News</p>', unsafe_allow_html=True)
+
     news = profile.get("news", {})
     articles = news.get("articles", [])
     pos = news.get("positive_count_30d", 0)
     neg = news.get("negative_count_30d", 0)
 
-    df = pd.DataFrame(
-        {"Sentiment": ["Positive", "Negative"], "Articles": [pos, neg]}
-    )
-    colors = {"Positive": "#22C55E", "Negative": "#EF4444"}
-    fig = px.bar(
-        df,
-        x="Sentiment",
-        y="Articles",
-        title="Recent news (30d) · demo data",
-        color="Sentiment",
-        color_discrete_map=colors,
-    )
-    fig.update_layout(**_chart_layout())
-    st.plotly_chart(fig, width="stretch")
+    chart_col, list_col = st.columns([1, 1.35], gap="medium")
+    with chart_col:
+        df = pd.DataFrame({"Sentiment": ["Positive", "Negative"], "Articles": [pos, neg]})
+        fig = px.bar(
+            df,
+            x="Sentiment",
+            y="Articles",
+            title="Last 30 days · demo data",
+            color="Sentiment",
+            color_discrete_map={"Positive": "#22C55E", "Negative": "#EF4444"},
+        )
+        fig.update_layout(**_chart_layout())
+        _plot_chart(fig)
 
-    if articles:
-        with st.expander("Headlines", expanded=False):
+    with list_col:
+        with st.container(border=True):
+            st.markdown("**Recent headlines**")
+            if not articles:
+                st.caption("No articles available.")
+                return
+            items = []
             for article in articles[:5]:
                 sentiment = article.get("sentiment", "neutral")
                 marker = "🟢" if sentiment == "positive" else "🔴" if sentiment == "negative" else "🟡"
                 days = article.get("published_days_ago", "—")
                 src = article.get("source", "")
-                st.caption(f"{marker} {article['title']} · {src} · {days}d ago")
+                items.append(
+                    f"<div class='finn-news-item'>{marker} {article['title']}"
+                    f"<br><span class='finn-muted'>{src} · {days}d ago</span></div>"
+                )
+            st.markdown(f"<div class='finn-news-list'>{''.join(items)}</div>", unsafe_allow_html=True)
 
 
 def render_charts(profile: dict, features: dict) -> None:
@@ -147,73 +171,69 @@ def render_charts(profile: dict, features: dict) -> None:
     electricity = profile["electricity"]
     sector = profile["sector"]
 
-    st.markdown("**Revenue & digital collections**")
-    c1, c2 = st.columns(2)
+    _section("Revenue & digital collections")
+    c1, c2 = st.columns(2, gap="medium")
     with c1:
         df = timeseries_df(gst["monthly_turnover_lakhs"], y_name="Turnover (₹L)")
-        fig = px.line(
-            df,
-            x="Month",
-            y="Turnover (₹L)",
-            markers=True,
-            title="GST turnover",
-        )
+        fig = px.line(df, x="Month", y="Turnover (₹L)", markers=True, title="GST turnover")
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
     with c2:
         _render_upi_panel(profile, features)
 
-    st.markdown("**Operations & payroll**")
-    c3, c4 = st.columns(2)
+    _section("Operations & payroll")
+    c3, c4 = st.columns(2, gap="medium")
     with c3:
         credits = timeseries_df(aa["monthly_credits_lakhs"], y_name="Credits (₹L)")
         debits = timeseries_df(aa["monthly_debits_lakhs"], y_name="Debits (₹L)")
         df = credits.merge(debits, on="Month")
         fig = px.area(df, x="Month", y=["Credits (₹L)", "Debits (₹L)"], title="Bank cash flow")
         fig.update_layout(**_chart_layout(show_legend=True))
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
     with c4:
         df = timeseries_df([float(x) for x in epfo["employee_count"]], y_name="Staff")
         fig = px.line(df, x="Month", y="Staff", markers=True, title="Employee growth")
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
 
-    st.markdown("**Sentiment, sector & utilities**")
-    c5, c6 = st.columns(2)
+    _section("Sentiment & sector")
+    c5, c6 = st.columns(2, gap="medium")
     with c5:
         sentiment = _google_sentiment_counts(google.get("reviews", []))
-        df = pd.DataFrame(
-            {"Sentiment": list(sentiment.keys()), "Reviews": list(sentiment.values())}
-        )
-        colors = {"positive": "#22C55E", "neutral": "#EAB308", "negative": "#EF4444"}
+        df = pd.DataFrame({"Sentiment": list(sentiment.keys()), "Reviews": list(sentiment.values())})
         fig = px.bar(
             df,
             x="Sentiment",
             y="Reviews",
             title=f"Google business sentiment ({google['rating']}★)",
             color="Sentiment",
-            color_discrete_map=colors,
+            color_discrete_map={"positive": "#22C55E", "neutral": "#EAB308", "negative": "#EF4444"},
         )
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
     with c6:
         sector_growth = SECTOR_GROWTH.get(sector, features.get("sector_growth_pct", 5.0))
         biz_growth = features["gst_turnover_yoy_growth"]
-        df = pd.DataFrame(
-            {"Entity": ["Sector", "This business"], "Growth %": [sector_growth, biz_growth]}
+        df = pd.DataFrame({"Entity": ["Sector", "This business"], "Growth %": [sector_growth, biz_growth]})
+        fig = px.bar(
+            df,
+            x="Entity",
+            y="Growth %",
+            title=f"Sector vs business growth ({sector})",
+            color="Entity",
         )
-        fig = px.bar(df, x="Entity", y="Growth %", title=f"Sector vs business growth ({sector})", color="Entity")
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
 
-    c7, c8 = st.columns(2)
+    _section("Utilities")
+    c7, _ = st.columns([1, 1], gap="medium")
     with c7:
-        _render_news_panel(profile)
-    with c8:
         df = timeseries_df(electricity["monthly_kwh"], y_name="kWh")
         fig = px.line(df, x="Month", y="kWh", markers=True, title="Electricity consumption")
         fig.update_layout(**_chart_layout())
-        st.plotly_chart(fig, width="stretch")
+        _plot_chart(fig)
+
+    _render_news_section(profile)
 
 
 def render_loan_panel(features: dict, result: dict) -> None:
