@@ -24,27 +24,42 @@ def get_stress_decision(stress_prob: float) -> dict:
     return {"action": action, "headline": headline, "band": band["band"], "color": band["color"]}
 
 
-def get_key_metrics(features: dict, profile: dict) -> list[dict]:
+def get_payment_metrics(features: dict, profile: dict) -> list[dict]:
+    """Primary metrics collections underwriters check first."""
+    bureau = profile.get("bureau", {})
+    is_ntc = bureau.get("is_ntc", False)
+    fourth = (
+        {"label": "GST compliance (NTC)", "value": f"{features.get('ntc_gst_compliance_proxy', 0)*100:.0f}%"}
+        if is_ntc
+        else {"label": "Other-loan on-time", "value": f"{features.get('bureau_other_emi_on_time_rate', 0)*100:.0f}%"}
+    )
+    return [
+        {"label": "EMI on-time (6m)", "value": f"{features.get('emi_on_time_rate_6m', 0)*100:.0f}%"},
+        {"label": "Max DPD (6m)", "value": f"{features.get('dpd_max_6m', 0)} days"},
+        {"label": "Bounces (6m)", "value": str(int(features.get("bounce_count_6m", 0)))},
+        fourth,
+    ]
+
+
+def get_facility_metrics(features: dict, profile: dict) -> list[dict]:
     bureau = profile.get("bureau", {})
     loan = profile.get("loan_book", {})
     is_ntc = bureau.get("is_ntc", False)
-
-    metrics = [
+    credit = {"label": "Credit file", "value": "NTC"} if is_ntc else {
+        "label": "Promoter CIBIL",
+        "value": str(int(bureau.get("cibil_score", 0))),
+    }
+    return [
         {"label": "12m stress probability", "value": f"{features.get('_stress_prob_display', 0)*100:.0f}%"},
-        {"label": "EMI on-time (6m)", "value": f"{features.get('emi_on_time_rate_6m', 0)*100:.0f}%"},
-        {"label": "Max DPD (6m)", "value": f"{features.get('dpd_max_6m', 0)} days"},
-        {"label": "Loan type", "value": loan.get("loan_type", "—")},
         {"label": "Outstanding", "value": f"₹{loan.get('outstanding_lakhs', 0):.1f}L"},
+        {"label": "EMI burden ratio", "value": f"{features.get('emi_burden_ratio', 0):.2f}"},
+        credit,
     ]
 
-    if is_ntc:
-        metrics.append({"label": "Credit file", "value": "NTC — alt-data"})
-        metrics.append({"label": "GST compliance", "value": f"{features.get('ntc_gst_compliance_proxy', 0)*100:.0f}%"})
-    else:
-        metrics.append({"label": "Promoter CIBIL", "value": str(int(bureau.get("cibil_score", 0)))})
-        metrics.append({"label": "Other-loan on-time", "value": f"{features.get('bureau_other_emi_on_time_rate', 0)*100:.0f}%"})
 
-    return metrics
+def get_key_metrics(features: dict, profile: dict) -> list[dict]:
+    """Combined list for exports / legacy callers."""
+    return get_payment_metrics(features, profile) + get_facility_metrics(features, profile)
 
 
 def get_risk_flags(features: dict, profile: dict) -> list[dict]:

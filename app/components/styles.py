@@ -13,7 +13,46 @@ def inject_styles() -> None:
         .block-container {{
             padding-top: 1rem;
             padding-bottom: 2rem;
-            max-width: 1040px;
+            max-width: 1180px;
+        }}
+        div[data-testid="stHorizontalBlock"] {{
+            align-items: stretch;
+        }}
+        div[data-testid="column"] {{
+            min-width: 0;
+        }}
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] div[data-testid="stVerticalBlockBorderWrapper"] {{
+            height: 100%;
+        }}
+        .finn-decision-inline {{
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0.35rem 0 0.65rem 0;
+        }}
+        .finn-decision-banner {{
+            background: #fff;
+            border: 1px solid #E8ECF0;
+            border-left-width: 5px;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1rem;
+        }}
+        .finn-decision-banner-action {{
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+            margin-bottom: 0.35rem;
+        }}
+        .finn-decision-banner-meta {{
+            color: #475569;
+            font-size: 0.88rem;
+            line-height: 1.45;
+        }}
+        .finn-decision-banner-sep {{
+            margin: 0 0.35rem;
+            color: #CBD5E1;
         }}
         h1 {{ font-size: 1.65rem !important; font-weight: 600 !important; margin-bottom: 0.2rem !important; }}
         h2, h3 {{ font-size: 1.05rem !important; font-weight: 600 !important; }}

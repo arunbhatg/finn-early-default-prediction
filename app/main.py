@@ -11,7 +11,7 @@ import streamlit as st
 
 from src.utils.ui_text import APP_TAGLINE, APP_TITLE, FINN_SCORE_LABEL
 
-PAGE_ORDER = ("Portfolio", "Assessment", "Signals")
+PAGE_ORDER = ("Portfolio", "Decision", "Evidence")
 
 
 def _run_page(name: str) -> None:
@@ -19,11 +19,11 @@ def _run_page(name: str) -> None:
         from app.views.cases import page_cases
 
         page_cases()
-    elif name == "Assessment":
+    elif name == "Decision":
         from app.views.assessment import page_assessment
 
         page_assessment()
-    elif name == "Signals":
+    elif name == "Evidence":
         from app.views.details import page_details
 
         page_details()
@@ -43,6 +43,9 @@ def init_session():
     for k, v in defaults.items():
         if k not in st.session_state:
             st.session_state[k] = v
+    legacy_pages = {"Assessment": "Decision", "Signals": "Evidence"}
+    if st.session_state.page in legacy_pages:
+        st.session_state.page = legacy_pages[st.session_state.page]
 
 
 def bootstrap_once():
