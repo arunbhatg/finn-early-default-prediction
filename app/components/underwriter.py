@@ -90,12 +90,12 @@ def _section(title: str) -> None:
     st.markdown(f'<p class="finn-section-title">{title}</p>', unsafe_allow_html=True)
 
 
-def _plot_chart(fig) -> None:
+def _plot_chart(fig, key: str) -> None:
     with st.container(border=True):
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, width="stretch", key=key)
 
 
-def render_collection_charts(profile: dict, features: dict) -> None:
+def render_collection_charts(profile: dict, features: dict, *, key_prefix: str = "coll") -> None:
     panel = profile.get("collections", {}).get("monthly_panel", [])
     if not panel:
         st.caption("No collection panel data.")
@@ -111,12 +111,12 @@ def render_collection_charts(profile: dict, features: dict) -> None:
         df = timeseries_df(dpd, y_name="Days past due")
         fig = px.bar(df, x="Month", y="Days past due", title="DPD trend (loan under review)")
         fig.update_layout(**_chart_layout())
-        _plot_chart(fig)
+        _plot_chart(fig, key=f"{key_prefix}_dpd")
     with c2:
         df = pd.DataFrame({"Month": [f"M{i+1}" for i in range(len(paid))], "Due": due, "Paid": paid})
         fig = px.line(df, x="Month", y=["Due", "Paid"], markers=True, title="EMI due vs paid")
         fig.update_layout(**_chart_layout(show_legend=True))
-        _plot_chart(fig)
+        _plot_chart(fig, key=f"{key_prefix}_emi")
 
     bureau = profile.get("bureau", {})
     other_loans = bureau.get("other_loans", [])
@@ -136,7 +136,7 @@ def render_collection_charts(profile: dict, features: dict) -> None:
         st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
 
-def render_unstructured_signals(profile: dict, features: dict) -> None:
+def render_unstructured_signals(profile: dict, features: dict, *, key_prefix: str = "nlp") -> None:
     unstructured = profile.get("unstructured", {})
     _section("Unstructured → structured conversion")
 
@@ -151,7 +151,7 @@ def render_unstructured_signals(profile: dict, features: dict) -> None:
     df = pd.DataFrame({"Signal": [c[0] for c in conv], "Score": [c[1] for c in conv]})
     fig = px.bar(df, x="Score", y="Signal", orientation="h", title="NLP-derived stress features (0–1)")
     fig.update_layout(**_chart_layout())
-    _plot_chart(fig)
+    _plot_chart(fig, key=f"{key_prefix}_stress_bar")
 
     with st.expander("Source text evidence", expanded=True):
         for note in unstructured.get("rm_call_notes", [])[:3]:
@@ -164,8 +164,8 @@ def render_unstructured_signals(profile: dict, features: dict) -> None:
             st.markdown(f"**Collection note** ({cn.get('days_ago')}d ago): {cn.get('text')}")
 
 
-def render_charts(profile: dict, features: dict) -> None:
-    render_collection_charts(profile, features)
+def render_charts(profile: dict, features: dict, *, key_prefix: str = "trends") -> None:
+    render_collection_charts(profile, features, key_prefix=f"{key_prefix}_coll")
 
     gst = profile["gst"]
     aa = profile["aa"]
@@ -178,13 +178,13 @@ def render_charts(profile: dict, features: dict) -> None:
         df = timeseries_df(gst["monthly_turnover_lakhs"], y_name="Turnover (₹L)")
         fig = px.line(df, x="Month", y="Turnover (₹L)", markers=True, title="GST turnover")
         fig.update_layout(**_chart_layout())
-        _plot_chart(fig)
+        _plot_chart(fig, key=f"{key_prefix}_gst")
     with c2:
         upi = profile["upi"]
         df = timeseries_df(upi["monthly_volume_lakhs"], y_name="Volume (₹L)")
         fig = px.line(df, x="Month", y="Volume (₹L)", markers=True, title="UPI collections")
         fig.update_layout(**_chart_layout())
-        _plot_chart(fig)
+        _plot_chart(fig, key=f"{key_prefix}_upi")
 
     _section("Bank cashflow")
     credits = timeseries_df(aa["monthly_credits_lakhs"], y_name="Credits (₹L)")
@@ -192,9 +192,7 @@ def render_charts(profile: dict, features: dict) -> None:
     df = credits.merge(debits, on="Month")
     fig = px.area(df, x="Month", y=["Credits (₹L)", "Debits (₹L)"], title="Account aggregator cashflow")
     fig.update_layout(**_chart_layout(show_legend=True))
-    _plot_chart(fig)
-
-    render_unstructured_signals(profile, features)
+    _plot_chart(fig, key=f"{key_prefix}_cashflow")
 
 
 def render_loan_panel(profile: dict, features: dict) -> None:
@@ -215,5 +213,3 @@ def render_loan_panel(profile: dict, features: dict) -> None:
             f"Other loans: {len(bureau.get('other_loans', []))} · "
             f"Other-loan on-time: {features.get('bureau_other_emi_on_time_rate', 0)*100:.0f}%"
         )
-
-    render_collection_charts(profile, features)

@@ -25,8 +25,8 @@ def page_assessment():
         render_overview(profile, features, result)
 
     with tab2:
-        render_charts(profile, features)
+        render_charts(profile, features, key_prefix="assess_trends")
 
     with tab3:
-        render_unstructured_signals(profile, features)
+        render_unstructured_signals(profile, features, key_prefix="assess_nlp")
         render_loan_panel(profile, features)
