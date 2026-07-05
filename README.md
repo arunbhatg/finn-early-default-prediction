@@ -1,60 +1,75 @@
 # FinHealth Card
 
-AI/ML-driven **Financial Health Card** for MSME credit assessment using alternative data.
+**Alternative-data credit assessment for New-To-Credit (NTC) MSMEs** — when traditional financials and bureau history are unavailable.
 
-## Features
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io)
 
-- **10 alternative data connectors**: GST, UPI, Account Aggregator, EPFO, Google Reviews (NLP sentiment), Promoter Bureau, Court Cases, Electricity, Macro/Sector, Investment
-- **Hybrid scoring**: Rule-based explainability + LightGBM calibration
-- **5-pillar breakdown**: Revenue, Liquidity, Risk, Context, Reputation
-- **4 demo personas**: Healthy manufacturer, retail kirana, distressed trader, agri dealer
-- **Loan simulation** with eligibility and pricing
-- **Streamlit dashboard** — deployable to Streamlit Community Cloud (free)
+**Repository:** https://github.com/arunbhatg/finhealth-card
 
-## Quick Start
+---
+
+## What it does
+
+Scores MSME creditworthiness using **10 digital data sources** (GST, UPI, Account Aggregator, EPFO, Google sentiment, promoter bureau, courts, electricity, macro, investment) and produces:
+
+- **Financial Health Score** (300–900, CIBIL-like scale)
+- **Credit recommendation** (Approve / Review / Decline)
+- **Explainable pillars** + risk flags for underwriters
+- **Indicative loan offer** (limit, rate, tenure)
+
+## Underwriter workflow (app)
+
+| Step | Screen | Purpose |
+|------|--------|---------|
+| ① | **Select MSME Case** | Pick demo borrower with visible score/decision preview |
+| ② | **Credit Decision** | Score, recommendation, key metrics, drivers, flags |
+| ③ | **Evidence & Trends** | GST, UPI, bank, payroll charts |
+| ④ | **Loan Offer** | Limit and pricing simulation |
+
+## Quick start
 
 ```bash
-# Install dependencies
 pip install -r requirements.txt
-
-# Generate synthetic data (75 MSME profiles)
 python scripts/generate_data.py
-
-# Train ML model
 python scripts/train_model.py
-
-# Run the app
 streamlit run app/main.py
 ```
 
-## Deploy (Free)
+Open http://localhost:8501 → **① Select MSME Case** → compare **MSME001** vs **MSME003**.
 
-1. Push this repo to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Connect repo, set main file: `app/main.py`
-4. Deploy — no credit card required
+## Deploy (free)
 
-## Demo Flow
+1. Push to GitHub
+2. [share.streamlit.io](https://share.streamlit.io) → New app
+3. Main file: `app/main.py`
 
-1. Open **Demo Gallery** → pick a persona
-2. View **Health Card** with score gauge (300–900)
-3. Explore **Score Breakdown** for explainability
-4. Check **Data Insights** charts per source
-5. Run **Loan Simulation**
+## Documentation
 
-## Architecture
+| Doc | Description |
+|-----|-------------|
+| [docs/README.md](docs/README.md) | Documentation index |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design & scoring pipeline |
+| [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) | Real vs dummy data & API replacement |
+| [docs/NTC_MSME.md](docs/NTC_MSME.md) | Business case for NTC MSMEs |
+| [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md) | Code layout & extension guide |
 
-```
-Streamlit UI → Connectors (mock) → Feature Engineering → Rule Engine + LightGBM → Health Score
-```
+## Demo cases
 
-## Project Structure
+| ID | Profile | Typical score | Decision |
+|----|---------|---------------|----------|
+| MSME001 | Manufacturer, Pune | ~740 | Approve |
+| MSME002 | Retail kirana, Ahmedabad | ~720 | Approve |
+| MSME003 | Distressed trader, Delhi | ~460 | Decline |
+| MSME004 | Agri-input, Nagpur | ~705 | Approve |
 
-```
-app/           Streamlit UI
-src/connectors Mock data fetchers
-src/features   Feature engineering
-src/scoring    Rules, ML model, loan sim
-data/synthetic Generated MSME profiles
-scripts/       Data generation & training
-```
+## Tech stack
+
+Python · Streamlit · LightGBM · Plotly · Pandas
+
+## PoC disclaimer
+
+All borrower data is **synthetic**. Architecture supports production connectors (GSTN, AA, bureau) — see [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
+
+## License
+
+Hackathon / PoC — IDBI internal use.
