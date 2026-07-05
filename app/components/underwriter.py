@@ -27,10 +27,11 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     stress_pct = int(result["stress_prob"] * 100)
     band = result["band"]
     decision = result.get("decision") or get_stress_decision(result["stress_prob"])
+    case_key = profile.get("msme_id", "case")
 
     left, right = st.columns([1.1, 1])
     with left:
-        render_stress_gauge(stress_pct, band, result.get("band_color", "#166534"))
+        render_stress_gauge(stress_pct, band, result.get("band_color", "#166534"), chart_key=f"gauge_{case_key}")
     with right:
         color = decision["color"]
         st.markdown(

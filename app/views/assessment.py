@@ -20,13 +20,14 @@ def page_assessment():
     st.caption(f"{loan_type} · {profile['city']} · observation month {obs} · 12-month horizon")
 
     tab1, tab2, tab3 = st.tabs(["Stress overview", "Collections & trends", "Unstructured signals"])
+    case_key = profile.get("msme_id", "case")
 
     with tab1:
         render_overview(profile, features, result)
 
     with tab2:
-        render_charts(profile, features, key_prefix="assess_trends")
+        render_charts(profile, features, key_prefix=f"assess_trends_{case_key}")
 
     with tab3:
-        render_unstructured_signals(profile, features, key_prefix="assess_nlp")
+        render_unstructured_signals(profile, features, key_prefix=f"assess_nlp_{case_key}")
         render_loan_panel(profile, features)

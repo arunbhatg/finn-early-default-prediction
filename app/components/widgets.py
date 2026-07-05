@@ -6,7 +6,7 @@ import streamlit as st
 from src.utils.ui_text import FINN_SCORE_LABEL
 
 
-def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E") -> None:
+def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E", *, chart_key: str = "stress_gauge") -> None:
     if not band:
         if stress_pct >= 70:
             band, color = "Critical", "#991B1B"
@@ -41,7 +41,7 @@ def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E
         )
     )
     fig.update_layout(height=260, margin=dict(t=48, b=16, l=24, r=24))
-    st.plotly_chart(fig, width="stretch", key="stress_gauge")
+    st.plotly_chart(fig, width="stretch", key=chart_key)
 
 
 def render_score_gauge(score: float, grade: str = "") -> None:

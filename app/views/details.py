@@ -17,8 +17,9 @@ def page_details():
     profile = st.session_state.profile
     features = st.session_state.features
 
-    render_collection_charts(profile, features, key_prefix="signals_coll")
-    render_unstructured_signals(profile, features, key_prefix="signals_nlp")
+    case_key = profile.get("msme_id", "case")
+    render_collection_charts(profile, features, key_prefix=f"signals_coll_{case_key}")
+    render_unstructured_signals(profile, features, key_prefix=f"signals_nlp_{case_key}")
 
     with st.expander("Full data summary & export", expanded=False):
         render_summary_sheet(
