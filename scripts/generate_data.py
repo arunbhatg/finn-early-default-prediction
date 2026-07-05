@@ -149,6 +149,55 @@ def _build_collections_panel(
     return panel, stress_onset
 
 
+def _build_commercial_bureau(
+    persona: str, is_ntc: bool, business_name: str, rng: random.Random
+) -> dict:
+    if is_ntc:
+        return {"has_file": False}
+
+    if rng.random() < 0.12 and persona != "distressed":
+        return {"has_file": False}
+
+    if persona == "distressed":
+        cmr = rng.randint(6, 10)
+        dpd = rng.randint(1, 4)
+        max_dpd = rng.randint(20, 75)
+        util = round(rng.uniform(0.62, 0.92), 2)
+        on_time = round(rng.uniform(0.55, 0.82), 2)
+    else:
+        cmr = rng.randint(1, 4)
+        dpd = 0
+        max_dpd = rng.randint(0, 8)
+        util = round(rng.uniform(0.22, 0.52), 2)
+        on_time = round(rng.uniform(0.9, 1.0), 2)
+
+    facility_count = rng.randint(1, 3)
+    facilities = []
+    for _ in range(facility_count):
+        facilities.append(
+            {
+                "lender": rng.choice(["HDFC", "ICICI", "SBI", "Axis", "IndusInd"]),
+                "product": rng.choice(["WC Limit", "Term Loan", "CC/OD", "Equipment Loan"]),
+                "sanctioned_lakhs": round(rng.uniform(15, 120), 2),
+                "outstanding_lakhs": round(rng.uniform(5, 80), 2),
+                "monthly_emi_paid_on_time_rate": on_time,
+                "max_dpd_12m": max_dpd if persona == "distressed" else rng.randint(0, 5),
+            }
+        )
+
+    return {
+        "has_file": True,
+        "entity_name": business_name,
+        "cmr_rank": cmr,
+        "facility_count": facility_count,
+        "total_outstanding_lakhs": round(sum(f["outstanding_lakhs"] for f in facilities), 2),
+        "dpd_12m": dpd,
+        "max_dpd_12m": max_dpd,
+        "utilization": util,
+        "facilities": facilities,
+    }
+
+
 def _build_bureau_other_loans(persona: str, is_ntc: bool, rng: random.Random) -> list[dict]:
     if is_ntc:
         return []
@@ -404,6 +453,7 @@ def build_profile(
             "dpd_12m": 0 if bureau_score > 700 or is_ntc else rng.randint(1, 3),
             "write_offs_36m": 1 if bureau_score < 650 and not is_ntc else 0,
             "credit_utilization": round(rng.uniform(0.2, 0.85 if persona == "distressed" else 0.45), 2),
+            "commercial": _build_commercial_bureau(persona, is_ntc, business_name, rng),
         },
         "courts": {
             "civil_cases": court_cases if court_cases else 0,

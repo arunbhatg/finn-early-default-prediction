@@ -235,6 +235,28 @@ def render_collection_charts(profile: dict, features: dict, *, key_prefix: str =
         ]
         st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
+    commercial = bureau.get("commercial", {})
+    if commercial.get("has_file") and not bureau.get("is_ntc"):
+        _section("Commercial bureau — entity facilities")
+        st.caption(
+            f"**{commercial.get('entity_name', '—')}** · CMR rank **{commercial.get('cmr_rank')}** "
+            f"(1 = lowest risk) · max DPD **{commercial.get('max_dpd_12m', 0)}d** · "
+            f"utilization **{commercial.get('utilization', 0)*100:.0f}%**"
+        )
+        facilities = commercial.get("facilities", [])
+        if facilities:
+            comm_rows = [
+                {
+                    "Lender": f.get("lender"),
+                    "Product": f.get("product"),
+                    "Outstanding (₹L)": f.get("outstanding_lakhs"),
+                    "On-time %": round(f.get("monthly_emi_paid_on_time_rate", 0) * 100, 1),
+                    "Max DPD 12m": f.get("max_dpd_12m", 0),
+                }
+                for f in facilities
+            ]
+            st.dataframe(pd.DataFrame(comm_rows), width="stretch", hide_index=True)
+
 
 def render_loan_panel(profile: dict, features: dict) -> None:
     lb = profile.get("loan_book", {})
@@ -251,11 +273,18 @@ def render_loan_panel(profile: dict, features: dict) -> None:
     )
 
     if bureau.get("is_ntc"):
-        st.caption("New-to-Credit — CIBIL not available; GST, UPI, and bank data used in scoring.")
+        st.caption("New-to-Credit — promoter/commercial bureau not available; GST, UPI, and bank data used.")
     else:
+        commercial = bureau.get("commercial", {})
+        comm_line = (
+            f"Commercial CMR **{commercial.get('cmr_rank')}** · "
+            f"{commercial.get('facility_count', 0)} entity facility(ies)"
+            if commercial.get("has_file")
+            else "Commercial bureau **not on file**"
+        )
         st.caption(
-            f"Promoter CIBIL **{bureau.get('cibil_score')}** · "
-            f"{len(bureau.get('other_loans', []))} other bureau loan(s) · "
+            f"Promoter CIBIL **{bureau.get('cibil_score')}** · {comm_line} · "
+            f"{len(bureau.get('other_loans', []))} other consumer tradeline(s) · "
             f"other-loan on-time **{features.get('bureau_other_emi_on_time_rate', 0)*100:.0f}%**"
         )
 

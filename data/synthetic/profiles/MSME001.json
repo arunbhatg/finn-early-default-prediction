@@ -432,7 +432,7 @@
     "collection_notes": []
   },
   "gst": {
-    "registration_date": "2021-03-31",
+    "registration_date": "2022-06-09",
     "business_type": "Manufacturing",
     "monthly_turnover_lakhs": [
       21.13,
@@ -489,9 +489,9 @@
     "b2b_sales_ratio": 0.36,
     "payment_delays_count": 0,
     "primary_customer_sectors": {
-      "Services": 0.1,
-      "Pharma": 0.63,
-      "Food Processing": 0.27
+      "Logistics": 0.1,
+      "Food Processing": 0.63,
+      "Manufacturing": 0.27
     }
   },
   "upi": {
@@ -815,7 +815,7 @@
     "review_velocity_6m": 11
   },
   "bureau": {
-    "promoter_name": "Idika Bajaj",
+    "promoter_name": "Dev Murthy",
     "cibil_score": 811,
     "is_ntc": false,
     "ntc_months_on_file": 43,
@@ -868,7 +868,35 @@
     ],
     "dpd_12m": 0,
     "write_offs_36m": 0,
-    "credit_utilization": 0.39
+    "credit_utilization": 0.39,
+    "commercial": {
+      "has_file": true,
+      "entity_name": "Sharma Precision Works",
+      "cmr_rank": 2,
+      "facility_count": 2,
+      "total_outstanding_lakhs": 87.51,
+      "dpd_12m": 0,
+      "max_dpd_12m": 2,
+      "utilization": 0.51,
+      "facilities": [
+        {
+          "lender": "HDFC",
+          "product": "Term Loan",
+          "sanctioned_lakhs": 92.34,
+          "outstanding_lakhs": 29.91,
+          "monthly_emi_paid_on_time_rate": 0.98,
+          "max_dpd_12m": 3
+        },
+        {
+          "lender": "ICICI",
+          "product": "CC/OD",
+          "sanctioned_lakhs": 31.72,
+          "outstanding_lakhs": 57.6,
+          "monthly_emi_paid_on_time_rate": 0.98,
+          "max_dpd_12m": 3
+        }
+      ]
+    }
   },
   "courts": {
     "civil_cases": 0,
@@ -877,7 +905,7 @@
     "total_outstanding_litigation_lakhs": 0.0
   },
   "electricity": {
-    "consumer_number": "ELC348237",
+    "consumer_number": "ELC593554",
     "monthly_kwh": [
       579.25,
       496.82,
@@ -901,9 +929,9 @@
     "region_tier": "Metro"
   },
   "investment": {
-    "rnd_spend_lakhs_annual": 4.88,
-    "capex_lakhs_12m": 16.22,
-    "patents_count": 3,
+    "rnd_spend_lakhs_annual": 1.0,
+    "capex_lakhs_12m": 18.37,
+    "patents_count": 2,
     "govt_scheme_beneficiary": true
   }
 }

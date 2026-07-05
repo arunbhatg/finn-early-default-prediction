@@ -1,76 +1,76 @@
 msme_id,loan_id,business_name,loan_type,sanctioned_lakhs,outstanding_lakhs,is_ntc,sector,city,state,persona
 MSME001,LN-MSME001-001,Sharma Precision Works,Term Loan,95.63,38.48,False,Manufacturing,Pune,Maharashtra,healthy_manufacturer
-MSME002,LN-MSME002-001,Patel Kirana & General Store,Cash Credit,55.12,36.63,True,Retail,Ahmedabad,Gujarat,healthy_retail
-MSME003,LN-MSME003-001,Gupta Trading Company,Working Capital,145.42,75.89,False,Retail,Delhi,Delhi,distressed
-MSME004,LN-MSME004-001,Krishi Mitra Agro Supplies,Mudra/PMEGP,45.51,22.91,True,Agri-Input,Nagpur,Maharashtra,agri_favorable
-MSME005,LN-MSME005-001,"Ravel, Kapoor and Handa",Equipment Finance,39.96,24.33,False,Retail,Raichur,Maharashtra,random
-MSME006,LN-MSME006-001,Sura-Char,Mudra/PMEGP,122.86,100.59,False,Services,Serampore,Maharashtra,distressed
-MSME007,LN-MSME007-001,Bawa-Lalla,Supply Chain Finance,128.7,112.18,False,Food Processing,Shimla,Rajasthan,distressed
-MSME008,LN-MSME008-001,Gour Inc,Working Capital,65.01,27.07,True,Agri-Input,North Dumdum,Delhi,random
-MSME009,LN-MSME009-001,"Bhasin, Dada and Banerjee",Term Loan,132.72,92.69,True,Pharma,Kollam,Tamil Nadu,healthy_retail
-MSME010,LN-MSME010-001,Padmanabhan Ltd,Cash Credit,49.08,32.09,False,Logistics,Sikar,Maharashtra,random
-MSME011,LN-MSME011-001,Keer and Sons,LAP,47.03,27.23,False,Textiles,Bilaspur,Rajasthan,random
-MSME012,LN-MSME012-001,"Sabharwal, Luthra and Doctor",Equipment Finance,121.72,62.33,True,Food Processing,Vijayanagaram,Gujarat,healthy_retail
-MSME013,LN-MSME013-001,Bava-Kumar,Mudra/PMEGP,33.84,19.81,False,Retail,Mathura,Delhi,random
-MSME014,LN-MSME014-001,Balakrishnan Group,Supply Chain Finance,83.51,76.92,False,Agri-Input,Kadapa,Gujarat,distressed
-MSME015,LN-MSME015-001,Tata-Balasubramanian,Working Capital,55.39,24.44,False,Pharma,Rewa,Karnataka,random
-MSME016,LN-MSME016-001,"Bal, Choudhry and Hora",Term Loan,13.16,7.92,False,Pharma,Sonipat,Delhi,healthy_manufacturer
-MSME017,LN-MSME017-001,"Kibe, More and Walla",Cash Credit,74.35,48.93,False,Services,Chandrapur,Karnataka,healthy_manufacturer
-MSME018,LN-MSME018-001,"Konda, Parmer and Palan",LAP,17.45,7.17,False,Logistics,Guntur,Rajasthan,healthy_manufacturer
-MSME019,LN-MSME019-001,Ahuja Inc,Equipment Finance,146.17,91.04,True,Services,Proddatur,Gujarat,healthy_retail
-MSME020,LN-MSME020-001,"Puri, Shukla and Kapur",Mudra/PMEGP,48.91,19.64,True,Logistics,Amritsar,Delhi,random
-MSME021,LN-MSME021-001,Nagarajan Ltd,Supply Chain Finance,128.41,67.45,False,Textiles,Kadapa,Delhi,healthy_manufacturer
-MSME022,LN-MSME022-001,Virk-Dayal,Working Capital,75.9,46.0,False,Logistics,Salem,Delhi,distressed
-MSME023,LN-MSME023-001,Chadha and Sons,Term Loan,15.14,8.79,True,Food Processing,Bangalore,Delhi,healthy_retail
-MSME024,LN-MSME024-001,"Sawhney, Patel and Setty",Cash Credit,146.02,75.24,False,Services,Kulti,Gujarat,healthy_manufacturer
-MSME025,LN-MSME025-001,Mand-Ratti,LAP,22.49,15.65,True,Retail,Kozhikode,Rajasthan,healthy_retail
-MSME026,LN-MSME026-001,Shere-Garg,Equipment Finance,133.6,86.14,True,Services,Berhampur,Rajasthan,random
-MSME027,LN-MSME027-001,"Shere, Pandit and Chahal",Mudra/PMEGP,69.87,55.09,False,Logistics,Bhiwani,Tamil Nadu,distressed
-MSME028,LN-MSME028-001,Nayar Group,Supply Chain Finance,91.14,51.53,True,Retail,Mirzapur,Maharashtra,random
-MSME029,LN-MSME029-001,Sahni Ltd,Working Capital,28.09,25.79,False,Retail,Bhusawal,Gujarat,distressed
-MSME030,LN-MSME030-001,"Baria, Mahajan and Singhal",Term Loan,36.2,20.42,False,Food Processing,Amritsar,Delhi,random
-MSME031,LN-MSME031-001,"Tella, Balasubramanian and Sengupta",Cash Credit,130.7,86.92,False,Services,Kamarhati,Karnataka,random
-MSME032,LN-MSME032-001,Garde-Palla,LAP,26.69,17.07,False,Services,Mehsana,Rajasthan,healthy_manufacturer
-MSME033,LN-MSME033-001,Hayer Group,Equipment Finance,18.29,11.83,False,Services,Erode,Gujarat,random
-MSME034,LN-MSME034-001,Patla Inc,Mudra/PMEGP,35.45,23.45,False,Retail,Ujjain,Karnataka,healthy_manufacturer
-MSME035,LN-MSME035-001,"Pandya, Goyal and Bhavsar",Supply Chain Finance,142.52,113.21,False,Food Processing,Panipat,Maharashtra,distressed
-MSME036,LN-MSME036-001,"Sha, Konda and Loke",Working Capital,147.79,80.41,True,Pharma,Kolkata,Maharashtra,random
-MSME037,LN-MSME037-001,"Chakrabarti, Gokhale and Sengupta",Term Loan,125.6,71.55,False,Retail,Lucknow,Karnataka,distressed
-MSME038,LN-MSME038-001,"Thakkar, Panchal and Varughese",Cash Credit,28.69,17.38,True,Manufacturing,Gaya,Karnataka,random
-MSME039,LN-MSME039-001,Kant PLC,LAP,107.43,77.25,False,Agri-Input,Tiruvottiyur,Karnataka,distressed
-MSME040,LN-MSME040-001,"Sangha, Char and Saxena",Equipment Finance,65.96,29.18,False,Retail,Aurangabad,Gujarat,healthy_manufacturer
-MSME041,LN-MSME041-001,"Rajagopal, Pall and Ray",Mudra/PMEGP,37.43,19.59,False,Textiles,Chennai,Karnataka,random
-MSME042,LN-MSME042-001,Rao LLC,Supply Chain Finance,48.04,26.81,False,Agri-Input,Sambhal,Delhi,random
-MSME043,LN-MSME043-001,"Bera, Bath and Sant",Working Capital,69.67,30.58,False,Manufacturing,Bilaspur,Maharashtra,healthy_manufacturer
-MSME044,LN-MSME044-001,Varughese Group,Term Loan,60.08,43.17,False,Manufacturing,Ahmednagar,Delhi,distressed
-MSME045,LN-MSME045-001,"Contractor, Khare and Oommen",Cash Credit,122.4,79.95,False,Food Processing,Ratlam,Delhi,random
-MSME046,LN-MSME046-001,Nadkarni and Sons,LAP,91.35,71.03,False,Retail,Unnao,Rajasthan,distressed
-MSME047,LN-MSME047-001,Sundaram-Nair,Equipment Finance,102.16,83.68,False,Services,Durg,Rajasthan,distressed
-MSME048,LN-MSME048-001,Sunder Group,Mudra/PMEGP,16.73,7.65,False,Pharma,Kumbakonam,Karnataka,healthy_manufacturer
-MSME049,LN-MSME049-001,Goel LLC,Supply Chain Finance,114.89,70.47,False,Services,Phusro,Gujarat,healthy_manufacturer
-MSME050,LN-MSME050-001,"Jani, Yohannan and Kata",Working Capital,52.12,29.38,False,Logistics,Kulti,Karnataka,distressed
-MSME051,LN-MSME051-001,Bala Inc,Term Loan,79.08,51.85,False,Agri-Input,Ajmer,Karnataka,distressed
-MSME052,LN-MSME052-001,Bhattacharyya LLC,Cash Credit,149.4,66.91,False,Retail,Tinsukia,Gujarat,healthy_manufacturer
-MSME053,LN-MSME053-001,"Sahota, Bandi and Bhakta",LAP,86.44,55.51,True,Retail,Udupi,Delhi,healthy_retail
-MSME054,LN-MSME054-001,Dalal-Bhatti,Equipment Finance,138.68,119.64,False,Textiles,Vijayawada,Gujarat,distressed
-MSME055,LN-MSME055-001,Sarraf Inc,Mudra/PMEGP,117.95,62.43,False,Manufacturing,Bilaspur,Rajasthan,random
-MSME056,LN-MSME056-001,"Dugal, Bassi and Soman",Supply Chain Finance,14.34,8.35,False,Logistics,Sri Ganganagar,Rajasthan,healthy_manufacturer
-MSME057,LN-MSME057-001,"Peri, Dixit and Gade",Working Capital,107.09,60.74,True,Services,Nellore,Rajasthan,healthy_retail
-MSME058,LN-MSME058-001,Magar-Mody,Term Loan,142.58,95.04,False,Manufacturing,Ongole,Maharashtra,random
-MSME059,LN-MSME059-001,Sani-Subramanian,Cash Credit,40.61,26.51,False,Food Processing,Sultan Pur Majra,Maharashtra,distressed
-MSME060,LN-MSME060-001,"Gokhale, Sawhney and Rajagopalan",LAP,107.25,68.85,True,Services,Bhalswa Jahangir Pur,Delhi,healthy_retail
-MSME061,LN-MSME061-001,"Dugal, Kalla and Sachdev",Equipment Finance,139.3,67.81,True,Food Processing,Giridih,Tamil Nadu,random
-MSME062,LN-MSME062-001,Lad and Sons,Mudra/PMEGP,119.05,76.33,False,Manufacturing,Kottayam,Delhi,random
-MSME063,LN-MSME063-001,Warrior-Brahmbhatt,Supply Chain Finance,27.81,13.16,False,Retail,Khandwa,Gujarat,healthy_manufacturer
-MSME064,LN-MSME064-001,Chhabra Inc,Working Capital,98.71,64.23,True,Pharma,Anand,Rajasthan,random
-MSME065,LN-MSME065-001,Chauhan PLC,Term Loan,114.79,63.87,False,Retail,Vadodara,Karnataka,healthy_manufacturer
-MSME066,LN-MSME066-001,"Dani, Soman and Panchal",Cash Credit,106.49,78.72,False,Retail,Kolkata,Karnataka,distressed
-MSME067,LN-MSME067-001,"Raj, Padmanabhan and Iyer",LAP,13.04,7.36,True,Pharma,Nadiad,Maharashtra,healthy_retail
-MSME068,LN-MSME068-001,Tara-Ramakrishnan,Equipment Finance,126.99,51.43,False,Agri-Input,Ballia,Maharashtra,distressed
-MSME069,LN-MSME069-001,Butala Group,Mudra/PMEGP,10.26,5.39,False,Retail,Haldia,Tamil Nadu,distressed
-MSME070,LN-MSME070-001,Vaidya Ltd,Supply Chain Finance,45.31,19.15,False,Retail,Ulhasnagar,Rajasthan,distressed
-MSME071,LN-MSME071-001,"Baria, Chhabra and Bhakta",Working Capital,48.8,28.16,False,Manufacturing,Karnal,Tamil Nadu,random
-MSME072,LN-MSME072-001,"Pall, Dayal and Kohli",Term Loan,62.12,27.23,False,Textiles,Malda,Karnataka,distressed
-MSME073,LN-MSME073-001,Dasgupta and Sons,Cash Credit,146.85,65.31,True,Pharma,Ghaziabad,Karnataka,random
-MSME074,LN-MSME074-001,Purohit-Muni,LAP,112.27,61.05,False,Pharma,Madhyamgram,Delhi,random
-MSME075,LN-MSME075-001,"Chadha, Rana and Nagarajan",Equipment Finance,87.86,38.27,False,Logistics,Bahraich,Rajasthan,healthy_manufacturer
+MSME002,LN-MSME002-001,Patel Kirana & General Store,Cash Credit,36.82,23.93,True,Retail,Ahmedabad,Gujarat,healthy_retail
+MSME003,LN-MSME003-001,Gupta Trading Company,Working Capital,120.7,112.28,False,Retail,Delhi,Delhi,distressed
+MSME004,LN-MSME004-001,Krishi Mitra Agro Supplies,Mudra/PMEGP,18.79,10.54,True,Agri-Input,Nagpur,Maharashtra,agri_favorable
+MSME005,LN-MSME005-001,Taneja and Sons,Equipment Finance,98.06,43.57,False,Retail,Imphal,Rajasthan,healthy_manufacturer
+MSME006,LN-MSME006-001,Chaudhry Ltd,Mudra/PMEGP,88.75,50.23,True,Services,North Dumdum,Gujarat,healthy_retail
+MSME007,LN-MSME007-001,"Bakshi, Mangat and Dave",Supply Chain Finance,104.1,45.29,False,Textiles,Motihari,Maharashtra,healthy_manufacturer
+MSME008,LN-MSME008-001,Bhandari Inc,Working Capital,109.56,45.43,False,Agri-Input,Naihati,Maharashtra,healthy_manufacturer
+MSME009,LN-MSME009-001,"Butala, Nori and Deshpande",Term Loan,119.27,54.61,True,Pharma,Hazaribagh,Delhi,healthy_retail
+MSME010,LN-MSME010-001,Bail LLC,Cash Credit,124.39,101.8,False,Textiles,Haldia,Gujarat,distressed
+MSME011,LN-MSME011-001,Issac and Sons,LAP,101.51,56.34,False,Logistics,Loni,Maharashtra,random
+MSME012,LN-MSME012-001,"Seth, Yohannan and Bhalla",Equipment Finance,33.42,15.89,True,Retail,Bhatpara,Maharashtra,healthy_retail
+MSME013,LN-MSME013-001,Nagar-Sethi,Mudra/PMEGP,78.36,59.56,False,Services,Fatehpur,Karnataka,distressed
+MSME014,LN-MSME014-001,Prashad-Bal,Supply Chain Finance,56.66,52.45,False,Logistics,Bardhaman,Rajasthan,distressed
+MSME015,LN-MSME015-001,Ram Group,Working Capital,124.49,79.64,False,Food Processing,Mysore,Rajasthan,random
+MSME016,LN-MSME016-001,Savant Ltd,Term Loan,27.01,17.03,True,Retail,Nashik,Tamil Nadu,random
+MSME017,LN-MSME017-001,Warrior Group,Cash Credit,35.1,18.65,True,Pharma,Jammu,Delhi,healthy_retail
+MSME018,LN-MSME018-001,Bhattacharyya-Krishnamurthy,LAP,100.36,67.77,True,Manufacturing,Silchar,Tamil Nadu,healthy_retail
+MSME019,LN-MSME019-001,Sant-Mukherjee,Equipment Finance,16.34,9.17,False,Pharma,Nagercoil,Delhi,distressed
+MSME020,LN-MSME020-001,"Chander, Yogi and Sandhu",Mudra/PMEGP,48.26,33.77,False,Retail,Khandwa,Gujarat,healthy_manufacturer
+MSME021,LN-MSME021-001,"Raj, Mannan and Barad",Supply Chain Finance,41.86,19.68,False,Agri-Input,Ranchi,Maharashtra,random
+MSME022,LN-MSME022-001,Sinha-Kala,Working Capital,140.5,96.54,False,Agri-Input,Naihati,Gujarat,random
+MSME023,LN-MSME023-001,Soni-Gill,Term Loan,15.14,10.4,True,Retail,Bardhaman,Karnataka,random
+MSME024,LN-MSME024-001,Narasimhan PLC,Cash Credit,148.54,88.32,False,Pharma,Hindupur,Karnataka,random
+MSME025,LN-MSME025-001,Roy Ltd,LAP,141.58,72.07,False,Textiles,Hindupur,Maharashtra,random
+MSME026,LN-MSME026-001,Prabhu-Chaudhary,Equipment Finance,41.69,19.18,False,Services,Danapur,Gujarat,distressed
+MSME027,LN-MSME027-001,"Yogi, Gala and Kata",Mudra/PMEGP,89.68,38.59,False,Logistics,Kavali,Gujarat,healthy_manufacturer
+MSME028,LN-MSME028-001,Raja Ltd,Supply Chain Finance,34.74,15.59,False,Retail,Shimoga,Delhi,distressed
+MSME029,LN-MSME029-001,"Sabharwal, Nori and Johal",Working Capital,56.57,37.86,False,Agri-Input,Berhampore,Karnataka,random
+MSME030,LN-MSME030-001,Prashad-Sharma,Term Loan,20.72,14.36,False,Logistics,Warangal,Maharashtra,healthy_manufacturer
+MSME031,LN-MSME031-001,Rao Group,Cash Credit,45.24,26.66,False,Pharma,Hospet,Karnataka,healthy_manufacturer
+MSME032,LN-MSME032-001,"Purohit, Shroff and Nayar",LAP,18.84,12.99,False,Manufacturing,Vadodara,Delhi,random
+MSME033,LN-MSME033-001,Dar PLC,Equipment Finance,143.44,81.43,False,Food Processing,Chittoor,Gujarat,random
+MSME034,LN-MSME034-001,Char-Goda,Mudra/PMEGP,39.13,24.26,True,Textiles,Malda,Rajasthan,healthy_retail
+MSME035,LN-MSME035-001,Bail Group,Supply Chain Finance,59.47,36.38,False,Logistics,Danapur,Karnataka,random
+MSME036,LN-MSME036-001,Murthy Inc,Working Capital,105.76,64.88,False,Services,Rampur,Karnataka,distressed
+MSME037,LN-MSME037-001,Jaggi Ltd,Term Loan,50.35,20.4,True,Logistics,Nadiad,Tamil Nadu,healthy_retail
+MSME038,LN-MSME038-001,Varty LLC,Cash Credit,143.99,75.65,True,Food Processing,Ghaziabad,Rajasthan,random
+MSME039,LN-MSME039-001,"Bir, Ramesh and Banik",LAP,66.78,30.41,True,Agri-Input,Tiruvottiyur,Delhi,healthy_retail
+MSME040,LN-MSME040-001,Palla LLC,Equipment Finance,78.76,65.67,False,Services,Jabalpur,Maharashtra,distressed
+MSME041,LN-MSME041-001,"Memon, Dhaliwal and Joshi",Mudra/PMEGP,76.98,55.88,False,Logistics,Pudukkottai,Delhi,distressed
+MSME042,LN-MSME042-001,Bora-Tailor,Supply Chain Finance,82.62,76.27,False,Retail,Jaipur,Delhi,distressed
+MSME043,LN-MSME043-001,Kota-Jhaveri,Working Capital,109.61,66.59,False,Agri-Input,Junagadh,Maharashtra,distressed
+MSME044,LN-MSME044-001,Anne Ltd,Term Loan,73.11,35.79,False,Agri-Input,Hyderabad,Karnataka,distressed
+MSME045,LN-MSME045-001,Chaudhuri Group,Cash Credit,38.31,17.77,False,Textiles,Pune,Delhi,healthy_manufacturer
+MSME046,LN-MSME046-001,Nayak Ltd,LAP,19.25,11.03,False,Services,Pali,Rajasthan,random
+MSME047,LN-MSME047-001,Korpal PLC,Equipment Finance,147.5,99.69,False,Services,Shivpuri,Maharashtra,random
+MSME048,LN-MSME048-001,"Taneja, Mani and Srinivas",Mudra/PMEGP,99.85,49.42,False,Textiles,Kozhikode,Tamil Nadu,distressed
+MSME049,LN-MSME049-001,Wadhwa-Walla,Supply Chain Finance,134.12,64.44,True,Food Processing,Secunderabad,Karnataka,healthy_retail
+MSME050,LN-MSME050-001,Prasad-Comar,Working Capital,135.82,84.91,False,Pharma,Sagar,Maharashtra,random
+MSME051,LN-MSME051-001,Wadhwa-Devi,Term Loan,89.29,53.26,True,Pharma,Amroha,Karnataka,random
+MSME052,LN-MSME052-001,Bajwa-Karpe,Cash Credit,38.07,21.02,False,Services,Jorhat,Rajasthan,distressed
+MSME053,LN-MSME053-001,Bail-Gole,LAP,34.69,21.97,False,Textiles,Thoothukudi,Rajasthan,random
+MSME054,LN-MSME054-001,Chopra-Sane,Equipment Finance,62.41,27.83,False,Textiles,Mangalore,Gujarat,healthy_manufacturer
+MSME055,LN-MSME055-001,Shroff-Kapoor,Mudra/PMEGP,66.73,41.06,False,Services,Gurgaon,Delhi,random
+MSME056,LN-MSME056-001,Bedi-More,Supply Chain Finance,46.48,44.01,False,Manufacturing,Kalyan-Dombivli,Gujarat,distressed
+MSME057,LN-MSME057-001,Chana PLC,Working Capital,45.21,27.38,False,Textiles,Agra,Karnataka,random
+MSME058,LN-MSME058-001,Bhat-Mishra,Term Loan,31.66,17.63,False,Manufacturing,Vasai-Virar,Karnataka,healthy_manufacturer
+MSME059,LN-MSME059-001,Pradhan PLC,Cash Credit,141.89,70.61,False,Food Processing,Surendranagar Dudhrej,Tamil Nadu,distressed
+MSME060,LN-MSME060-001,"Bajaj, Sheth and Parikh",LAP,134.59,71.12,False,Manufacturing,Salem,Gujarat,distressed
+MSME061,LN-MSME061-001,"Batra, Mander and Banik",Equipment Finance,118.38,78.63,False,Services,Thiruvananthapuram,Gujarat,random
+MSME062,LN-MSME062-001,"Narain, Dutta and Seth",Mudra/PMEGP,19.24,11.94,False,Retail,Amroha,Tamil Nadu,distressed
+MSME063,LN-MSME063-001,Warrior Ltd,Supply Chain Finance,115.46,85.46,False,Pharma,Howrah,Delhi,distressed
+MSME064,LN-MSME064-001,"Ramesh, Sami and Shere",Working Capital,75.83,43.49,False,Retail,Rajahmundry,Maharashtra,healthy_manufacturer
+MSME065,LN-MSME065-001,"Nayak, Biswas and D’Alia",Term Loan,13.04,6.93,False,Manufacturing,Naihati,Rajasthan,healthy_manufacturer
+MSME066,LN-MSME066-001,Balan and Sons,Cash Credit,29.79,13.28,False,Food Processing,Vijayawada,Delhi,distressed
+MSME067,LN-MSME067-001,"Srivastava, Sandhu and Dar",LAP,71.6,41.15,False,Logistics,Barasat,Rajasthan,healthy_manufacturer
+MSME068,LN-MSME068-001,Sidhu-Pal,Equipment Finance,119.33,76.22,False,Logistics,Ghaziabad,Tamil Nadu,random
+MSME069,LN-MSME069-001,Menon-Dhar,Mudra/PMEGP,27.69,14.81,False,Pharma,Belgaum,Gujarat,healthy_manufacturer
+MSME070,LN-MSME070-001,Mohan-Aggarwal,Supply Chain Finance,125.38,75.47,False,Textiles,Morena,Gujarat,random
+MSME071,LN-MSME071-001,Ravi LLC,Working Capital,24.93,14.62,False,Logistics,Aizawl,Maharashtra,distressed
+MSME072,LN-MSME072-001,"Sachdev, Pathak and Vyas",Term Loan,72.34,65.24,False,Services,Vadodara,Rajasthan,distressed
+MSME073,LN-MSME073-001,"Saha, Sagar and Ramanathan",Cash Credit,149.16,84.09,True,Textiles,Haldia,Delhi,healthy_retail
+MSME074,LN-MSME074-001,Ganesh and Sons,LAP,84.95,55.19,True,Services,Chittoor,Maharashtra,healthy_retail
+MSME075,LN-MSME075-001,Sastry and Sons,Equipment Finance,132.93,105.19,False,Textiles,Bally,Maharashtra,distressed

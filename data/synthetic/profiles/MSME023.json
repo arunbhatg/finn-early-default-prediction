@@ -1,19 +1,19 @@
 {
   "msme_id": "MSME023",
-  "business_name": "Chadha and Sons",
-  "pan": "WHSVJ6644G",
-  "gstin": "07V953A5O47A1ZH",
-  "sector": "Food Processing",
-  "city": "Bangalore",
-  "state": "Delhi",
+  "business_name": "Soni-Gill",
+  "pan": "CNAPZ7943N",
+  "gstin": "29CBIR1AJ8X21ZC",
+  "sector": "Retail",
+  "city": "Bardhaman",
+  "state": "Karnataka",
   "years_in_business": 8,
-  "udyam_number": "UDYAM-07-7024113",
-  "persona": "healthy_retail",
+  "udyam_number": "UDYAM-29-7024113",
+  "persona": "random",
   "loan_book": {
     "loan_id": "LN-MSME023-001",
     "loan_type": "Term Loan",
     "sanctioned_amount_lakhs": 15.14,
-    "outstanding_lakhs": 8.79,
+    "outstanding_lakhs": 10.4,
     "interest_rate_pct": 10.89,
     "tenure_months": 60,
     "monthly_emi_lakhs": 0.25,
@@ -243,8 +243,8 @@
       {
         "month_index": 18,
         "emi_due_date": "2026-01-06",
-        "emi_paid_date": "2026-01-07",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-01-06",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -255,8 +255,8 @@
       {
         "month_index": 19,
         "emi_due_date": "2026-02-05",
-        "emi_paid_date": "2026-02-06",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-02-05",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -267,8 +267,8 @@
       {
         "month_index": 20,
         "emi_due_date": "2026-03-07",
-        "emi_paid_date": "2026-03-08",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-03-07",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -279,8 +279,8 @@
       {
         "month_index": 21,
         "emi_due_date": "2026-04-06",
-        "emi_paid_date": "2026-04-07",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-04-06",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -291,8 +291,8 @@
       {
         "month_index": 22,
         "emi_due_date": "2026-05-06",
-        "emi_paid_date": "2026-05-07",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-05-06",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -303,8 +303,8 @@
       {
         "month_index": 23,
         "emi_due_date": "2026-06-05",
-        "emi_paid_date": "2026-06-06",
-        "days_past_due": 1,
+        "emi_paid_date": "2026-06-05",
+        "days_past_due": 0,
         "amount_due_lakhs": 0.25,
         "amount_paid_lakhs": 0.25,
         "partial_payment": false,
@@ -413,63 +413,56 @@
     }
   ],
   "unstructured": {
-    "news_mentions": [
-      {
-        "headline": "Chadha and Sons expands operations",
-        "text": "Business reports steady growth and timely vendor payments.",
-        "sentiment": "positive",
-        "days_ago": 170
-      }
-    ],
+    "news_mentions": [],
     "rm_call_notes": [
       {
-        "text": "Routine review \u2014 promoter maintains healthy payment discipline on all facilities.",
-        "sentiment": "positive",
-        "days_ago": 46
+        "text": "Standard monitoring call \u2014 no concerns.",
+        "sentiment": "neutral",
+        "days_ago": 65
       }
     ],
     "gst_remarks": [],
     "collection_notes": []
   },
   "gst": {
-    "registration_date": "2022-01-30",
-    "business_type": "Food Processing",
+    "registration_date": "2018-11-12",
+    "business_type": "Retail",
     "monthly_turnover_lakhs": [
-      30.17,
-      30.09,
-      30.94,
-      32.53,
-      34.42,
-      35.65,
-      36.72,
-      36.47,
-      36.97,
-      38.24,
-      39.7,
-      39.84,
-      41.75,
-      43.7,
-      44.29,
-      45.42,
-      46.7,
-      46.21,
-      46.55,
-      47.57,
-      48.92,
-      50.77,
-      52.66,
-      54.3
+      40.44,
+      41.47,
+      40.1,
+      41.33,
+      41.15,
+      42.27,
+      43.67,
+      42.37,
+      41.36,
+      41.57,
+      43.04,
+      43.92,
+      43.29,
+      43.27,
+      43.95,
+      45.18,
+      45.36,
+      45.97,
+      44.61,
+      45.15,
+      46.6,
+      46.2,
+      46.73,
+      47.99
     ],
     "filing_status": [
+      "missed",
+      "filed",
       "filed",
       "filed",
       "filed",
       "filed",
       "filed",
       "missed",
-      "filed",
-      "filed",
-      "filed",
+      "delayed",
       "filed",
       "filed",
       "filed",
@@ -486,16 +479,16 @@
       "filed",
       "filed"
     ],
-    "b2b_sales_ratio": 0.46,
-    "payment_delays_count": 1,
+    "b2b_sales_ratio": 0.45,
+    "payment_delays_count": 3,
     "primary_customer_sectors": {
-      "Services": 0.08,
-      "Agri-Input": 0.88,
-      "Food Processing": 0.04
+      "Manufacturing": 0.08,
+      "Pharma": 0.88,
+      "Retail": 0.04
     }
   },
   "upi": {
-    "vpa": "chadha@okaxis",
+    "vpa": "soni-gill@paytm",
     "monthly_txn_count": [
       0,
       0,
@@ -511,35 +504,35 @@
       0
     ],
     "monthly_volume_lakhs": [
-      22.45,
-      22.27,
-      22.72,
-      23.49,
-      23.26,
-      23.99,
-      25.01,
-      26.16,
-      27.05,
-      27.7,
-      28.43,
-      28.74
+      11.69,
+      11.99,
+      11.62,
+      11.2,
+      11.64,
+      11.94,
+      11.32,
+      11.25,
+      11.64,
+      11.13,
+      11.86,
+      12.54
     ],
     "avg_ticket_size": [
-      22.45,
-      22.27,
-      22.72,
-      23.49,
-      23.26,
-      23.99,
-      25.01,
-      26.16,
-      27.05,
-      27.7,
-      28.43,
-      28.74
+      11.69,
+      11.99,
+      11.62,
+      11.2,
+      11.64,
+      11.94,
+      11.32,
+      11.25,
+      11.64,
+      11.13,
+      11.86,
+      12.54
     ],
-    "p2m_ratio": 0.75,
-    "failed_txn_rate": 0.007
+    "p2m_ratio": 0.81,
+    "failed_txn_rate": 0.013
   },
   "aa": {
     "consent_id": "AA-CONSENT-MSME023",
@@ -550,120 +543,138 @@
       }
     ],
     "monthly_closing_balance_lakhs": [
-      11.36,
-      11.33,
-      11.56,
-      11.71,
-      12.15,
-      12.55,
-      12.37,
-      12.08,
-      11.75,
+      11.47,
+      11.24,
+      11.23,
+      11.65,
+      11.28,
+      10.94,
+      10.99,
+      11.23,
+      10.83,
+      11.04,
       11.43,
-      11.76,
-      12.28
+      11.88
     ],
     "monthly_credits_lakhs": [
-      23.05,
-      23.08,
-      24.27,
-      25.72,
-      26.3,
-      25.49,
-      24.82,
-      25.28,
-      26.49,
-      28.04,
-      28.03,
-      28.13
+      24.47,
+      24.88,
+      24.66,
+      25.25,
+      25.89,
+      25.68,
+      26.09,
+      26.32,
+      27.25,
+      28.06,
+      27.48,
+      26.64
     ],
     "monthly_debits_lakhs": [
-      20.42,
-      20.99,
-      20.73,
-      22.38,
-      20.89,
-      21.13,
-      21.29,
-      21.29,
-      20.63,
-      26.32,
-      25.72,
-      23.91
+      18.78,
+      19.1,
+      22.15,
+      23.67,
+      23.27,
+      19.86,
+      21.49,
+      24.23,
+      25.64,
+      24.28,
+      20.62,
+      20.31
     ],
-    "abb_lakhs": 11.82,
-    "emi_on_time_rate": 0.79,
+    "abb_lakhs": 11.45,
+    "emi_on_time_rate": 0.82,
     "bounce_count_12m": 0,
-    "od_utilization": 0.34
+    "od_utilization": 0.15
   },
   "epfo": {
-    "establishment_id": "DE/BAN/497349",
+    "establishment_id": "KA/BAR/926051",
     "employee_count": [
-      33,
-      33,
-      34,
-      34,
-      35,
-      34,
-      34,
-      34,
-      35,
-      35,
-      35,
-      35
+      38,
+      38,
+      38,
+      38,
+      39,
+      39,
+      39,
+      39,
+      39,
+      39,
+      38,
+      39
     ],
     "monthly_wage_bill_lakhs": [
-      802255.43,
-      665182.67,
-      711108.34,
-      940608.54,
-      650584.41,
-      887471.46,
-      663918.76,
-      855700.54,
-      926824.48,
-      957051.52,
-      708775.11,
-      887503.95
+      804051.97,
+      994136.22,
+      796792.95,
+      767183.61,
+      967192.56,
+      759495.89,
+      812523.2,
+      993353.37,
+      1033159.71,
+      1024823.0,
+      697050.67,
+      826854.35
     ],
     "contribution_status": [
+      "paid",
+      "paid",
+      "paid",
+      "missed",
+      "paid",
+      "paid",
+      "paid",
       "delayed",
+      "missed",
       "paid",
       "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid",
-      "paid"
+      "delayed"
     ],
-    "new_joiners_12m": 0,
-    "attrition_rate": 0.12
+    "new_joiners_12m": 6,
+    "attrition_rate": 0.08
   },
   "google": {
     "place_id": "ChIJMSME023",
-    "rating": 3.6,
-    "review_count": 31,
+    "rating": 4.7,
+    "review_count": 34,
     "reviews": [
       {
-        "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
-        "sentiment": "positive",
-        "days_ago": 453
+        "rating": 2,
+        "text": "Decent products at market rates.",
+        "sentiment": "neutral",
+        "days_ago": 290
       },
       {
         "rating": 5,
-        "text": "Excellent quality products and timely delivery.",
+        "text": "Reliable supplier \u2014 payments always honoured.",
         "sentiment": "positive",
-        "days_ago": 215
+        "days_ago": 404
+      },
+      {
+        "rating": 5,
+        "text": "Reliable supplier \u2014 payments always honoured.",
+        "sentiment": "positive",
+        "days_ago": 56
+      },
+      {
+        "rating": 1,
+        "text": "Decent products at market rates.",
+        "sentiment": "neutral",
+        "days_ago": 168
+      },
+      {
+        "rating": 4,
+        "text": "Very professional team, highly recommended.",
+        "sentiment": "positive",
+        "days_ago": 299
       },
       {
         "rating": 3,
-        "text": "Reliable supplier \u2014 payments always honoured.",
-        "sentiment": "positive",
+        "text": "Average experience, nothing exceptional.",
+        "sentiment": "neutral",
         "days_ago": 10
       },
       {
@@ -835,11 +846,11 @@
         "days_ago": 243
       }
     ],
-    "response_rate": 0.55,
-    "review_velocity_6m": 8
+    "response_rate": 0.54,
+    "review_velocity_6m": 10
   },
   "bureau": {
-    "promoter_name": "Varsha Kothari",
+    "promoter_name": "Yagnesh Goda",
     "cibil_score": 0,
     "is_ntc": true,
     "ntc_months_on_file": 0,
@@ -847,7 +858,10 @@
     "other_loans": [],
     "dpd_12m": 0,
     "write_offs_36m": 0,
-    "credit_utilization": 0.33
+    "credit_utilization": 0.27,
+    "commercial": {
+      "has_file": false
+    }
   },
   "courts": {
     "civil_cases": 0,
@@ -856,33 +870,33 @@
     "total_outstanding_litigation_lakhs": 0.0
   },
   "electricity": {
-    "consumer_number": "ELC526541",
+    "consumer_number": "ELC817204",
     "monthly_kwh": [
-      2184.92,
-      2239.37,
-      2205.18,
-      2298.98,
-      2348.78,
-      2368.17,
-      2297.5,
-      2271.75,
-      2339.48,
-      2422.39,
-      2343.31,
-      2439.99
+      3562.23,
+      3635.2,
+      3570.89,
+      3568.28,
+      3546.53,
+      3643.29,
+      3675.03,
+      3744.61,
+      3842.71,
+      3852.17,
+      3819.53,
+      3854.99
     ],
     "tariff_category": "Commercial",
-    "payment_regularity": 0.96
+    "payment_regularity": 0.88
   },
   "macro": {
     "sector_growth_pct": null,
-    "monsoon_index_pct": 95.0,
-    "region_tier": "Metro"
+    "monsoon_index_pct": 103.3,
+    "region_tier": "Tier-2"
   },
   "investment": {
-    "rnd_spend_lakhs_annual": 0.49,
-    "capex_lakhs_12m": 0.44,
-    "patents_count": 1,
+    "rnd_spend_lakhs_annual": 0.61,
+    "capex_lakhs_12m": 1.65,
+    "patents_count": 0,
     "govt_scheme_beneficiary": false
   }
 }

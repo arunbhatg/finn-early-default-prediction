@@ -9,6 +9,10 @@ import numpy as np
 import pandas as pd
 
 from src.features.collection_features import COLLECTION_FEATURE_COLUMNS, extract_collection_features
+from src.features.commercial_bureau_features import (
+    COMMERCIAL_BUREAU_FEATURE_COLUMNS,
+    extract_commercial_bureau_features,
+)
 from src.features.nlp_features import NLP_FEATURE_COLUMNS, extract_nlp_features
 from src.utils.constants import LOAN_TYPES, PANEL_DIR, PROFILES_DIR, SECTOR_GROWTH
 from src.utils.helpers import avg_recent, compliance_rate, yoy_growth
@@ -153,6 +157,7 @@ def extract_features(profile: dict, observation_month: int | None = None) -> dic
     }
 
     features.update(_ntc_proxy_features(profile))
+    features.update(extract_commercial_bureau_features(profile))
     features.update(extract_collection_features(profile, observation_month))
     features.update(extract_nlp_features(profile))
     features = _apply_early_warning_mask(profile, features, observation_month)
@@ -180,6 +185,9 @@ def _apply_early_warning_mask(profile: dict, features: dict, observation_month: 
         features["bureau_other_emi_on_time_rate"] = 0.96
         features["bureau_other_max_dpd_12m"] = 0
         features["bureau_other_avg_dpd"] = 0
+        features["commercial_cmr_rank"] = min(features.get("commercial_cmr_rank", 10) or 10, 3)
+        features["commercial_max_dpd_12m"] = 0
+        features["commercial_dpd_12m"] = 0
     elif months_before_stress >= 6:
         features["promoter_cibil"] = max(features.get("promoter_cibil", 600), 680)
         features["gst_payment_delays"] = min(features.get("gst_payment_delays", 0), 3)
@@ -230,6 +238,7 @@ BASE_FEATURE_COLUMNS = [
     "promoter_dpd_12m",
     "promoter_write_offs",
     "promoter_credit_utilization",
+    *COMMERCIAL_BUREAU_FEATURE_COLUMNS,
     "court_civil_cases",
     "court_criminal_cases",
     "court_insolvency",
@@ -256,6 +265,7 @@ STRUCTURED_BASELINE_COLUMNS = [
     "promoter_dpd_12m",
     "promoter_write_offs",
     "promoter_credit_utilization",
+    *COMMERCIAL_BUREAU_FEATURE_COLUMNS,
     "court_civil_cases",
     "court_insolvency",
     "sector_growth_pct",

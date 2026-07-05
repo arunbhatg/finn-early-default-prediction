@@ -47,15 +47,22 @@ def get_facility_metrics(features: dict, profile: dict) -> list[dict]:
     bureau = profile.get("bureau", {})
     loan = profile.get("loan_book", {})
     is_ntc = bureau.get("is_ntc", False)
-    credit = {"label": "Credit file", "value": "NTC"} if is_ntc else {
-        "label": "Promoter CIBIL",
-        "value": str(int(bureau.get("cibil_score", 0))),
-    }
+
+    if is_ntc:
+        promoter = {"label": "Promoter bureau", "value": "NTC"}
+        commercial = {"label": "Commercial bureau", "value": "Not on file"}
+    else:
+        promoter = {"label": "Promoter CIBIL", "value": str(int(bureau.get("cibil_score", 0)))}
+        if features.get("has_commercial_bureau"):
+            commercial = {"label": "Commercial CMR", "value": str(int(features.get("commercial_cmr_rank", 0)))}
+        else:
+            commercial = {"label": "Commercial bureau", "value": "Not on file"}
+
     return [
         {"label": "12m stress probability", "value": f"{features.get('_stress_prob_display', 0)*100:.0f}%"},
         {"label": "Outstanding", "value": f"₹{loan.get('outstanding_lakhs', 0):.1f}L"},
-        {"label": "EMI burden ratio", "value": f"{features.get('emi_burden_ratio', 0):.2f}"},
-        credit,
+        promoter,
+        commercial,
     ]
 
 
@@ -79,6 +86,11 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
 
     if features.get("bureau_other_max_dpd_12m", 0) >= 30:
         flags.append({"level": "red", "label": "DPD on other bureau loans"})
+
+    if features.get("has_commercial_bureau") and features.get("commercial_cmr_rank", 0) >= 7:
+        flags.append({"level": "amber", "label": f"Weak commercial CMR ({features['commercial_cmr_rank']})"})
+    if features.get("commercial_max_dpd_12m", 0) >= 30:
+        flags.append({"level": "red", "label": "DPD on commercial bureau facilities"})
 
     if features.get("composite_text_stress_score", 0) >= 0.4:
         flags.append({"level": "amber", "label": "Negative unstructured signals"})

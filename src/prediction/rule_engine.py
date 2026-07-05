@@ -62,6 +62,17 @@ def score_bureau_ntc(f: dict) -> tuple[float, list[dict]]:
             ("Other-loan avg DPD (inverse)", _scale(f.get("bureau_other_avg_dpd", 0), 0, 30, invert=True), f"{f.get('bureau_other_avg_dpd', 0):.1f}d"),
             ("Credit utilization (inverse)", 100 - f.get("promoter_credit_utilization", 0) * 100, f"{f.get('promoter_credit_utilization', 0)*100:.0f}%"),
         ]
+        if f.get("has_commercial_bureau"):
+            cmr = f.get("commercial_cmr_rank", 10) or 10
+            cmr_pts = _scale(cmr, 1, 10, invert=True)
+            signals.insert(1, ("Commercial CMR (inverse)", cmr_pts, str(int(cmr))))
+            signals.append(
+                (
+                    "Commercial max DPD (inverse)",
+                    _scale(f.get("commercial_max_dpd_12m", 0), 0, 60, invert=True),
+                    f"{int(f.get('commercial_max_dpd_12m', 0))}d",
+                )
+            )
     court_penalty = f.get("court_civil_cases", 0) * 8 + f.get("court_insolvency", 0) * 25
     score = clamp(sum(s[1] for s in signals) / len(signals) - court_penalty, 0, 100)
     drivers = [{"factor": s[0], "impact": s[1], "value": s[2]} for s in signals]
