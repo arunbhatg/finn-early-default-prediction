@@ -31,4 +31,4 @@ def render_score_gauge(score: float, grade: str = "") -> None:
         )
     )
     fig.update_layout(height=260, margin=dict(t=48, b=16, l=24, r=24))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")

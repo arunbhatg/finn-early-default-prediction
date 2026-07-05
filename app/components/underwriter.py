@@ -67,33 +67,40 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
                 st.caption(f"↓ {d['factor']} ({d['value']})")
 
 
+def _chart_layout(*, show_legend: bool = False) -> dict:
+    return {
+        "height": 280,
+        "margin": dict(t=36, l=8, r=8, b=8),
+        "showlegend": show_legend,
+    }
+
+
 def render_charts(profile: dict) -> None:
     gst, upi, aa, epfo = profile["gst"], profile["upi"], profile["aa"], profile["epfo"]
-    layout = dict(height=280, margin=dict(t=36, l=8, r=8, b=8), showlegend=False)
 
     c1, c2 = st.columns(2)
     with c1:
         df = pd.DataFrame({"Turnover (₹L)": gst["monthly_turnover_lakhs"]})
         fig = px.line(df, markers=True, title="GST turnover")
-        fig.update_layout(**layout)
-        st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(**_chart_layout())
+        st.plotly_chart(fig, width="stretch")
     with c2:
         df = pd.DataFrame({"UPI (₹L)": upi["monthly_volume_lakhs"]})
         fig = px.bar(df, title="UPI collections")
-        fig.update_layout(**layout)
-        st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(**_chart_layout())
+        st.plotly_chart(fig, width="stretch")
 
     c3, c4 = st.columns(2)
     with c3:
         df = pd.DataFrame({"Credits": aa["monthly_credits_lakhs"], "Debits": aa["monthly_debits_lakhs"]})
         fig = px.area(df, title="Bank cash flow")
-        fig.update_layout({**layout, "showlegend": True})
-        st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(**_chart_layout(show_legend=True))
+        st.plotly_chart(fig, width="stretch")
     with c4:
         df = pd.DataFrame({"Staff": epfo["employee_count"]})
         fig = px.line(df, markers=True, title="Payroll headcount")
-        fig.update_layout(**layout)
-        st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(**_chart_layout())
+        st.plotly_chart(fig, width="stretch")
 
 
 def render_loan_panel(features: dict, result: dict) -> None:
