@@ -50,11 +50,6 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
             "detail": f"{courts['civil_cases']} civil · {courts['criminal_cases']} criminal",
         })
 
-    if features["promoter_cibil"] < 650:
-        flags.append({"level": "red", "label": "Weak promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
-    elif features["promoter_cibil"] >= 750:
-        flags.append({"level": "green", "label": "Strong promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
-
     if features["gst_turnover_yoy_growth"] > 10:
         flags.append({"level": "green", "label": "Revenue growth", "detail": f"+{features['gst_turnover_yoy_growth']:.1f}% YoY (GST)"})
     elif features["gst_turnover_yoy_growth"] < 0:
@@ -69,6 +64,12 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
     if features["google_rating"] >= 4.0:
         flags.append({"level": "green", "label": "Customer sentiment", "detail": f"{features['google_rating']:.1f}★ Google rating"})
 
+    # Promoter bureau — lowest priority for NTC MSME underwriting
+    if features["promoter_cibil"] < 650:
+        flags.append({"level": "red", "label": "Weak promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
+    elif features["promoter_cibil"] >= 750:
+        flags.append({"level": "green", "label": "Strong promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
+
     return flags
 
 
@@ -77,9 +78,9 @@ def get_key_metrics(features: dict, profile: dict) -> list[dict]:
         {"label": "GST compliance", "value": f"{features['gst_filing_compliance']*100:.0f}%", "benchmark": "≥ 90%"},
         {"label": "Monthly turnover", "value": f"₹{features['gst_avg_monthly_turnover']:.1f}L", "benchmark": "Sector median"},
         {"label": "ABB (3M)", "value": f"₹{features['aa_abb_lakhs']:.1f}L", "benchmark": "≥ ₹3L"},
-        {"label": "Promoter CIBIL", "value": str(int(features["promoter_cibil"])), "benchmark": "≥ 700"},
         {"label": "EMI on-time", "value": f"{features['aa_emi_on_time_rate']*100:.0f}%", "benchmark": "≥ 95%"},
         {"label": "Employees", "value": str(int(features["epfo_headcount"])), "benchmark": "Stable trend"},
+        {"label": "Promoter CIBIL", "value": str(int(features["promoter_cibil"])), "benchmark": "≥ 700"},
     ]
 
 

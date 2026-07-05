@@ -144,13 +144,6 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
             "Month": [f"M{i+1}" for i in range(len(elec["monthly_kwh"]))],
             "kWh": elec["monthly_kwh"],
         }),
-        "Bureau": pd.DataFrame([
-            ("Promoter", bureau["promoter_name"]),
-            ("CIBIL", bureau["cibil_score"]),
-            ("DPD 12M", bureau["dpd_12m"]),
-            ("Write-offs 36M", bureau["write_offs_36m"]),
-            ("Utilisation", f"{bureau['credit_utilization']*100:.0f}%"),
-        ], columns=["Field", "Value"]),
         "Courts": pd.DataFrame([
             ("Civil cases", courts["civil_cases"]),
             ("Criminal cases", courts["criminal_cases"]),
@@ -174,6 +167,13 @@ def source_snapshot_tables(profile: dict) -> dict[str, pd.DataFrame]:
             ("Repo rate", f"{MACRO_INDICATORS['repo_rate']}%"),
             ("Monsoon index", f"{profile['macro'].get('monsoon_index_pct', 100)}%"),
             ("Region", profile["macro"].get("region_tier", "—")),
+        ], columns=["Field", "Value"]),
+        "Bureau": pd.DataFrame([
+            ("Promoter", bureau["promoter_name"]),
+            ("CIBIL", bureau["cibil_score"]),
+            ("DPD 12M", bureau["dpd_12m"]),
+            ("Write-offs 36M", bureau["write_offs_36m"]),
+            ("Utilisation", f"{bureau['credit_utilization']*100:.0f}%"),
         ], columns=["Field", "Value"]),
     }
     return tables

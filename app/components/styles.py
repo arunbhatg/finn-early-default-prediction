@@ -26,6 +26,44 @@ def inject_styles() -> None:
             border: 1px solid #E8ECF0;
             border-radius: 10px;
             padding: 0.6rem 0.7rem;
+            min-width: 0;
+            overflow: visible;
+        }}
+        [data-testid="stMetric"] label {{
+            font-size: 0.78rem !important;
+            white-space: nowrap;
+        }}
+        [data-testid="stMetricValue"] {{
+            font-size: 1.2rem !important;
+            font-weight: 600 !important;
+            overflow: visible !important;
+            white-space: nowrap;
+        }}
+        .finn-case-stats {{
+            display: flex;
+            gap: 0.75rem;
+            margin: 0.5rem 0 0.75rem 0;
+        }}
+        .finn-case-stat {{
+            flex: 1;
+            background: #fff;
+            border: 1px solid #E8ECF0;
+            border-radius: 10px;
+            padding: 0.55rem 0.65rem;
+            min-width: 0;
+        }}
+        .finn-case-stat .label {{
+            display: block;
+            color: #64748B;
+            font-size: 0.75rem;
+            margin-bottom: 0.15rem;
+        }}
+        .finn-case-stat .value {{
+            display: block;
+            color: #0F172A;
+            font-size: 1.15rem;
+            font-weight: 600;
+            white-space: nowrap;
         }}
         div[data-testid="stVerticalBlockBorderWrapper"] {{
             border-radius: 12px;

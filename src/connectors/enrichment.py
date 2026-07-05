@@ -80,10 +80,10 @@ def enrich_profile_with_public_data(profile: dict) -> tuple[dict, list[dict]]:
         ("upi", "UPI Merchant", "Bank / NPCI merchant API"),
         ("aa", "Account Aggregator", "RBI AA framework (FIU consent)"),
         ("epfo", "EPFO", "Employer establishment API"),
-        ("bureau", "Promoter Bureau", "CIBIL / CRIF commercial API"),
         ("courts", "Court Records", "eCourts aggregator"),
         ("electricity", "Electricity", "Discom API or bill OCR"),
         ("investment", "Investment / MCA", "MCA21 / patent registry"),
+        ("bureau", "Promoter Bureau", "CIBIL / CRIF — lowest weight for NTC cases"),
     ]
     for key, name, hint in mock_sources:
         status.append({"key": key, "name": name, "mode": "mock", "detail": hint})

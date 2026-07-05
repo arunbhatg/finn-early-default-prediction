@@ -6,7 +6,7 @@ from app.views._helpers import load_case
 from src.connectors.base import load_profile
 from src.features.feature_engineering import extract_features
 from src.scoring.model import compute_final_score
-from src.scoring.underwriter_insights import get_credit_decision, get_demo_preview
+from src.scoring.underwriter_insights import get_credit_decision
 from src.utils.constants import DEMO_PERSONAS
 
 
@@ -24,16 +24,27 @@ def page_cases():
         features = extract_features(profile)
         score = int(compute_final_score(features)["final_score"])
         decision = get_credit_decision(score)["action"]
-        preview = get_demo_preview(msme_id, features, profile, score)
 
         with cols[i % 2]:
             with st.container(border=True):
-                st.markdown(f'<div class="finn-case-card">', unsafe_allow_html=True)
                 st.markdown(f"##### {meta['name']}")
                 st.caption(f"{meta['sector']} · {meta['city']}")
-                c1, c2 = st.columns(2)
-                c1.metric("Score", score)
-                c2.metric("Turnover", preview["turnover"])
+                turnover_l = features["gst_avg_monthly_turnover"]
+                st.markdown(
+                    f"""
+                    <div class="finn-case-stats">
+                        <div class="finn-case-stat">
+                            <span class="label">Score</span>
+                            <span class="value">{score}</span>
+                        </div>
+                        <div class="finn-case-stat">
+                            <span class="label">Turnover / mo</span>
+                            <span class="value">Rs {turnover_l:.1f}L</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
                 st.markdown(
                     f"<span class='finn-decision' style='color:{_decision_color(decision)}'>{decision}</span>",
                     unsafe_allow_html=True,
@@ -42,4 +53,3 @@ def page_cases():
                     load_case(msme_id)
                     st.session_state.page = "Assessment"
                     st.rerun()
-                st.markdown("</div>", unsafe_allow_html=True)

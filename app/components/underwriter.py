@@ -87,7 +87,7 @@ def render_charts(profile: dict) -> None:
     with c3:
         df = pd.DataFrame({"Credits": aa["monthly_credits_lakhs"], "Debits": aa["monthly_debits_lakhs"]})
         fig = px.area(df, title="Bank cash flow")
-        fig.update_layout(**layout, showlegend=True)
+        fig.update_layout({**layout, "showlegend": True})
         st.plotly_chart(fig, use_container_width=True)
     with c4:
         df = pd.DataFrame({"Staff": epfo["employee_count"]})
