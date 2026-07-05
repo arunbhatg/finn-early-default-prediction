@@ -5,15 +5,27 @@ import plotly.express as px
 import streamlit as st
 
 from app.components.widgets import render_stress_gauge
+from src.prediction import stress_insights as _stress_insights
 from src.prediction.model import load_training_metrics
-from src.prediction.stress_insights import (
-    get_facility_metrics,
-    get_payment_metrics,
-    get_risk_flags,
-    get_stress_decision,
-)
+from src.prediction.stress_insights import get_risk_flags, get_stress_decision
 from src.utils.chart_helpers import timeseries_df
 from src.utils.ui_text import FINN_SCORE_LABEL
+
+
+def _payment_metrics(features: dict, profile: dict) -> list[dict]:
+    fn = getattr(_stress_insights, "get_payment_metrics", None)
+    if fn is not None:
+        return fn(features, profile)
+    metrics = _stress_insights.get_key_metrics(features, profile)
+    return metrics[:4]
+
+
+def _facility_metrics(features: dict, profile: dict) -> list[dict]:
+    fn = getattr(_stress_insights, "get_facility_metrics", None)
+    if fn is not None:
+        return fn(features, profile)
+    metrics = _stress_insights.get_key_metrics(features, profile)
+    return metrics[4:8] if len(metrics) > 4 else metrics[4:]
 
 
 def _chips(flags: list[dict], levels: tuple[str, ...], css: str, limit: int = 4) -> None:
@@ -80,10 +92,10 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
             )
 
     st.markdown('<p class="finn-section-title">① Payment & collections (priority)</p>', unsafe_allow_html=True)
-    _metric_row(get_payment_metrics(features, profile), columns=4)
+    _metric_row(_payment_metrics(features, profile), columns=4)
 
     st.markdown('<p class="finn-section-title">② Facility snapshot</p>', unsafe_allow_html=True)
-    _metric_row(get_facility_metrics(features, profile), columns=4)
+    _metric_row(_facility_metrics(features, profile), columns=4)
 
     flags = get_risk_flags(features, profile)
     if flags:

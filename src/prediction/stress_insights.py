@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from src.utils.constants import STRESS_BANDS
 
+__version__ = "1.1.0"
+
 
 def stress_to_band(prob: float) -> dict:
     for threshold, label, color in STRESS_BANDS:
