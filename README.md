@@ -6,6 +6,8 @@
 
 **Repository:** https://github.com/arunbhatg/finhealth-card
 
+**Powered by FINN.** (FINN in black, dot in green in the app UI) · [Try Finndot AI app](https://play.google.com/store/apps/details?id=com.anomapro.finndot.prd)
+
 ---
 
 ## What it does

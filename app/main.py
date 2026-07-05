@@ -9,6 +9,7 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
+from app.components.branding import render_footer_branding, render_sidebar_branding, render_sidebar_footer_link
 from app.views.cases import page_select_case
 from app.views.decision import page_credit_decision
 from app.views.evidence import page_evidence
@@ -40,8 +41,7 @@ def init_session():
 
 
 def sidebar():
-    st.sidebar.title("FinHealth Card")
-    st.sidebar.caption("NTC MSME · Alternative-data underwriting")
+    render_sidebar_branding()
 
     if st.session_state.msme_id and st.session_state.profile:
         st.sidebar.success(st.session_state.profile.get("business_name", ""))
@@ -63,11 +63,13 @@ def sidebar():
     with st.sidebar.expander("Full onboarding flow (optional)"):
         page_onboarding_flow()
 
+    render_sidebar_footer_link()
+
 
 def run_app():
     st.set_page_config(
-        page_title="FinHealth Card",
-        page_icon="📊",
+        page_title="FinHealth Card | FINN.",
+        page_icon="🟢",
         layout="wide",
         initial_sidebar_state="expanded",
     )
@@ -79,6 +81,7 @@ def run_app():
     init_session()
     sidebar()
     NAV[st.session_state.page]()
+    render_footer_branding()
 
 
 run_app()
