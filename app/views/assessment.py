@@ -23,7 +23,7 @@ def page_assessment():
         render_overview(profile, features, result)
 
     with tab2:
-        render_charts(profile)
+        render_charts(profile, features)
 
     with tab3:
         render_loan_panel(features, result)

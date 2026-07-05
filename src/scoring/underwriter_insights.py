@@ -31,17 +31,25 @@ def get_credit_decision(score: float) -> dict:
 def get_risk_flags(features: dict, profile: dict) -> list[dict]:
     flags = []
     courts = profile["courts"]
-    gst = profile["gst"]
 
     if features["gst_filing_compliance"] < 0.85:
         flags.append({"level": "red", "label": "GST filing irregular", "detail": f"{features['gst_filing_compliance']*100:.0f}% compliance"})
-    elif features["gst_payment_delays"] > 2:
-        flags.append({"level": "amber", "label": "GST payment delays", "detail": f"{int(features['gst_payment_delays'])} delayed periods"})
+    elif features["gst_payment_delays"] > 0:
+        flags.append({
+            "level": "amber" if features["gst_payment_delays"] <= 2 else "red",
+            "label": "GST late penalties",
+            "detail": f"{int(features['gst_payment_delays'])} delayed filings",
+        })
 
     if features["aa_bounce_count"] > 0:
-        flags.append({"level": "red", "label": "EMI / cheque bounces", "detail": f"{int(features['aa_bounce_count'])} in 12M"})
+        flags.append({"level": "red", "label": "Autopay / cheque failures", "detail": f"{int(features['aa_bounce_count'])} in 12M"})
     elif features["aa_emi_on_time_rate"] < 0.9:
-        flags.append({"level": "amber", "label": "EMI discipline weak", "detail": f"{features['aa_emi_on_time_rate']*100:.0f}% on-time"})
+        flags.append({"level": "amber", "label": "Bill pay discipline weak", "detail": f"{features['aa_emi_on_time_rate']*100:.0f}% on-time"})
+
+    if features["electricity_payment_regularity"] < 0.85:
+        flags.append({"level": "red", "label": "Utility bill delays", "detail": f"{features['electricity_payment_regularity']*100:.0f}% paid on time"})
+    elif features["electricity_payment_regularity"] >= 0.95:
+        flags.append({"level": "green", "label": "Bills paid on time", "detail": f"Electricity {features['electricity_payment_regularity']*100:.0f}% regular"})
 
     if courts["civil_cases"] + courts["criminal_cases"] + courts["insolvency_petitions"] > 0:
         flags.append({
@@ -61,26 +69,35 @@ def get_risk_flags(features: dict, profile: dict) -> list[dict]:
     if features["epfo_contribution_compliance"] >= 0.9:
         flags.append({"level": "green", "label": "Payroll compliance", "detail": "EPFO contributions regular"})
 
-    if features["google_rating"] >= 4.0:
-        flags.append({"level": "green", "label": "Customer sentiment", "detail": f"{features['google_rating']:.1f}★ Google rating"})
+    if features["epfo_headcount_growth"] > 5:
+        flags.append({"level": "green", "label": "Employee growth", "detail": f"+{features['epfo_headcount_growth']:.1f}% YoY"})
+    elif features["epfo_headcount_growth"] < -3:
+        flags.append({"level": "red", "label": "Headcount shrinking", "detail": f"{features['epfo_headcount_growth']:.1f}% YoY"})
 
-    # Promoter bureau — lowest priority for NTC MSME underwriting
-    if features["promoter_cibil"] < 650:
-        flags.append({"level": "red", "label": "Weak promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
-    elif features["promoter_cibil"] >= 750:
-        flags.append({"level": "green", "label": "Strong promoter bureau", "detail": f"CIBIL {int(features['promoter_cibil'])}"})
+    if features["google_rating"] >= 4.0:
+        flags.append({"level": "green", "label": "Google business sentiment", "detail": f"{features['google_rating']:.1f}★ · {features['google_sentiment_score']*100:.0f}% positive"})
+    elif features["google_rating"] < 3.5:
+        flags.append({"level": "amber", "label": "Weak Google sentiment", "detail": f"{features['google_rating']:.1f}★ rating"})
 
     return flags
 
 
 def get_key_metrics(features: dict, profile: dict) -> list[dict]:
+    growth = features["gst_turnover_yoy_growth"]
+    growth_sign = "+" if growth >= 0 else ""
     return [
-        {"label": "GST compliance", "value": f"{features['gst_filing_compliance']*100:.0f}%", "benchmark": "≥ 90%"},
-        {"label": "Monthly turnover", "value": f"₹{features['gst_avg_monthly_turnover']:.1f}L", "benchmark": "Sector median"},
-        {"label": "ABB (3M)", "value": f"₹{features['aa_abb_lakhs']:.1f}L", "benchmark": "≥ ₹3L"},
-        {"label": "EMI on-time", "value": f"{features['aa_emi_on_time_rate']*100:.0f}%", "benchmark": "≥ 95%"},
-        {"label": "Employees", "value": str(int(features["epfo_headcount"])), "benchmark": "Stable trend"},
-        {"label": "Promoter CIBIL", "value": str(int(features["promoter_cibil"])), "benchmark": "≥ 700"},
+        {"label": "GST YoY growth", "value": f"{growth_sign}{growth:.1f}%"},
+        {"label": "GST compliance", "value": f"{features['gst_filing_compliance']*100:.0f}%"},
+        {"label": "Bill pay on-time", "value": f"{features['electricity_payment_regularity']*100:.0f}%"},
+        {"label": "Autopay failures", "value": str(int(features["aa_bounce_count"]))},
+        {"label": "Late penalties", "value": str(int(features["gst_payment_delays"]))},
+        {"label": "Employee growth", "value": f"{features['epfo_headcount_growth']:+.1f}%"},
+        {
+            "label": "Google sentiment",
+            "value": f"{features['google_rating']:.1f}★",
+            "benchmark": f"{features['google_sentiment_score']*100:.0f}% positive",
+        },
+        {"label": "Monthly turnover", "value": f"₹{features['gst_avg_monthly_turnover']:.1f}L"},
     ]
 
 
