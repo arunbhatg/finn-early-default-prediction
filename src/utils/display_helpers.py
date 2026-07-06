@@ -2,7 +2,14 @@
 
 from __future__ import annotations
 
+from datetime import date, timedelta
+
+import pandas as pd
+
 from src.features.nlp_features import STRESS_KEYWORDS, _tokenize
+
+SENTIMENT_SCORE = {"positive": 1, "neutral": 0, "negative": -1}
+SENTIMENT_LABEL = {"positive": "Positive", "neutral": "Neutral", "negative": "Negative"}
 
 
 def text_severity_label(score: float) -> str:
@@ -145,6 +152,54 @@ def build_text_signal_table(profile: dict, features: dict) -> list[dict]:
             }
         )
     return rows
+
+
+def collect_recent_news(profile: dict, *, limit: int = 6, max_days: int = 365) -> list[dict]:
+    items = profile.get("unstructured", {}).get("news_mentions", [])
+    news = []
+    for item in items:
+        days = int(item.get("days_ago", 999))
+        if days > max_days:
+            continue
+        sentiment = item.get("sentiment", "neutral")
+        news.append(
+            {
+                "days_ago": days,
+                "date_label": _news_date_label(days),
+                "sentiment": sentiment,
+                "sentiment_label": SENTIMENT_LABEL.get(sentiment, "Neutral"),
+                "headline": item.get("headline", "").strip(),
+                "text": item.get("text", "").strip(),
+            }
+        )
+    news.sort(key=lambda n: n["days_ago"])
+    return news[:limit]
+
+
+def build_news_sentiment_dataframe(profile: dict, *, max_days: int = 365) -> pd.DataFrame:
+    rows = []
+    for item in collect_recent_news(profile, limit=50, max_days=max_days):
+        rows.append(
+            {
+                "Date": _news_date(days_ago=item["days_ago"]),
+                "Days ago": item["days_ago"],
+                "Sentiment score": SENTIMENT_SCORE.get(item["sentiment"], 0),
+                "Sentiment": item["sentiment_label"],
+                "Headline": item["headline"],
+                "Summary": item["text"],
+            }
+        )
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows).sort_values("Date")
+
+
+def _news_date(days_ago: int) -> date:
+    return date.today() - timedelta(days=int(days_ago))
+
+
+def _news_date_label(days_ago: int) -> str:
+    return _news_date(days_ago).strftime("%d %b %Y")
 
 
 def collect_text_timeline(profile: dict, limit: int = 8) -> list[dict]:

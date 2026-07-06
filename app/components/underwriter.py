@@ -10,6 +10,8 @@ from src.prediction.stress_insights import get_risk_flags, get_stress_decision
 from src.utils.chart_helpers import timeseries_df
 from src.utils.display_helpers import (
     build_text_signal_table,
+    build_news_sentiment_dataframe,
+    collect_recent_news,
     collect_text_timeline,
     describe_month_on_book,
     get_derived_business_metrics,
@@ -228,14 +230,66 @@ def _text_stress_chart(features: dict, *, key: str, height: int = 280) -> None:
     _plot_chart(fig, key=key)
 
 
+def _news_sentiment_chart(profile: dict, *, key: str) -> None:
+    df = build_news_sentiment_dataframe(profile)
+    if df.empty:
+        return
+    fig = px.scatter(
+        df,
+        x="Date",
+        y="Sentiment score",
+        color="Sentiment",
+        color_discrete_map={"Negative": "#EF4444", "Neutral": "#94A3B8", "Positive": "#22C55E"},
+        hover_name="Headline",
+        custom_data=["Summary", "Days ago"],
+        title="News sentiment timeline",
+        labels={"Sentiment score": "Sentiment", "Date": "Publication date"},
+    )
+    fig.update_traces(marker={"size": 11, "line": {"width": 1, "color": "white"}})
+    layout = _chart_layout(height=280, show_legend=True)
+    layout["yaxis"] = dict(
+        tickmode="array",
+        tickvals=[-1, 0, 1],
+        ticktext=["Negative", "Neutral", "Positive"],
+        range=[-1.35, 1.35],
+    )
+    fig.update_layout(**layout)
+    _plot_chart(fig, key=key)
+
+
+def _render_recent_news_text(profile: dict) -> None:
+    news_items = collect_recent_news(profile)
+    if not news_items:
+        st.caption("No recent news mentions on file.")
+        return
+
+    st.markdown("**Recent news headlines**")
+    for item in news_items:
+        sentiment = item.get("sentiment", "neutral")
+        css = {"negative": "finn-event-negative", "positive": "finn-event-positive"}.get(
+            sentiment, "finn-event-neutral"
+        )
+        body = item["text"] or item["headline"]
+        st.markdown(
+            f'<div class="finn-event {css}">'
+            f'<span class="finn-event-meta">{item["date_label"]} · {item["sentiment_label"]}</span>'
+            f"<strong>{item['headline']}</strong><br>{body}"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
+
 def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str = "nlp", show_section: bool = True) -> None:
     rows = build_text_signal_table(profile, features)
-    if not rows and features.get("composite_text_stress_score", 0) <= 0:
+    has_news = bool(collect_recent_news(profile))
+    if not rows and features.get("composite_text_stress_score", 0) <= 0 and not has_news:
         return
 
     if show_section:
         _section(_insights_section_title())
-    _metric_row(get_text_intel_metrics(features), columns=4)
+
+    if rows or features.get("composite_text_stress_score", 0) > 0:
+        _metric_row(get_text_intel_metrics(features), columns=4)
 
     if rows:
         st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
@@ -246,6 +300,14 @@ def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str 
             f"Composite text stress index: **{composite * 100:.0f}/100** ({text_severity_label(composite)}) — "
             "derived from keyword and sentiment analysis on reviews, news, RM notes, GST remarks, and collection notes."
         )
+
+    if has_news:
+        st.markdown("**News & media**")
+        c1, c2 = st.columns([1.1, 1], gap="medium")
+        with c1:
+            _render_recent_news_text(profile)
+        with c2:
+            _news_sentiment_chart(profile, key=f"{key_prefix}_news_sentiment")
 
 
 def render_collection_charts(profile: dict, features: dict, *, key_prefix: str = "coll") -> None:
