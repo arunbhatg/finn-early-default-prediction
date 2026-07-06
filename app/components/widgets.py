@@ -40,7 +40,12 @@ def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E
             },
         )
     )
-    fig.update_layout(height=240, margin=dict(t=44, b=12, l=20, r=20))
+    fig.update_layout(
+        height=220,
+        margin=dict(t=40, b=8, l=16, r=16),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+    )
     st.plotly_chart(fig, width="stretch", key=chart_key)
 
 

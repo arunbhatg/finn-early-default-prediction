@@ -59,7 +59,7 @@ def get_facility_metrics(features: dict, profile: dict) -> list[dict]:
             commercial = {"label": "Commercial bureau", "value": "Not on file"}
 
     return [
-        {"label": "12m stress probability", "value": f"{features.get('_stress_prob_display', 0)*100:.0f}%"},
+        {"label": "12m stress risk", "value": f"{features.get('_stress_prob_display', 0)*100:.0f}%"},
         {"label": "Outstanding", "value": f"₹{loan.get('outstanding_lakhs', 0):.1f}L"},
         promoter,
         commercial,

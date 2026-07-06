@@ -49,9 +49,9 @@ def _chips(flags: list[dict], levels: tuple[str, ...], css: str, limit: int = 4)
 
 
 def _metric_row(metrics: list[dict], columns: int = 4) -> None:
-    cols = st.columns(columns)
-    for i, m in enumerate(metrics):
-        with cols[i % columns]:
+    cols = st.columns(columns, gap="small")
+    for i, m in enumerate(metrics[:columns]):
+        with cols[i]:
             st.metric(m["label"], m["value"])
 
 
@@ -86,19 +86,37 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
 
     render_decision_banner(result, month_on_book=obs_info["short"])
 
-    gauge_col, detail_col = st.columns([1, 1.35], gap="large")
+    lb = profile.get("loan_book", {})
+    gauge_col, action_col = st.columns([1, 1.15], gap="medium")
     with gauge_col:
         with st.container(border=True):
-            render_stress_gauge(stress_pct, band, result.get("band_color", "#166534"), chart_key=f"gauge_{case_key}")
-    with detail_col:
+            render_stress_gauge(
+                stress_pct, band, result.get("band_color", "#166534"), chart_key=f"gauge_{case_key}"
+            )
+    with action_col:
         with st.container(border=True):
-            st.markdown(f"**{decision['action']}** — {decision['headline']}")
-            lb = profile.get("loan_book", {})
-            m1, m2, m3 = st.columns(3, gap="small")
-            m1.metric("Month on book", str(obs_info["month"]))
-            m2.metric("Outstanding", f"₹{lb.get('outstanding_lakhs', 0):.1f}L")
-            m3.metric("EMI / month", f"₹{lb.get('monthly_emi_lakhs', 0):.2f}L")
-            st.caption(f"{lb.get('loan_type', '—')} · {profile.get('city', '—')}")
+            st.markdown(
+                f'<p class="finn-action-headline">'
+                f'<span style="color:{decision["color"]}">{decision["action"]}</span>'
+                f" — {decision['headline']}</p>",
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                f'<p class="finn-action-meta">'
+                f"<strong>{lb.get('loan_type', '—')}</strong> · {profile.get('city', '—')}<br>"
+                f"{obs_info['short']}</p>",
+                unsafe_allow_html=True,
+            )
+
+    _metric_row(
+        [
+            {"label": "Month on book", "value": str(obs_info["month"])},
+            {"label": "Outstanding", "value": f"₹{lb.get('outstanding_lakhs', 0):.1f}L"},
+            {"label": "EMI / month", "value": f"₹{lb.get('monthly_emi_lakhs', 0):.2f}L"},
+            {"label": "Risk band", "value": band},
+        ],
+        columns=4,
+    )
 
     st.markdown('<p class="finn-section-title">Payment & collections</p>', unsafe_allow_html=True)
     _metric_row(_payment_metrics(features, profile), columns=4)
@@ -188,11 +206,8 @@ def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str 
     _metric_row(get_text_intel_metrics(features), columns=4)
 
     if rows:
-        c1, c2 = st.columns([1.2, 1], gap="medium")
-        with c1:
-            st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
-        with c2:
-            _text_stress_chart(features, key=f"{key_prefix}_bar", height=260)
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        _text_stress_chart(features, key=f"{key_prefix}_bar", height=240)
 
         composite = features.get("composite_text_stress_score", 0)
         st.caption(

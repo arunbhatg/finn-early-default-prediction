@@ -54,6 +54,70 @@ def inject_styles() -> None:
             margin: 0 0.35rem;
             color: #CBD5E1;
         }}
+        /* Decision hero — gauge + action panels equal height */
+        .finn-decision-banner + div[data-testid="stHorizontalBlock"] {{
+            align-items: stretch !important;
+        }}
+        .finn-decision-banner + div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {{
+            display: flex;
+            flex-direction: column;
+        }}
+        .finn-decision-banner + div[data-testid="stHorizontalBlock"] [data-testid="stVerticalBlockBorderWrapper"] {{
+            flex: 1;
+            min-height: 248px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }}
+        .finn-decision-banner + div[data-testid="stHorizontalBlock"] [data-testid="stPlotlyChart"] {{
+            margin-top: auto;
+            margin-bottom: auto;
+        }}
+        .finn-action-headline {{
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: #0F172A;
+            margin: 0 0 0.65rem 0;
+            line-height: 1.45;
+        }}
+        .finn-action-meta {{
+            font-size: 0.86rem;
+            color: #64748B;
+            margin: 0;
+            line-height: 1.55;
+        }}
+        /* Snapshot metric row directly under hero */
+        .finn-decision-banner + div[data-testid="stHorizontalBlock"] + div[data-testid="stHorizontalBlock"] {{
+            margin-top: 0.35rem;
+            margin-bottom: 0.85rem;
+        }}
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetric"] {{
+            height: 100%;
+            min-height: 4.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }}
+        [data-testid="stMetric"] {{
+            background: #fff;
+            border: 1px solid #E8ECF0;
+            border-radius: 10px;
+            padding: 0.6rem 0.7rem;
+            min-width: 0;
+            overflow: visible;
+        }}
+        [data-testid="stMetric"] label {{
+            font-size: 0.75rem !important;
+            line-height: 1.25 !important;
+            white-space: normal !important;
+            min-height: 2.4em;
+        }}
+        [data-testid="stMetricValue"] {{
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            overflow: visible !important;
+            white-space: nowrap;
+        }}
         .finn-band-pill {{
             display: inline-block;
             font-size: 0.78rem;
@@ -90,24 +154,6 @@ def inject_styles() -> None:
         [data-testid="stSidebar"] {{
             background-color: #FAFBFC;
             border-right: 1px solid #E8ECF0;
-        }}
-        [data-testid="stMetric"] {{
-            background: #fff;
-            border: 1px solid #E8ECF0;
-            border-radius: 10px;
-            padding: 0.6rem 0.7rem;
-            min-width: 0;
-            overflow: visible;
-        }}
-        [data-testid="stMetric"] label {{
-            font-size: 0.78rem !important;
-            white-space: nowrap;
-        }}
-        [data-testid="stMetricValue"] {{
-            font-size: 1.2rem !important;
-            font-weight: 600 !important;
-            overflow: visible !important;
-            white-space: nowrap;
         }}
         .finn-case-stats {{
             display: flex;
