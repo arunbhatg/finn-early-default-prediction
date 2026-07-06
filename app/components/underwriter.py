@@ -75,6 +75,58 @@ def render_decision_banner(result: dict, *, month_on_book: str = "") -> None:
     )
 
 
+def render_decision_hero(
+    *,
+    stress_pct: int,
+    band: str,
+    band_color: str,
+    decision: dict,
+    profile: dict,
+    lb: dict,
+    obs_info: dict,
+    chart_key: str,
+) -> None:
+    """Single-card hero: gauge left, action context right — aligned in one row."""
+    st.markdown('<div class="finn-hero-anchor"></div>', unsafe_allow_html=True)
+    with st.container(border=True):
+        gauge_col, action_col = st.columns([2, 3], gap="small")
+        with gauge_col:
+            render_stress_gauge(stress_pct, band, band_color, chart_key=chart_key, compact=True)
+        with action_col:
+            st.markdown(
+                f"""
+                <div class="finn-action-stack">
+                    <p class="finn-action-headline">
+                        <span style="color:{decision['color']}">{decision['action']}</span>
+                        — {decision['headline']}
+                    </p>
+                    <div class="finn-action-facts">
+                        <div class="finn-action-fact">
+                            <span class="k">Month on book</span>
+                            <span class="v">{obs_info['month']}</span>
+                        </div>
+                        <div class="finn-action-fact">
+                            <span class="k">Outstanding</span>
+                            <span class="v">₹{lb.get('outstanding_lakhs', 0):.1f}L</span>
+                        </div>
+                        <div class="finn-action-fact">
+                            <span class="k">EMI / month</span>
+                            <span class="v">₹{lb.get('monthly_emi_lakhs', 0):.2f}L</span>
+                        </div>
+                        <div class="finn-action-fact">
+                            <span class="k">Risk band</span>
+                            <span class="v" style="color:{decision['color']}">{band}</span>
+                        </div>
+                    </div>
+                    <p class="finn-action-meta">
+                        <strong>{lb.get('loan_type', '—')}</strong> · {profile.get('city', '—')} · {obs_info['short']}
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+
 def render_overview(profile: dict, features: dict, result: dict) -> None:
     """Underwriter decision view — action, payment signals, derived intel, flags, drivers."""
     stress_pct = int(result["stress_prob"] * 100)
@@ -87,35 +139,15 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     render_decision_banner(result, month_on_book=obs_info["short"])
 
     lb = profile.get("loan_book", {})
-    gauge_col, action_col = st.columns([1, 1.15], gap="medium")
-    with gauge_col:
-        with st.container(border=True):
-            render_stress_gauge(
-                stress_pct, band, result.get("band_color", "#166534"), chart_key=f"gauge_{case_key}"
-            )
-    with action_col:
-        with st.container(border=True):
-            st.markdown(
-                f'<p class="finn-action-headline">'
-                f'<span style="color:{decision["color"]}">{decision["action"]}</span>'
-                f" — {decision['headline']}</p>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                f'<p class="finn-action-meta">'
-                f"<strong>{lb.get('loan_type', '—')}</strong> · {profile.get('city', '—')}<br>"
-                f"{obs_info['short']}</p>",
-                unsafe_allow_html=True,
-            )
-
-    _metric_row(
-        [
-            {"label": "Month on book", "value": str(obs_info["month"])},
-            {"label": "Outstanding", "value": f"₹{lb.get('outstanding_lakhs', 0):.1f}L"},
-            {"label": "EMI / month", "value": f"₹{lb.get('monthly_emi_lakhs', 0):.2f}L"},
-            {"label": "Risk band", "value": band},
-        ],
-        columns=4,
+    render_decision_hero(
+        stress_pct=stress_pct,
+        band=band,
+        band_color=result.get("band_color", "#166534"),
+        decision=decision,
+        profile=profile,
+        lb=lb,
+        obs_info=obs_info,
+        chart_key=f"gauge_{case_key}",
     )
 
     st.markdown('<p class="finn-section-title">Payment & collections</p>', unsafe_allow_html=True)

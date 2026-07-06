@@ -6,7 +6,14 @@ import streamlit as st
 from src.utils.ui_text import FINN_SCORE_LABEL
 
 
-def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E", *, chart_key: str = "stress_gauge") -> None:
+def render_stress_gauge(
+    stress_pct: float,
+    band: str = "",
+    color: str = "#22C55E",
+    *,
+    chart_key: str = "stress_gauge",
+    compact: bool = False,
+) -> None:
     if not band:
         if stress_pct >= 70:
             band, color = "Critical", "#991B1B"
@@ -17,18 +24,23 @@ def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E
         else:
             band, color = "Low", "#166534"
 
+    title_font = 12 if compact else 14
+    number_font = 32 if compact else 36
+    chart_height = 196 if compact else 220
+    top_margin = 32 if compact else 40
+
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
             value=stress_pct,
-            number={"suffix": "%", "font": {"size": 36}},
+            number={"suffix": "%", "font": {"size": number_font}},
             title={
-                "text": f"{band}<br><span style='font-size:11px'>{FINN_SCORE_LABEL}</span>",
-                "font": {"size": 14},
+                "text": f"{band}<br><span style='font-size:10px'>{FINN_SCORE_LABEL}</span>",
+                "font": {"size": title_font},
             },
             gauge={
-                "axis": {"range": [0, 100], "tickwidth": 0},
-                "bar": {"color": color, "thickness": 0.22},
+                "axis": {"range": [0, 100], "tickwidth": 0, "visible": not compact},
+                "bar": {"color": color, "thickness": 0.24},
                 "bgcolor": "white",
                 "borderwidth": 0,
                 "steps": [
@@ -41,8 +53,8 @@ def render_stress_gauge(stress_pct: float, band: str = "", color: str = "#22C55E
         )
     )
     fig.update_layout(
-        height=220,
-        margin=dict(t=40, b=8, l=16, r=16),
+        height=chart_height,
+        margin=dict(t=top_margin, b=0, l=8, r=8),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
     )

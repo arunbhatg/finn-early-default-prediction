@@ -21,9 +21,6 @@ def inject_styles() -> None:
         div[data-testid="column"] {{
             min-width: 0;
         }}
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] div[data-testid="stVerticalBlockBorderWrapper"] {{
-            height: 100%;
-        }}
         .finn-decision-inline {{
             display: block;
             font-size: 0.95rem;
@@ -54,42 +51,89 @@ def inject_styles() -> None:
             margin: 0 0.35rem;
             color: #CBD5E1;
         }}
-        /* Decision hero — gauge + action panels equal height */
-        .finn-decision-banner + div[data-testid="stHorizontalBlock"] {{
-            align-items: stretch !important;
+        /* Decision hero — one card, gauge + action side by side */
+        .finn-hero-anchor + div [data-testid="stVerticalBlockBorderWrapper"] {{
+            padding: 0.65rem 0.85rem 0.75rem 0.85rem;
         }}
-        .finn-decision-banner + div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {{
+        .finn-hero-anchor + div [data-testid="stHorizontalBlock"] {{
+            align-items: center !important;
+            min-height: 210px;
+        }}
+        .finn-hero-anchor + div [data-testid="stHorizontalBlock"] > div[data-testid="column"]:first-child {{
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }}
-        .finn-decision-banner + div[data-testid="stHorizontalBlock"] [data-testid="stVerticalBlockBorderWrapper"] {{
-            flex: 1;
-            min-height: 248px;
+        .finn-hero-anchor + div [data-testid="stHorizontalBlock"] > div[data-testid="column"]:last-child {{
+            border-left: 1px solid #E8ECF0;
+            padding-left: 1rem;
+            display: flex;
+            align-items: center;
+        }}
+        .finn-hero-anchor + div [data-testid="stPlotlyChart"] {{
+            margin: 0 auto;
+        }}
+        .finn-hero-anchor + div iframe {{
+            max-height: 200px !important;
+        }}
+        .finn-action-stack {{
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }}
-        .finn-decision-banner + div[data-testid="stHorizontalBlock"] [data-testid="stPlotlyChart"] {{
-            margin-top: auto;
-            margin-bottom: auto;
+            gap: 0.65rem;
+            min-height: 190px;
         }}
         .finn-action-headline {{
-            font-size: 1.02rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #0F172A;
-            margin: 0 0 0.65rem 0;
+            margin: 0;
             line-height: 1.45;
         }}
+        .finn-action-facts {{
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.5rem;
+        }}
+        .finn-action-fact {{
+            background: #F8FAFC;
+            border: 1px solid #E8ECF0;
+            border-radius: 8px;
+            padding: 0.5rem 0.55rem;
+            min-width: 0;
+        }}
+        .finn-action-fact .k {{
+            display: block;
+            font-size: 0.68rem;
+            color: #64748B;
+            line-height: 1.2;
+            margin-bottom: 0.2rem;
+        }}
+        .finn-action-fact .v {{
+            display: block;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #0F172A;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }}
         .finn-action-meta {{
-            font-size: 0.86rem;
+            font-size: 0.82rem;
             color: #64748B;
             margin: 0;
-            line-height: 1.55;
+            line-height: 1.45;
         }}
-        /* Snapshot metric row directly under hero */
-        .finn-decision-banner + div[data-testid="stHorizontalBlock"] + div[data-testid="stHorizontalBlock"] {{
-            margin-top: 0.35rem;
-            margin-bottom: 0.85rem;
+        @media (max-width: 768px) {{
+            .finn-action-facts {{
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }}
+            .finn-hero-anchor + div [data-testid="stHorizontalBlock"] > div[data-testid="column"]:last-child {{
+                border-left: none;
+                padding-left: 0;
+                margin-top: 0.5rem;
+            }}
         }}
         div[data-testid="stHorizontalBlock"] > div[data-testid="column"] [data-testid="stMetric"] {{
             height: 100%;
