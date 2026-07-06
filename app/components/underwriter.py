@@ -16,7 +16,11 @@ from src.utils.display_helpers import (
     get_text_intel_metrics,
     text_severity_label,
 )
-from src.utils.ui_text import FINN_SCORE_LABEL, SECTION_UNSTRUCTURED_INSIGHTS, TAB_BUSINESS_SIGNALS
+from src.utils import ui_text as _ui_text
+
+
+def _insights_section_title() -> str:
+    return getattr(_ui_text, "SECTION_UNSTRUCTURED_INSIGHTS", "Insights from unstructured signals")
 
 
 def _payment_metrics(features: dict, profile: dict) -> list[dict]:
@@ -121,7 +125,7 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
     risks = result.get("risk_factors", [])[:4]
     protective = result.get("protective_factors", [])[:3]
     expand_drivers = result["stress_prob"] >= 0.45
-    with st.expander(f"{FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
+    with st.expander(f"{_ui_text.FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
         d1, d2 = st.columns(2, gap="medium")
         with d1:
             st.markdown("**Risk factors**")
@@ -180,7 +184,7 @@ def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str 
         return
 
     if show_section:
-        _section(SECTION_UNSTRUCTURED_INSIGHTS)
+        _section(_insights_section_title())
     _metric_row(get_text_intel_metrics(features), columns=4)
 
     if rows:
@@ -372,4 +376,4 @@ def render_evidence_summary(profile: dict, features: dict, result: dict) -> None
 
 
 def tab_business_signals_label() -> str:
-    return TAB_BUSINESS_SIGNALS
+    return getattr(_ui_text, "TAB_BUSINESS_SIGNALS", "Business & Digital Signals")
