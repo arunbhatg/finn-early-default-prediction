@@ -1,5 +1,7 @@
 """Collections / RM UI — underwriter-first layout."""
 
+from datetime import date, timedelta
+
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -8,10 +10,9 @@ from app.components.widgets import render_stress_gauge
 from src.prediction import stress_insights as _stress_insights
 from src.prediction.stress_insights import get_risk_flags, get_stress_decision
 from src.utils.chart_helpers import timeseries_df
+from src.utils import display_helpers as _display_helpers
 from src.utils.display_helpers import (
     build_text_signal_table,
-    build_news_sentiment_dataframe,
-    collect_recent_news,
     collect_text_timeline,
     describe_month_on_book,
     get_derived_business_metrics,
@@ -19,6 +20,64 @@ from src.utils.display_helpers import (
     text_severity_label,
 )
 from src.utils import ui_text as _ui_text
+
+_NEWS_SENTIMENT_SCORE = {"positive": 1, "neutral": 0, "negative": -1}
+_NEWS_SENTIMENT_LABEL = {"positive": "Positive", "neutral": "Neutral", "negative": "Negative"}
+
+
+def _fallback_collect_recent_news(profile: dict, *, limit: int = 6, max_days: int = 365) -> list[dict]:
+    items = profile.get("unstructured", {}).get("news_mentions", [])
+    news = []
+    for item in items:
+        days = int(item.get("days_ago", 999))
+        if days > max_days:
+            continue
+        sentiment = item.get("sentiment", "neutral")
+        event_date = date.today() - timedelta(days=days)
+        news.append(
+            {
+                "days_ago": days,
+                "date_label": event_date.strftime("%d %b %Y"),
+                "sentiment": sentiment,
+                "sentiment_label": _NEWS_SENTIMENT_LABEL.get(sentiment, "Neutral"),
+                "headline": item.get("headline", "").strip(),
+                "text": item.get("text", "").strip(),
+            }
+        )
+    news.sort(key=lambda n: n["days_ago"])
+    return news[:limit]
+
+
+def _fallback_build_news_sentiment_dataframe(profile: dict, *, max_days: int = 365) -> pd.DataFrame:
+    rows = []
+    for item in _fallback_collect_recent_news(profile, limit=50, max_days=max_days):
+        rows.append(
+            {
+                "Date": date.today() - timedelta(days=int(item["days_ago"])),
+                "Days ago": item["days_ago"],
+                "Sentiment score": _NEWS_SENTIMENT_SCORE.get(item["sentiment"], 0),
+                "Sentiment": item["sentiment_label"],
+                "Headline": item["headline"],
+                "Summary": item["text"],
+            }
+        )
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows).sort_values("Date")
+
+
+def _collect_recent_news(profile: dict, *, limit: int = 6, max_days: int = 365) -> list[dict]:
+    fn = getattr(_display_helpers, "collect_recent_news", None)
+    if fn is not None:
+        return fn(profile, limit=limit, max_days=max_days)
+    return _fallback_collect_recent_news(profile, limit=limit, max_days=max_days)
+
+
+def _build_news_sentiment_dataframe(profile: dict, *, max_days: int = 365) -> pd.DataFrame:
+    fn = getattr(_display_helpers, "build_news_sentiment_dataframe", None)
+    if fn is not None:
+        return fn(profile, max_days=max_days)
+    return _fallback_build_news_sentiment_dataframe(profile, max_days=max_days)
 
 
 def _insights_section_title() -> str:
@@ -231,7 +290,7 @@ def _text_stress_chart(features: dict, *, key: str, height: int = 280) -> None:
 
 
 def _news_sentiment_chart(profile: dict, *, key: str) -> None:
-    df = build_news_sentiment_dataframe(profile)
+    df = _build_news_sentiment_dataframe(profile)
     if df.empty:
         return
     fig = px.scatter(
@@ -258,7 +317,7 @@ def _news_sentiment_chart(profile: dict, *, key: str) -> None:
 
 
 def _render_recent_news_text(profile: dict) -> None:
-    news_items = collect_recent_news(profile)
+    news_items = _collect_recent_news(profile)
     if not news_items:
         st.caption("No recent news mentions on file.")
         return
@@ -281,7 +340,7 @@ def _render_recent_news_text(profile: dict) -> None:
 
 def render_text_intel_compact(profile: dict, features: dict, *, key_prefix: str = "nlp", show_section: bool = True) -> None:
     rows = build_text_signal_table(profile, features)
-    has_news = bool(collect_recent_news(profile))
+    has_news = bool(_collect_recent_news(profile))
     if not rows and features.get("composite_text_stress_score", 0) <= 0 and not has_news:
         return
 
