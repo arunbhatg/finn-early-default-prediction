@@ -189,7 +189,7 @@ def render_decision_hero(
 
 
 def render_overview(profile: dict, features: dict, result: dict) -> None:
-    """Underwriter decision view — action, payment signals, derived intel, flags, drivers."""
+    """Underwriter decision view — action, drivers, payment signals, intel, flags."""
     stress_pct = int(result["stress_prob"] * 100)
     band = result["band"]
     decision = result.get("decision") or get_stress_decision(result["stress_prob"])
@@ -210,6 +210,26 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
         obs_info=obs_info,
         chart_key=f"gauge_{case_key}",
     )
+
+    risks = result.get("risk_factors", [])[:4]
+    protective = result.get("protective_factors", [])[:3]
+    expand_drivers = result["stress_prob"] >= 0.45
+    with st.expander(f"{_ui_text.FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
+        d1, d2 = st.columns(2, gap="medium")
+        with d1:
+            st.markdown("**Risk factors**")
+            if risks:
+                for d in risks:
+                    st.markdown(f"- {d['factor']} — *{d['value']}*")
+            else:
+                st.caption("None flagged")
+        with d2:
+            st.markdown("**Protective factors**")
+            if protective:
+                for d in protective:
+                    st.markdown(f"- {d['factor']} — *{d['value']}*")
+            else:
+                st.caption("None flagged")
 
     st.markdown('<p class="finn-section-title">Payment & collections</p>', unsafe_allow_html=True)
     _metric_row(_payment_metrics(features, profile), columns=4)
@@ -232,26 +252,6 @@ def render_overview(profile: dict, features: dict, result: dict) -> None:
         with c2:
             st.markdown("**Strengths**")
             _chips(flags, ("green",), "finn-chip-green")
-
-    risks = result.get("risk_factors", [])[:4]
-    protective = result.get("protective_factors", [])[:3]
-    expand_drivers = result["stress_prob"] >= 0.45
-    with st.expander(f"{_ui_text.FINN_SCORE_LABEL} drivers", expanded=expand_drivers):
-        d1, d2 = st.columns(2, gap="medium")
-        with d1:
-            st.markdown("**Risk factors**")
-            if risks:
-                for d in risks:
-                    st.markdown(f"- {d['factor']} — *{d['value']}*")
-            else:
-                st.caption("None flagged")
-        with d2:
-            st.markdown("**Protective factors**")
-            if protective:
-                for d in protective:
-                    st.markdown(f"- {d['factor']} — *{d['value']}*")
-            else:
-                st.caption("None flagged")
 
 
 def _chart_layout(*, show_legend: bool = False, height: int = 300) -> dict:

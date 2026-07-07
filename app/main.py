@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from src.utils.ui_text import APP_BUILD, APP_TAGLINE, APP_TITLE, FINN_SCORE_LABEL
+from src.utils.ui_text import APP_BUILD, APP_TAGLINE, APP_TITLE, BRAND_NAME, FINN_SCORE_LABEL
 
 PAGE_ORDER = ("Portfolio", "Decision", "Evidence")
 
@@ -65,7 +65,8 @@ def _sidebar_branding() -> None:
         render_sidebar_branding()
     except Exception:
         st.sidebar.markdown(
-            '<span style="font-weight:700;font-size:1.2rem">FINN<span style="color:#22C55E">.</span></span>',
+            f'<span style="font-weight:700;font-size:1.2rem">{BRAND_NAME}'
+            '<span style="color:#22C55E">.</span></span>',
             unsafe_allow_html=True,
         )
         st.sidebar.caption("Early Default Prediction")
@@ -142,7 +143,7 @@ def _footer_branding() -> None:
     except Exception:
         st.markdown(
             '<div style="margin-top:2rem;padding-top:1rem;border-top:1px solid #E2E8F0;'
-            'text-align:center;font-size:0.78rem;color:#94A3B8;">Powered by FINN.</div>',
+            f'text-align:center;font-size:0.78rem;color:#94A3B8;">Powered by {BRAND_NAME}.</div>',
             unsafe_allow_html=True,
         )
 
@@ -151,7 +152,7 @@ def run_app():
     from app.components.styles import inject_styles
 
     st.set_page_config(
-        page_title="FINN. Early Default Prediction",
+        page_title=APP_TITLE,
         page_icon="🟢",
         layout="wide",
         initial_sidebar_state="expanded",

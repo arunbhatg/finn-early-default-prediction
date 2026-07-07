@@ -1,4 +1,4 @@
-# FINN. Early Default Prediction — Documentation
+# Finn. Early Default Prediction — Documentation
 
 ## Index
 
@@ -9,11 +9,22 @@
 | [DATA_SOURCES.md](DATA_SOURCES.md) | Structured + unstructured sources |
 | [CONNECTOR_INTEGRATION.md](CONNECTOR_INTEGRATION.md) | CBS loan tape, bureau, collections CRM |
 | [CODE_GUIDE.md](CODE_GUIDE.md) | Code layout |
+| [FINN_ML_Model_Documentation.docx](FINN_ML_Model_Documentation.docx) | **ML model doc (Word)** — target, features, training, scoring |
 | [NTC_MSME.md](NTC_MSME.md) | NTC MSME context (alt-data path) |
+
+## Regenerate ML documentation
+
+After training (`python scripts/train_model.py`), refresh the Word document with latest metrics:
+
+```bash
+python scripts/generate_model_doc.py
+```
+
+Output: `docs/FINN_ML_Model_Documentation.docx`
 
 ## Summary
 
-FINN. Early Default Prediction flags **MSME loan stress 12 months ahead** using:
+Finn. Early Default Prediction flags **MSME loan stress 12 months ahead** using:
 
 1. **Collection payment timing** — DPD, EMI lead days, bounces, PTP breaks
 2. **Bureau other-loan behaviour** — how promoter pays non-IDBI facilities

@@ -1,6 +1,8 @@
-"""FINN. brand assets and Finndot app link."""
+"""Finn. brand assets and Finndot app link."""
 
 import streamlit as st
+
+from src.utils.ui_text import BRAND_NAME
 
 FINNDOT_PLAY_URL = "https://play.google.com/store/apps/details?id=com.anomapro.finndot.prd"
 
@@ -15,7 +17,7 @@ def finn_logo_html(size: str = "medium") -> str:
         f'<span style="font-family: Segoe UI, system-ui, -apple-system, sans-serif; '
         f'font-weight: 700; font-size: {font_size}; letter-spacing: -0.03em; '
         f'line-height: 1.1; white-space: nowrap;">'
-        f'<span style="color: {FINN_BLACK};">FINN</span>'
+        f'<span style="color: {FINN_BLACK};">{BRAND_NAME}</span>'
         f'<span style="color: {FINN_GREEN};">.</span>'
         f"</span>"
     )
@@ -31,7 +33,7 @@ def render_app_header() -> None:
     try:
         from src.utils.ui_text import APP_TAGLINE, APP_TITLE
     except ImportError:
-        APP_TITLE = "FINN. Alternative Score System"
+        APP_TITLE = "Finn. Alternative Score System"
         APP_TAGLINE = "NTC MSME underwriting · powered by Finndot alternative data"
 
     st.markdown(

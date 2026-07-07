@@ -5,7 +5,7 @@
 | Approach | Accuracy (typical) | What it uses |
 |----------|-------------------|--------------|
 | Structured-only (legacy) | 16–22% | Bureau snapshot, loan master, static GST |
-| **FINN. full model** | **≥90%** (PoC) | + collections timing + bureau other-loans + NLP text conversion |
+| **Finn. full model** | **≥90%** (PoC) | + collections timing + bureau other-loans + NLP text conversion |
 
 ## Stress definition
 

@@ -1,10 +1,10 @@
-# FINN. Early Default Prediction
+# Finn. Early Default Prediction
 
 **12-month MSME loan stress early warning** — combining structured alt-data, collection payment timing, bureau/NTC signals, and unstructured text conversion.
 
 **Repository:** https://github.com/arunbhatg/finn-early-default-prediction
 
-**Powered by FINN.** · [Try Finndot AI app](https://play.google.com/store/apps/details?id=com.anomapro.finndot.prd)
+**Powered by Finn.** · [Try Finndot AI app](https://play.google.com/store/apps/details?id=com.anomapro.finndot.prd)
 
 ---
 
@@ -71,6 +71,9 @@ Open http://localhost:8501 → **Portfolio** → compare **MSME001** vs **MSME00
 | [docs/EARLY_WARNING.md](docs/EARLY_WARNING.md) | Business case & RM workflow |
 | [docs/CONNECTOR_INTEGRATION.md](docs/CONNECTOR_INTEGRATION.md) | CBS loan tape + bureau feeds |
 | [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md) | Structured + unstructured sources |
+| [docs/FINN_ML_Model_Documentation.docx](docs/FINN_ML_Model_Documentation.docx) | **ML model doc (Word)** — target, features, training, scoring |
+
+Regenerate the Word doc after retraining: `python scripts/generate_model_doc.py`
 
 ## Tech stack
 

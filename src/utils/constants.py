@@ -68,7 +68,7 @@ MACRO_INDICATORS = {
     "msme_sentiment_index": 58.2,
 }
 
-FINN_SCORE_LABEL = "FINN. Stress Risk (12m)"
+FINN_SCORE_LABEL = "Finn. Stress Risk (12m)"
 
 DEMO_PERSONAS = {
     "MSME001": {
